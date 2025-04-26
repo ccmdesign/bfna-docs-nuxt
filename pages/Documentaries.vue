@@ -109,24 +109,26 @@
 <script setup>
 import utils from "~/composables/utils";
 import { useRouter } from "vue-router";
+import { useVideoStore } from "~/stores/video";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
+const videoStore = useVideoStore();
+const { videoList, currentVideo } = storeToRefs(videoStore);
 
-const videoList = computed(() => $store.state.videoList);
-const currentIndex = computed(() => $store.state.currentVideo);
-const hasVideos = computed(() => $store.getters.hasVideos);
-const currentVideo = computed(() => hasVideos.value
-    ? videoList.value[currentIndex.value]
-    : $store.getters.emptyEpisode);
+const hasVideos = computed(() => videoStore.hasVideos);
+const currentVideoObj = computed(() => hasVideos.value
+    ? videoList.value[currentVideo.value]
+    : videoStore.emptyEpisode);
 
 function setCurrentVideo(url) {
-  $store.commit("setCurrentVideo", url);
-  router.replace({ name: "documentaryInternal-id", params: { id: utils.slugify(currentVideo.value.title) } });
+  videoStore.setCurrentVideo(url);
+  router.replace({ name: "documentaryInternal-id", params: { id: utils.slugify(currentVideoObj.value.title) } });
 }
 
 onMounted(() => {
-  $store.commit("setHomepageVideoEffect", false);
-  $store.commit("setNavigation", true);
+  videoStore.setHomepageVideoEffect(false);
+  videoStore.setNavigation(true);
 });
 
 useHead({
