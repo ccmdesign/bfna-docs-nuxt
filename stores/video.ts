@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { createClient } from 'vue-contentful'
+import * as contentful from 'contentful'
 
 export interface Video {
   title: string
@@ -85,39 +85,82 @@ export const useVideoStore = defineStore('video', {
       this.menuVisibility = val
     },
     async fetchVideos() {
-      // For now, use hardcoded data until Contentful is set up
-      this.videoList = [
-        {
-          title: 'The Great Reset',
-          subtitle: 'How the world is changing after the pandemic',
-          description: 'An exploration of the economic and social shifts following the global pandemic, examining both the challenges and opportunities for a more equitable society.',
-          source: 'youtube',
-          videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-          backgroundImage: '/assets/cicle_video.png',
-          workstream: 'democracy',
-          tags: ['pandemic', 'economy', 'social change'],
-          by: 'Bertelsmann Foundation',
-          awards: [
-            {
-              id: '1',
-              title: 'Best Documentary',
-              year: '2023',
-              institution: 'International Film Festival'
+      try {
+        const config = useRuntimeConfig()
+        
+        // If credentials are set, try to fetch from Contentful
+        if (config.public.contentfulSpace && config.public.contentfulToken) {
+          const client = contentful.createClient({
+            space: config.public.contentfulSpace,
+            accessToken: config.public.contentfulToken
+          })
+          
+          try {
+            const entries = await client.getEntries({
+              content_type: 'documentary',
+              order: ['-sys.createdAt'] as any
+            })
+            
+            if (entries.items.length > 0) {
+              this.videoList = entries.items.map(item => {
+                const fields = item.fields as any
+                return {
+                  title: fields.title || 'Untitled',
+                  description: fields.description || '',
+                  subtitle: fields.subtitle || '',
+                  videoUrl: fields.videoUrl || '',
+                  source: fields.source || 'youtube',
+                  workstream: fields.workstream || 'democracy',
+                  backgroundImage: fields.backgroundImage?.fields?.file?.url || '',
+                  tags: fields.tags || [],
+                  // Map other fields as needed
+                } as Video
+              })
+              return
             }
-          ]
-        },
-        {
-          title: 'Digital Frontiers',
-          subtitle: 'The new era of technology',
-          description: 'An in-depth look at how emerging technologies are reshaping business, government, and everyday life, with special focus on privacy and security concerns.',
-          source: 'vimeo',
-          videoUrl: 'https://vimeo.com/565486457',
-          backgroundImage: '/assets/cicle_video.png',
-          workstream: 'digital-economy',
-          tags: ['technology', 'privacy', 'security'],
-          by: 'Bertelsmann Foundation'
+          } catch (err) {
+            console.error('Contentful fetch error:', err)
+            // Fall back to sample data if error fetching
+          }
         }
-      ]
+        
+        // Fall back to sample data
+        console.log('Using sample data')
+        this.videoList = [
+          {
+            title: 'The Great Reset',
+            subtitle: 'How the world is changing after the pandemic',
+            description: 'An exploration of the economic and social shifts following the global pandemic, examining both the challenges and opportunities for a more equitable society.',
+            source: 'youtube',
+            videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            backgroundImage: '/assets/cicle_video.png',
+            workstream: 'democracy',
+            tags: ['pandemic', 'economy', 'social change'],
+            by: 'Bertelsmann Foundation',
+            awards: [
+              {
+                id: '1',
+                title: 'Best Documentary',
+                year: '2023',
+                institution: 'International Film Festival'
+              }
+            ]
+          },
+          {
+            title: 'Digital Frontiers',
+            subtitle: 'The new era of technology',
+            description: 'An in-depth look at how emerging technologies are reshaping business, government, and everyday life, with special focus on privacy and security concerns.',
+            source: 'vimeo',
+            videoUrl: 'https://vimeo.com/565486457',
+            backgroundImage: '/assets/cicle_video.png',
+            workstream: 'digital-economy',
+            tags: ['technology', 'privacy', 'security'],
+            by: 'Bertelsmann Foundation'
+          }
+        ]
+      } catch (error) {
+        console.error('Error in fetchVideos:', error)
+      }
     }
   }
 }) 

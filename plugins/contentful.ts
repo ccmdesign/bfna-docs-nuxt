@@ -1,4 +1,4 @@
-import { createClient } from 'vue-contentful'
+import * as contentful from 'contentful'
 import { defineNuxtPlugin } from '#app'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -6,7 +6,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   
   // Use environment variables or fallback to empty strings
   // (will be replaced with real values in .env file)
-  const client = createClient({
+  const client = contentful.createClient({
     space: config.public.contentfulSpace || '',
     accessToken: config.public.contentfulToken || '',
   })

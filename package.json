@@ -15,14 +15,15 @@
     "@nuxt/test-utils": "^3.17.2",
     "@pinia/nuxt": "^0.11.0",
     "axios": "^1.9.0",
+    "contentful": "^11.5.16",
     "eslint": "^9.25.1",
     "nuxt": "^3.16.2",
     "pinia": "^3.0.2",
     "vue": "^3.5.13",
-    "vue-contentful": "^1.1.9",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@nuxt/vite-builder": "^3.16.2",
     "sass": "^1.87.0",
     "sass-embedded": "^1.87.0"
   }
