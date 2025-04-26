@@ -1,22 +1,24 @@
 <template>
-  <slide class="homepage__slider__slide">
+  <div class="homepage__slider__slide">
     <background :imageUrl="video.backgroundImage" />
-  </slide>
+  </div>
 </template>
 
+<!--
 <style lang="scss">
 .homepage__slider__slide {
   width: 100%;
   height: 100vh;
 }
 </style>
+-->
 
 <script>
-import { Slide } from "vue-carousel";
+// import { Slide } from "vue-carousel";
 import Background from "@/components/HomepageUILarge/Background";
 
 export default {
-  components: { Slide, Background },
+  components: { Background },
   props: {
     video: {
       type: Object,

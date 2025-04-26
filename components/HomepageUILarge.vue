@@ -108,7 +108,7 @@
       &.opened {
         transform: translate(-50%, -50%) rotateZ(179deg) scale(1.2);
         &:before {
-          @extend .material-icons;
+          @extend .material-icons !optional;
           width: 24px;
         }
       }
@@ -131,7 +131,7 @@
 
   &__controls {
     z-index: 2;
-    @extend .material-icons;
+    @extend .material-icons !optional;
     position: absolute;
     background-color: #08415c;
     padding: 12px;
@@ -167,18 +167,20 @@
 </style>
 
 <script>
-import { Carousel } from "vue-carousel";
+// import { Carousel } from "vue-carousel";
 import Slide from "@/components/HomepageUILarge/Slide";
 import VideoList from "@/components/HomepageUILarge/VideoList";
 import NavigationBar from "@/components/HomepageUILarge/NavigationBar";
 import MenuUI from "@/components/HomepageUILarge/Menu";
 import VideoDescription from "@/components/HomepageUILarge/VideoDescription";
 import Footer from "@/components/Footer"
+import { useVideoStore } from "~/stores/video";
+import { mapState, mapActions } from "pinia";
 
 export default {
   name: "HomepageUILargeComponent",
   components: {
-    Carousel,
+    // Carousel,
     Slide,
     VideoList,
     Footer,
@@ -194,19 +196,19 @@ export default {
     };
   },
   computed: {
-    videoList() {
-      return this.$store.state.videoList;
+    ...mapState(useVideoStore, ["videoList", "currentVideo"]),
+    hasVideos() {
+      const videoStore = useVideoStore();
+      return videoStore.hasVideos;
     },
     currentIndex() {
-      return this.$store.state.currentVideo;
-    },
-    hasVideos() {
-      return this.$store.getters.hasVideos;
+      return this.currentVideo;
     },
     currentVideo() {
-      return this.hasVideos
+      const videoStore = useVideoStore();
+      return videoStore.hasVideos
         ? this.videoList[this.currentIndex]
-        : this.$store.getters.emptyEpisode;
+        : videoStore.emptyEpisode;
     },
   },
   methods: {
@@ -214,7 +216,8 @@ export default {
       this.setCurrentVideo(newSlide);
     },
     setCurrentVideo(index) {
-      this.$store.commit("setCurrentVideo", index);
+      const videoStore = useVideoStore();
+      videoStore.setCurrentVideoIndex(index);
     },
     nextSlide() {
       if (this.currentIndex + 1 >= this.videoList.length) {
@@ -248,13 +251,15 @@ export default {
     }
   },
   mounted() {
-    requestAnimationFrame(() => {
-      this.videoListHeight =
-        Math.max(
-          this.$refs.videoListWrapper.$el.getBoundingClientRect().height,
-          510
-        ) + "px";
-    });
+    if (process.client) {
+      requestAnimationFrame(() => {
+        this.videoListHeight =
+          Math.max(
+            this.$refs.videoListWrapper.$el.getBoundingClientRect().height,
+            510
+          ) + "px";
+      });
+    }
     this.animate = true;
   },
 };

@@ -16,6 +16,7 @@
   </div>
 </template>
 
+<!--
 <style lang="scss">
 .homepage {
   position: relative;
@@ -39,7 +40,24 @@
     }
   }
 }
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
 </style>
+-->
 
 <script setup>
 import utils from '~/composables/utils';
@@ -54,7 +72,10 @@ const { homepageVideoEffect } = storeToRefs(videoStore);
 const showVideoLoad = computed(() => homepageVideoEffect.value);
 
 function getUIType() {
-  return document.documentElement.clientWidth >= 768 ? 'large' : 'small';
+  if (process.client) {
+    return document.documentElement.clientWidth >= 768 ? 'large' : 'small';
+  }
+  return 'large'; // Default for server-side rendering
 }
 
 onMounted(() => {

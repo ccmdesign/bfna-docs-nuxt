@@ -1,9 +1,9 @@
 <template>
   <div class="navigation-bar">
     <NuxtLink to="/" class="navigation-bar__logo">
-      <img src="../../assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
+      <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
     </NuxtLink>
-    <div class="menu-trigger" @click="showMenu">
+    <div class="menu-trigger" @click="toggleMenu">
       <div class="menu-trigger__line"></div>
       <div class="menu-trigger__line"></div>
       <div class="menu-trigger__line"></div>
@@ -11,6 +11,7 @@
   </div>
 </template>
 
+<!--
 <style lang="scss" scoped>
 .navigation-bar {
   position: fixed;
@@ -71,28 +72,40 @@
   }
 
   &__icon {
-    @extend .material-icons;
+    @extend .material-icons !optional;
   }
 }
 </style>
+-->
 
 <script>
+import { useRouter } from 'vue-router'
+import { useVideoStore } from '~/stores/video'
+import { mapState } from 'pinia'
+
 export default {
+  setup() {
+    const router = useRouter()
+    return {
+      router
+    }
+  },
   data() {
     return {
-      currentRoute: this.$router.history.current.name,
+      currentRoute: this.router.currentRoute.value.name,
     };
   },
   computed: {
+    ...mapState(useVideoStore, ['navigation', 'menuVisibility']),
     hasNavigation() {
-      return this.$store.state.navigation;
+      return this.navigation;
     },
     hasMenu() {
-      return this.$store.state.menuVisibility;
+      return this.menuVisibility;
     },
   },
   watch: {
-    $route(to, from) {
+    '$route'(to, from) {
       this.currentRoute = to.name;
     },
   },
@@ -101,7 +114,8 @@ export default {
       return this.currentRoute === routeName;
     },
     toggleMenu() {
-      this.$store.commit("setMenuVisibility", !this.hasMenu);
+      const videoStore = useVideoStore();
+      videoStore.setMenuVisibility(!this.hasMenu);
     },
   },
 };

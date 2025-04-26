@@ -75,6 +75,11 @@ export const useVideoStore = defineStore('video', {
         this.currentVideo = index
       }
     },
+    setCurrentVideoIndex(index: number) {
+      if (index >= 0 && index < this.videoList.length) {
+        this.currentVideo = index
+      }
+    },
     setHomepageVideoEffect(val: boolean) {
       this.homepageVideoEffect = val
     },

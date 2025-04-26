@@ -1,10 +1,14 @@
 <template>
-  <div class="home-header">
+  <div class="header">
     <NuxtLink to="/">
-      <img src="../../assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
+      <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
     </NuxtLink>
   </div>
 </template>
+
+<script setup>
+// Component is now compatible with Nuxt 3 composition API
+</script>
 
 <style lang="scss">
 .header {

@@ -65,6 +65,7 @@
 </div>
 </template>
 
+<!--
 <style lang="scss" scoped>
 .video-list__episode--featured {
   position: relative;
@@ -240,7 +241,7 @@
   }
 
   &__controls {
-    @extend .material-icons;
+    @extend .material-icons !optional;
     position: absolute;
     background-color: #08415c;
     padding: 12px;
@@ -259,12 +260,14 @@
     }
   }
 }
-
 </style>
+-->
 
 <script>
-import utils from "../../utils";
+import utils from "~/composables/utils";
 import { PerfectScrollbar } from 'vue2-perfect-scrollbar'
+import { useVideoStore } from '~/stores/video'
+import { mapState } from 'pinia'
 
 export default {
   components: { PerfectScrollbar },
@@ -281,7 +284,11 @@ export default {
     },
   },
   computed: {
-    videoList() {
+    ...mapState(useVideoStore, ['videoList', 'currentVideo']),
+    fullVideoList() {
+      return this.videoList;
+    },
+    filteredVideoList() {
       const filter = (item) => {
         return (
           this.selectedWorkstreams.length === 0 ||
@@ -289,31 +296,28 @@ export default {
         );
       };
 
-      return this.$store.state.videoList.filter(filter);
-    },
-    fullVideoList() {
-      return this.$store.state.videoList;
+      return this.videoList.filter(filter);
     },
     featured() {
-      return this.$store.state.featured;
+      // For now, we'll use videoList directly since featured is not in the Pinia store
+      return this.videoList;
     },
     maxPages() {
-      return Math.floor(this.videoList.length / 4);
+      return Math.floor(this.filteredVideoList.length / 4);
     },
     currentIndex() {
-      return this.$store.state.currentVideo;
+      return this.currentVideo;
     },
     hasVideos() {
-      return this.$store.getters.hasVideos;
+      const videoStore = useVideoStore();
+      return videoStore.hasVideos;
     },
-    currentVideo() {
+    currentVideoObj() {
+      const videoStore = useVideoStore();
       return this.hasVideos
-        ? this.videoList[this.currentIndex]
-        : this.$store.getters.emptyEpisode;
+        ? this.filteredVideoList[this.currentIndex]
+        : videoStore.emptyEpisode;
     },
-    // workstreams () {
-    //   return new Set(this.$store.state.videoList.map(x => x.workstream))
-    // }
   },
   methods: {
     getVideoThumbnail(video) {
@@ -329,12 +333,15 @@ export default {
       this.$refs.videoList.handleNavigation("backward");
     },
     selectEpisode(url) {
-      window.scroll({
-        top: 0, 
-        left: 0, 
-        behavior: 'smooth'
-      });
-      this.$store.commit("setCurrentVideo", url);
+      if (process.client) {
+        window.scroll({
+          top: 0, 
+          left: 0, 
+          behavior: 'smooth'
+        });
+      }
+      const videoStore = useVideoStore();
+      videoStore.setCurrentVideo(url);
       if (this.closeAction) {
         this.closeAction();
       }

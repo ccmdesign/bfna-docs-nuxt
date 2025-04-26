@@ -11,5 +11,13 @@ export default defineNuxtConfig({
   },
   css: [
     './assets/scss/main.scss'
-  ]
+  ],
+  build: {
+    transpile: ['vue-carousel'],
+  },
+  vite: {
+    optimizeDeps: {
+      exclude: ['vue-carousel']
+    }
+  }
 })

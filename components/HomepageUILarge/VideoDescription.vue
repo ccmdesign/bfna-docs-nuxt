@@ -3,20 +3,20 @@
     <HomeHeader />
     <div class="video__description" :class="workstream">
       <span class="video__workstream__tag">
-        {{ currentVideo.workstream }}
+        {{ currentVideoObj.workstream }}
       </span>
       <div class="video__heading">
-        <h2 class="video__title">{{ currentVideo.title }}</h2>
-        <p class="video__subtitle">{{ currentVideo.subtitle }}</p>
-        <p class="video__subtitle" v-if="currentVideo.by">By {{ currentVideo.by }}</p>
+        <h2 class="video__title">{{ currentVideoObj.title }}</h2>
+        <p class="video__subtitle">{{ currentVideoObj.subtitle }}</p>
+        <p class="video__subtitle" v-if="currentVideoObj.by">By {{ currentVideoObj.by }}</p>
       </div>
-      <div class="video__excerpt" v-bind:class="{ opened : isOpened == 'true' || isOpened == true }">
-        <p>{{ currentVideo.description }}</p>
+      <div class="video__excerpt" v-bind:class="{ opened : isOpened }">
+        <p>{{ currentVideoObj.description }}</p>
       </div>
       <div class="award-list award-list--mobile" v-if="getUIType() === 'small'">
-        <div class="award"  v-for="award in currentVideo.awards" :key="award.id">
+        <div class="award" v-for="award in currentVideoObj.awards" :key="award.id">
           <div class="award__info">
-            <img src="../../assets/award_icon.png" alt="Icon badge" class="award__icon">
+            <img src="/assets/award_icon.png" alt="Icon badge" class="award__icon">
             <span class="award__separator"></span>
             <div class="award__data">
               <p class="award__title">{{ award.title }}</p>
@@ -25,13 +25,14 @@
           </div>
         </div>
       </div>
-      <button class="video__play" @click="openVideo(currentVideo)">play</button>
-      <button class="video__info video__info--borderless" @click="returnButton"  v-if="(isOpened == 'true' || isOpened == true) && getUIType() === 'large'">Return</button>
+      <button class="video__play" @click="openVideo(currentVideoObj)">play</button>
+      <button class="video__info video__info--borderless" @click="returnButton" v-if="isOpened && getUIType() === 'large'">Return</button>
       <button class="video__info" @click="moreInfo" v-else-if="getUIType() === 'large'">More info</button>
     </div>
   </div>
 </template>
 
+<!--
 <style lang="scss">
 .full_content {
   z-index: 1;
@@ -269,17 +270,21 @@
     }
 }
 </style>
+-->
 
 <script setup>
+import { ref, computed } from 'vue';
 import HomeHeader from "./HomeHeader.vue";
 import utils from "~/composables/utils";
-import { PerfectScrollbar } from 'vue2-perfect-scrollbar';
 import { useRouter } from 'vue-router';
 import { useVideoStore } from '~/stores/video';
 import { storeToRefs } from 'pinia';
 
 const props = defineProps({
-  open: String
+  open: {
+    type: [String, Boolean],
+    default: false
+  }
 });
 
 const isOpened = ref(props.open);
@@ -308,7 +313,9 @@ function openVideo(video) {
   }
   
   if (!videoId) {
-    alert(`Couldn't play video:\nvideo ID not found in "${video.videoUrl}".`);
+    if (process.client) {
+      alert(`Couldn't play video:\nvideo ID not found in "${video.videoUrl}".`);
+    }
     return;
   }
   
@@ -332,26 +339,33 @@ function moreInfo() {
 
 function returnButton() {
   isOpened.value = false;
-  window.scroll({
-    top: 0, 
-    left: 0, 
-    behavior: 'smooth'
-  });
+  if (process.client) {
+    window.scroll({
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth'
+    });
+  }
   setTimeout(() => {
     router.replace('/');
   }, 100);
 }
 
 function toTop() {
-  window.scroll({
-    top: 0, 
-    left: 0, 
-    behavior: 'smooth'
-  });
+  if (process.client) {
+    window.scroll({
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth'
+    });
+  }
 }
 
 function getUIType() {
-  return document.documentElement.clientWidth >= 768 ? 'large' : 'small';
+  if (process.client) {
+    return document.documentElement.clientWidth >= 768 ? 'large' : 'small';
+  }
+  return 'large'; // Default for SSR
 }
 </script>
 <style src="vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css"/>

@@ -83,6 +83,7 @@
   </div>
 </template>
 
+<!--
 <style lang="scss" scoped>
 .menu-large {
   position: fixed;
@@ -103,7 +104,7 @@
   }
 
   &__close {
-    @extend .material-icons;
+    @extend .material-icons !optional;
     position: absolute;
     top: 2rem;
     right: 2rem;
@@ -173,17 +174,23 @@
   }
 }
 </style>
+-->
 
 <script>
+import { useVideoStore } from '~/stores/video';
+import { mapState } from 'pinia';
+
 export default {
   computed: {
+    ...mapState(useVideoStore, ['menuVisibility']),
     hasMenu() {
-      return this.$store.state.menuVisibility;
+      return this.menuVisibility;
     },
   },
   methods: {
     setMenuVisibility(menuVisibility) {
-      this.$store.commit("setMenuVisibility", menuVisibility);
+      const videoStore = useVideoStore();
+      videoStore.setMenuVisibility(menuVisibility);
     },
     closeMenu(ifBackground, event) {
       if (ifBackground && !event.target.classList.contains("menu-large")) {

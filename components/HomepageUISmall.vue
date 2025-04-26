@@ -1,6 +1,6 @@
 <template>
   <div class="homepage">
-    <img src="../assets/loader.gif" alt="Loading website" class="loader">
+    <img src="/assets/loader.gif" alt="Loading website" class="loader">
     <!--<div
       class="homepage__slider__background--large"
       :style="`background-image: url('${currentVideo.backgroundImage}')`"
@@ -9,7 +9,7 @@
       <div class="homepage__header">
         <div class="homepage__header__logos">
           <div class="homepage__header__logo">
-            <img src="../assets/bfna-documentaries-logo.png" alt="Bertelsman Foundation Documentaries" class="documentaries" />
+            <img src="/assets/bfna-documentaries-logo.png" alt="Bertelsman Foundation Documentaries" class="documentaries" />
           </div>
         </div>
       </div>
@@ -21,6 +21,7 @@
   </div>
 </template>
 
+<!--
 <style lang="scss" scoped>
 .homepage {
   position: fixed;
@@ -143,7 +144,7 @@
   }
 
   &__controls {
-    @extend .material-icons;
+    @extend .material-icons !optional;
     position: absolute;
     background-color: #08415c;
     padding: 12px;
@@ -201,11 +202,20 @@
       }
     }
   }
+
+  &__nav-button {
+    @extend .material-icons !optional;
+    position: absolute;
+    top: 2.5rem;
+    width: 64px;
+    height: 64px;
+  }
 }*/
 </style>
+-->
 
 <script>
-import utils from "../utils";
+import utils from "~/composables/utils";
 
 export default {
   name: "HomepageUILargeComponent",

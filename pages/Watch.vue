@@ -57,6 +57,7 @@
   </div>
 </template>
 
+<!--
 <style lang="scss">
 .watch-view {
   position: relative;
@@ -231,7 +232,7 @@
   }
 
   &__back {
-    @extend .material-icons;
+    @extend .material-icons !optional;
     position: absolute;
     bottom: 48px;
     right: 48px;
@@ -271,9 +272,10 @@
   }
 }
 </style>
+-->
 
 <script>
-import utils from "../utils";
+import utils from "~/composables/utils";
 
 export default {
   data() {

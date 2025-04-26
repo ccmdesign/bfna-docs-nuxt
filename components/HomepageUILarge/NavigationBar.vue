@@ -10,6 +10,7 @@
   </div>
 </template>
 
+<!--
 <style lang="scss">
 .large-navigation-bar {
   padding: 0 170px;
@@ -31,7 +32,7 @@
   }
 
   &__button {
-    @extend .material-icons;
+    @extend .material-icons !optional;
     width: 60px;
     height: 60px;
     text-align: center;
@@ -85,6 +86,7 @@
   }
 }
 </style>
+-->
 
 <script setup>
 import { useVideoStore } from '~/stores/video';

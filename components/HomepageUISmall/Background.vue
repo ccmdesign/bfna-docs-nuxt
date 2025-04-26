@@ -5,6 +5,7 @@
   ></div>
 </template>
 
+<!--
 <style lang="scss">
 .homepage__slider__background--large {
   width: 100%;
@@ -17,9 +18,10 @@
   opacity: 0.67;
 }
 </style>
+-->
 
 <script>
-import utils from "../../utils";
+import utils from "~/composables/utils";
 
 export default {
   data() {

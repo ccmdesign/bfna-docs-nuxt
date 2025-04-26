@@ -1,5 +1,4 @@
 import Vue from "vue";
-import VueCarousel from "vue-carousel";
 import VueYoutube from "vue-youtube";
 import vueVimeoPlayer from "vue-vimeo-player";
 
@@ -13,7 +12,6 @@ import "./registerServiceWorker";
 
 Vue.config.productionTip = false;
 
-Vue.use(VueCarousel);
 Vue.use(VueYoutube);
 Vue.use(vueVimeoPlayer);
 
@@ -26,3 +24,27 @@ const instance = new Vue({
 
 setupContentful(instance);
 getList(instance);
+
+// Constants
+export const STORAGE_KEY = 'bfna-store';
+
+// Video list
+export const DEFAULT_VIDEO_LIST = [];
+
+export const getSavedStore = () => {
+  if(localStorage.getItem(STORAGE_KEY)) {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY));
+  }
+
+  return {
+    videoList: DEFAULT_VIDEO_LIST,
+    currentVideo: 0,
+    homepageVideoEffect: false,
+    navigation: true,
+    menuVisibility: false,
+  };
+};
+
+export const saveStore = (store) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+};

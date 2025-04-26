@@ -7,9 +7,11 @@
     </div>
     <NuxtLink to="/" class="app-window__close-button"></NuxtLink>
     <div class="app-page__content app-page__padding">
-      <div class="app-window__logo app-window__logo--center">
-        <a href="https://www.bfna.org/" target="_blank" class="router-link-exact-active router-link-active"><img src="../assets/bertelsmann-logo.png" alt="Bertelsman Foundation" class="logo"></a>
-        <NuxtLink to="/"><img alt="Bertelsman Foundation Documentaries" src="../assets/bfna-documentaries-logo.png" class="logo" /></NuxtLink>
+      <div class="about-page__header">
+        <div class="about-page__logos">
+          <a href="https://www.bfna.org/" target="_blank" class="router-link-exact-active router-link-active"><img src="/assets/bertelsmann-logo.png" alt="Bertelsman Foundation" class="logo"></a>
+          <NuxtLink to="/"><img alt="Bertelsman Foundation Documentaries" src="/assets/bfna-documentaries-logo.png" class="logo" /></NuxtLink>
+        </div>
       </div>
       <section class="about-us-view__text flex columns">
         <div class="column">
@@ -25,6 +27,7 @@
   </div>
 </template>
 
+<!--
 <style lang="scss" scoped>
 .logo {
   max-width: 350px;
@@ -60,6 +63,7 @@
   }
 }
 </style>
+-->
 
 <script>
 import utils from "~/composables/utils";

@@ -10,7 +10,7 @@
       <div class="award"  v-for="award in currentVideo.awards" :key="award.id">
         <div class="award__tip"></div>
         <div class="award__info">
-          <img src="../assets/award_icon.png" alt="Icon badge" class="award__icon">
+          <img src="/assets/award_icon.png" alt="Icon badge" class="award__icon">
           <span class="award__separator"></span>
           <div class="award__data">
             <p class="award__title">{{ award.title }}</p>
@@ -77,13 +77,13 @@
           <div class="resource-list__resource | resource-card" v-for="resource in currentVideo.resources" :key="resource.id">
             <div class="resource-card__header">
               <template>
-                <img src="../assets/cicle_link.png" alt="Link" class="resource-card__icon" v-if="resource.type == 'link'">
-                <img src="../assets/cicle_pdf.png" alt="Link" class="resource-card__icon" v-else-if="resource.type == 'pdf'">
-                <img src="../assets/cicle_doc.png" alt="Link" class="resource-card__icon" v-else-if="resource.type == 'doc'">
-                <img src="../assets/cicle_img.png" alt="Link" class="resource-card__icon" v-else-if="resource.type == 'image'">
-                <img src="../assets/cicle_video.png" alt="Link" class="resource-card__icon" v-else-if="resource.type == 'video'">
-                <img src="../assets/cicle_zip.png" alt="Link" class="resource-card__icon" v-else-if="resource.type == 'zip'">
-                <img src="../assets/cicle_file.png" alt="Link" class="resource-card__icon" v-else>
+                <img src="/assets/cicle_link.png" alt="Link" class="resource-card__icon" v-if="resource.type == 'link'">
+                <img src="/assets/cicle_pdf.png" alt="Link" class="resource-card__icon" v-else-if="resource.type == 'pdf'">
+                <img src="/assets/cicle_doc.png" alt="Link" class="resource-card__icon" v-else-if="resource.type == 'doc'">
+                <img src="/assets/cicle_img.png" alt="Link" class="resource-card__icon" v-else-if="resource.type == 'image'">
+                <img src="/assets/cicle_video.png" alt="Link" class="resource-card__icon" v-else-if="resource.type == 'video'">
+                <img src="/assets/cicle_zip.png" alt="Link" class="resource-card__icon" v-else-if="resource.type == 'zip'">
+                <img src="/assets/cicle_file.png" alt="Link" class="resource-card__icon" v-else>
               </template>
               <div class="resource-card__main">
                 <h3 class="resource-card__title">{{ resource.title }}</h3>
@@ -354,7 +354,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     transition: transform 0.2s ease-in-out;
-    background-image: url('../assets/play-icon.png');
+    background-image: url('/assets/play-icon.png');
     background-position: center;
     background-size: contain;
   }
@@ -613,7 +613,7 @@
       &.opened {
         transform: translate(-50%, -50%) rotateZ(179deg) scale(1.2);
         &:before {
-          @extend .material-icons;
+          @extend .material-icons !optional;
           width: 24px;
         }
       }
@@ -636,7 +636,7 @@
 
   &__controls {
     z-index: 2;
-    @extend .material-icons;
+    @extend .material-icons !optional;
     position: absolute;
     background-color: #08415c;
     padding: 12px;
@@ -781,18 +781,23 @@ export default {
       return url;
     },
     getUIType () {
-      return document.documentElement.clientWidth >= 768 ? 'large' : 'small'
+      if (process.client) {
+        return document.documentElement.clientWidth >= 768 ? 'large' : 'small';
+      }
+      return 'large'; // Default for server-side rendering
     },
   },
   mounted() {
     this.animate = true;
-    window.setTimeout(() => {
-      window.scroll({
-        top: 200, 
-        left: 0, 
-        behavior: 'smooth'
-      });
-    }, 0);
+    if (process.client) {
+      window.setTimeout(() => {
+        window.scroll({
+          top: 200, 
+          left: 0, 
+          behavior: 'smooth'
+        });
+      }, 0);
+    }
   },
   watch: {
     videoList: function () {
