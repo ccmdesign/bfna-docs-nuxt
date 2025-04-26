@@ -42,13 +42,13 @@
 </style>
 
 <script>
-import utils from '../utils';
+import utils from '~/composables/utils';
 
 export default {
   name: 'home',
   components: {
-    'ui-large': () => import('@/components/HomepageUILarge.vue'),
-    'ui-small': () => import('@/components/HomepageUISmall.vue'),
+    'ui-large': () => import('~/components/HomepageUILarge.vue'),
+    'ui-small': () => import('~/components/HomepageUISmall.vue'),
   },
   computed: {
     showVideoLoad () {

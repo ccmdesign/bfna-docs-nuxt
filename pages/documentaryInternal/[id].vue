@@ -677,13 +677,23 @@
 }
 </style>
 
+<script setup>
+import { useRouter, useRoute } from "vue-router";
+import utils from "~/composables/utils";
+
+const router = useRouter();
+const route = useRoute();
+const id = computed(() => route.params.id);
+
+// Rest of component logic to be refactored later
+</script>
+
 <script>
 import Slide from "@/components/HomepageUILarge/Slide";
 import VideoList from "@/components/HomepageUILarge/VideoList";
 import NavigationBar from "@/components/HomepageUILarge/NavigationBar";
 import MenuUI from "@/components/HomepageUILarge/Menu";
 import VideoDescription from "@/components/HomepageUILarge/VideoDescription";
-import utils from "../utils";
 import Footer from "@/components/Footer"
 
 export default {
