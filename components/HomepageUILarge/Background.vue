@@ -5,7 +5,6 @@
   ></div>
 </template>
 
-<!--
 <style lang="scss">
 .homepage__slider__background--large {
   position: fixed;
@@ -27,7 +26,6 @@
   }
 }
 </style>
--->
 
 <script>
 import utils from "~/composables/utils";

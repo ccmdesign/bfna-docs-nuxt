@@ -65,7 +65,6 @@
 </div>
 </template>
 
-<!--
 <style lang="scss" scoped>
 .video-list__episode--featured {
   position: relative;
@@ -261,7 +260,6 @@
   }
 }
 </style>
--->
 
 <script>
 import utils from "~/composables/utils";
@@ -376,4 +374,3 @@ export default {
   },
 };
 </script>
-<style src="vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css"/>

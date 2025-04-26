@@ -83,7 +83,6 @@
 </section>
 </template>
 
-<!--
 <style lang="scss" scoped>
 .footer-section {
   position: relative;
@@ -202,7 +201,6 @@
     }
   }
 </style>
--->
 
 <script>
 export default {

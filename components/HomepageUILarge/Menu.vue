@@ -83,7 +83,6 @@
   </div>
 </template>
 
-<!--
 <style lang="scss" scoped>
 .menu-large {
   position: fixed;
@@ -174,7 +173,6 @@
   }
 }
 </style>
--->
 
 <script>
 import { useVideoStore } from '~/stores/video';

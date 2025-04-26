@@ -32,7 +32,6 @@
   </div>
 </template>
 
-<!--
 <style lang="scss">
 .full_content {
   z-index: 1;
@@ -270,7 +269,6 @@
     }
 }
 </style>
--->
 
 <script setup>
 import { ref, computed } from 'vue';
@@ -368,4 +366,3 @@ function getUIType() {
   return 'large'; // Default for SSR
 }
 </script>
-<style src="vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css"/>

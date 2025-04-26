@@ -697,7 +697,7 @@ import VideoDescription from "@/components/HomepageUILarge/VideoDescription";
 import Footer from "@/components/Footer"
 
 export default {
-  name: "documentaryInternal",
+  name: "documentary",
   components: {
     Footer,
     Slide,

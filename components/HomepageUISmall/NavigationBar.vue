@@ -11,7 +11,6 @@
   </div>
 </template>
 
-<!--
 <style lang="scss" scoped>
 .navigation-bar {
   position: fixed;
@@ -76,7 +75,6 @@
   }
 }
 </style>
--->
 
 <script>
 import { useRouter } from 'vue-router'

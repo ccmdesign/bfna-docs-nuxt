@@ -19,5 +19,9 @@ export default defineNuxtConfig({
     optimizeDeps: {
       exclude: ['vue-carousel']
     }
+  },
+  ssr: true,
+  experimental: {
+    clientFallback: true
   }
 })

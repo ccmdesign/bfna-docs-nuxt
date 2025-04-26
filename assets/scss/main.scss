@@ -1,5 +1,8 @@
 /* Main SCSS file for BFNA Docs */
 
+// Google Fonts Import
+@import url('https://fonts.googleapis.com/css2?family=Material+Icons&display=swap');
+
 // Variables
 $colors-green: #4f8d71;
 $colors-orange: #fc8b00;
@@ -32,6 +35,7 @@ $colors-purple: #631764;
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
+  -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
 
@@ -54,4 +58,13 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+// Utilities
+.link {
+  color: $colors-green;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 } 

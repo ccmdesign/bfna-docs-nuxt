@@ -10,7 +10,6 @@
   </div>
 </template>
 
-<!--
 <style lang="scss">
 .large-navigation-bar {
   padding: 0 170px;
@@ -86,7 +85,6 @@
   }
 }
 </style>
--->
 
 <script setup>
 import { useVideoStore } from '~/stores/video';
