@@ -1,63 +1,65 @@
 <template>
 <div>
-  <div class="video-list gradient">
-    <div class="video-list__featured-section">
-      <h3 class="section-title">Featured</h3>
-      <div class="featured-list">
-        <div v-for="(video, index) in featured
-        " :key="index" >
-          <div class="video-list__episode video-list__episode--featured" @click="selectEpisode(video.videoUrl)" :data-title="video.title" :aria-label="video.title">
-            <div
-              class="video-list__episode-thumbnail"
-              :style="{ backgroundImage: `url('${video.backgroundImage}')` }"
-            />
+  <div v-if="loading" class="video-list-loader">
+    <div class="loader-content">
+      <img src="/assets/loader.gif" alt="Loading videos" />
+      <p>Loading documentaries...</p>
+    </div>
+  </div>
+  <div v-else-if="!videoList.length" class="video-list-empty">
+    <div class="empty-content">
+      <p>No documentaries found</p>
+      <button @click="fetchVideos" class="retry-button">Retry</button>
+    </div>
+  </div>
+  <div v-else>
+    <div class="video-list gradient">
+      <div class="video-list__featured-section">
+        <h3 class="section-title">Featured</h3>
+        <div class="featured-list">
+          <div v-for="(video, index) in featured" :key="index">
+            <div class="video-list__episode video-list__episode--featured" @click="selectEpisode(video.videoUrl)" :data-title="video.title" :aria-label="video.title">
+              <div
+                class="video-list__episode-thumbnail"
+                :style="{ backgroundImage: `url('${video.backgroundImage}')` }"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="video-list">
-    <div class="video-list__workstreams-section">
-      <h3 class="section-title | videolist-main-title">All documentaries</h3>
-      <div
-        class="child workstream--democracy"
-        @click="selectWorkstream('democracy')"
-        :class="{ selected: isWorkstreamSelected('democracy'), disabled:  !workstreamVideos('democracy') }"
-      >
-        <h2>Democracy</h2>
+    <div class="video-list">
+      <div class="video-list__workstreams-section">
+        <h3 class="section-title | videolist-main-title">All documentaries</h3>
+        <div 
+          v-for="(label, id) in workstreams" 
+          :key="id"
+          class="child"
+          :class="{
+            ['workstream--' + id]: true,
+            'selected': isWorkstreamSelected(id),
+            'disabled': !workstreamVideos(id)
+          }"
+          @click="selectWorkstream(id)"
+        >
+          <h2>{{ label }}</h2>
+        </div>
       </div>
-      <div
-        class="child workstream--politics-society"
-        @click="selectWorkstream('politics-society')"
-        :class="{ selected: isWorkstreamSelected('politics-society'), disabled:  !workstreamVideos('politics-society') }"
-      >
-        <h2>Politics &amp; Society</h2>
-      </div>
-      <div
-        class="child workstream--future-of-work"
-        @click="selectWorkstream('future-of-work')"
-        :class="{ selected: isWorkstreamSelected('future-of-work'), disabled:  !workstreamVideos('future-of-work')  }"
-      >
-        <h2>Future Leadership</h2>
-      </div>
-      <div
-        class="child workstream--digital-economy"
-        @click="selectWorkstream('digital-economy')"
-        :class="{ selected: isWorkstreamSelected('digital-economy'), disabled:  !workstreamVideos('digital-economy') }"
-      >
-        <h2>Digital World</h2>
-      </div>
-    </div>
-    <div class="video-list__list">
-      <div class="video-list__episode" v-for="(video, index) in videoList" :key="index" @click="selectEpisode(video.videoUrl)">
-        <div
-          class="video-list__episode-thumbnail"
-          :style="{ backgroundImage: `url('${video.backgroundImage}')` }"
-        />
+      <div class="video-list__list">
+        <div v-if="filteredVideoList.length === 0 && selectedWorkstream" class="video-list__empty-category">
+          <p>No videos found in this category</p>
+          <button @click="selectedWorkstream = ''" class="reset-button">Show all videos</button>
+        </div>
+        <div class="video-list__episode" v-for="(video, index) in filteredVideoList" :key="index" @click="selectEpisode(video.videoUrl)">
+          <div
+            class="video-list__episode-thumbnail"
+            :style="{ backgroundImage: `url('${video.backgroundImage}')` }"
+          />
 
-        <div class="video-list__episode-info">
-          <h4>{{ video.title }}</h4>
-          <h3>{{ video.subtitle }}</h3>
+          <div class="video-list__episode-info">
+            <h4>{{ video.title }}</h4>
+            <h3>{{ video.subtitle }}</h3>
+          </div>
         </div>
       </div>
     </div>
@@ -89,6 +91,73 @@
   &:hover {
     &::after {
       opacity: 1;
+    }
+  }
+}
+
+.video-list-loader,
+.video-list-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  width: 100%;
+  position: relative;
+  
+  .loader-content,
+  .empty-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    
+    p {
+      margin-top: 16px;
+      color: #fff;
+      font-size: 1.2em;
+    }
+  }
+  
+  img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .retry-button {
+    margin-top: 16px;
+    background: #08415c;
+    color: white;
+    border: none;
+    padding: 8px 24px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+    
+    &:hover {
+      background: #0a5272;
+    }
+  }
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(11, 13, 14, 0.2) 25%, rgba(11, 13, 14, 0.5) 50%, rgba(11, 13, 14, 0.2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    z-index: -1;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      background-position: -100% 0;
+    }
+    100% {
+      background-position: 100% 0;
     }
   }
 }
@@ -125,17 +194,64 @@
   position: relative;
   padding: 12px 170px 64px;
 
+  &__empty-category {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 48px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    
+    p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.2em;
+      margin-bottom: 16px;
+    }
+    
+    .reset-button {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      padding: 8px 24px;
+      font-size: 0.9em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: white;
+      }
+    }
+  }
+
   &__list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 32px;
+    position: relative;
+    min-height: 200px;
+    
+    &:empty::after {
+      content: "No videos found for this category";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255, 255, 255, 0.5);
+      font-style: italic;
+    }
   }
 
   &__episode {
     cursor: pointer;
     box-shadow: 0px 8px 32px #00000026;
     border: 1px solid #ffffff33;
-    //width: 20vw;
+    transition: transform 0.2s ease-in-out;
+    
+    &:hover {
+      transform: scale(1.02);
+      box-shadow: 0px 12px 36px #00000040;
+    }
 
     &:first-child {
       margin-left: 0;
@@ -184,8 +300,7 @@
     .child {
       --button-color: #ffffff;
       --bg-color: #000;
-
-
+      transition: all 0.25s ease-in-out;
       padding: 0;
       border: 3px solid var(--button-color);
       background-color: var(--bg-color);
@@ -213,6 +328,10 @@
       }
       &:not(.disabled) {
         cursor: pointer;
+        &:hover:not(.selected) {
+          opacity: 0.85;
+          transform: translateY(-2px);
+        }
       }
       &.disabled {
         pointer-events: none;
@@ -240,7 +359,7 @@
   }
 
   &__controls {
-    @extend .material-icons !optional;
+    font-family: 'Material Icons';
     position: absolute;
     background-color: #08415c;
     padding: 12px;
@@ -262,115 +381,138 @@
 </style>
 
 <script>
-import utils from "~/composables/utils";
-import { PerfectScrollbar } from 'vue2-perfect-scrollbar'
+import PerfectScrollbar from 'perfect-scrollbar'
 import { useVideoStore } from '~/stores/video'
-import { mapState } from 'pinia'
 
 export default {
-  components: { PerfectScrollbar },
-  data() {
-    return {
-      currentEpisode: 0,
-      selectedWorkstreams: [],
-    };
-  },
+  name: 'VideoList',
   props: {
+    isActive: {
+      type: Boolean,
+      default: false
+    },
     closeAction: {
       type: Function,
-      required: false,
-    },
-  },
-  computed: {
-    ...mapState(useVideoStore, ['videoList', 'currentVideo']),
-    fullVideoList() {
-      return this.videoList;
-    },
-    filteredVideoList() {
-      const filter = (item) => {
-        return (
-          this.selectedWorkstreams.length === 0 ||
-          this.selectedWorkstreams.includes(item.workstream)
-        );
-      };
-
-      return this.videoList.filter(filter);
-    },
-    featured() {
-      // For now, we'll use videoList directly since featured is not in the Pinia store
-      return this.videoList;
-    },
-    maxPages() {
-      return Math.floor(this.filteredVideoList.length / 4);
-    },
-    currentIndex() {
-      return this.currentVideo;
-    },
-    hasVideos() {
-      const videoStore = useVideoStore();
-      return videoStore.hasVideos;
-    },
-    currentVideoObj() {
-      const videoStore = useVideoStore();
-      return this.hasVideos
-        ? this.filteredVideoList[this.currentIndex]
-        : videoStore.emptyEpisode;
-    },
-  },
-  methods: {
-    getVideoThumbnail(video) {
-      const videoId = video.source == 'youtube' ? utils.getVideoIdFromYoutubeUrl(video.videoUrl) : utils.getVideoIdFromVimeoUrl(video.videoUrl);
-      return videoId
-        ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`
-        : "";
-    },
-    nextEpisode() {
-      this.$refs.videoList.handleNavigation("forward");
-    },
-    previousEpisode() {
-      this.$refs.videoList.handleNavigation("backward");
-    },
-    selectEpisode(url) {
-      if (process.client) {
-        window.scroll({
-          top: 0, 
-          left: 0, 
-          behavior: 'smooth'
-        });
-      }
-      const videoStore = useVideoStore();
-      videoStore.setCurrentVideo(url);
-      if (this.closeAction) {
-        this.closeAction();
-      }
-    },
-    selectWorkstream(workstream) {
-      const index = this.selectedWorkstreams.indexOf(workstream);
-
-      if (index > -1) {
-        this.selectedWorkstreams.splice(index, 1);
-      } else {
-        this.selectedWorkstreams.push(workstream);
-      }
-
-      // if (this.selectedWorkstream !== workstream) {
-      //   this.selectedWorkstream = workstream
-
-      //   this.$refs.videoList.goToPage(0)
-      // } else if (this.selectedWorkstream !== null) {
-      //   this.selectedWorkstream = null
-      //   this.$refs.videoList.goToPage(0)
-      // }
-    },
-    isWorkstreamSelected(workstream) {
-      return this.selectedWorkstreams.includes(workstream);
-    },
-    workstreamVideos(workstream) {
-      const qtd = this.fullVideoList.filter((item) => {
-        return item.workstream == workstream
-      }).length;
-      return qtd >= 1;
+      required: false
     }
   },
-};
+  data() {
+    return {
+      selectedWorkstream: '',
+      loading: true,
+      videoStore: null,
+      workstreams: {
+        'democracy': 'Democracy',
+        'politics-society': 'Politics & Society', 
+        'future-of-work': 'Future Leadership',
+        'digital-economy': 'Digital World'
+      }
+    }
+  },
+  computed: {
+    videoList() {
+      return this.videoStore?.videoList || []
+    },
+    filteredVideoList() {
+      if (!this.selectedWorkstream) return this.videoList
+      
+      return this.videoList.filter(video => {
+        // Get normalized workstream from video (default to democracy if missing)
+        const videoWorkstream = String(video.workstream || 'democracy').toLowerCase()
+        
+        // Direct match with selected workstream
+        return videoWorkstream === String(this.selectedWorkstream).toLowerCase()
+      })
+    },
+    featured() {
+      return this.videoList
+    },
+    // Count how many videos are in each workstream
+    workstreamCounts() {
+      const counts = {}
+      
+      // Initialize all workstreams with 0
+      Object.keys(this.workstreams).forEach(ws => {
+        counts[ws] = 0
+      })
+      
+      // Count videos in each workstream
+      this.videoList.forEach(video => {
+        const ws = String(video.workstream || 'democracy').toLowerCase()
+        if (counts[ws] !== undefined) {
+          counts[ws]++
+        }
+      })
+      
+      return counts
+    }
+  },
+  async mounted() {
+    this.videoStore = useVideoStore()
+    await this.fetchVideos()
+    
+    // Initialize perfect scrollbar
+    const container = this.$el.querySelector('.video-list__list')
+    if (container) {
+      new PerfectScrollbar(container, {
+        wheelSpeed: 2,
+        wheelPropagation: true,
+        minScrollbarLength: 20
+      })
+    }
+  },
+  methods: {    
+    async fetchVideos() {
+      try {
+        this.loading = true
+        if (this.videoStore && !this.videoStore.hasVideos) {
+          await this.videoStore.fetchVideos()
+        }
+      } catch (error) {
+        console.error('Error fetching videos:', error)
+      } finally {
+        this.loading = false
+      }
+    },
+    
+    selectEpisode(videoUrl) {
+      // Close the list if there's a close action
+      if (this.closeAction) {
+        this.closeAction()
+      }
+      
+      // Set the video in the store
+      if (this.videoStore) {
+        this.videoStore.setCurrentVideo(videoUrl)
+        
+        // Scroll to top
+        if (process.client) {
+          window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+          })
+        }
+      }
+    },
+    
+    selectWorkstream(workstream) {
+      if (!this.workstreamVideos(workstream)) return
+      
+      if (this.selectedWorkstream === workstream) {
+        this.selectedWorkstream = ''
+      } else {
+        this.selectedWorkstream = workstream
+      }
+    },
+    
+    isWorkstreamSelected(workstream) {
+      return this.selectedWorkstream === workstream
+    },
+    
+    workstreamVideos(workstream) {
+      return this.workstreamCounts[workstream] > 0
+    }
+  }
+}
 </script>

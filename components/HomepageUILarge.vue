@@ -8,7 +8,7 @@
     <navigation-bar />
     <menu-ui />
     <div class="homepage__list-bar" :class="{ animated : animate }">
-      <!--<div class="homepage__list-bar__section button-section">
+      <div class="homepage__list-bar__section button-section">
         <div
           class="homepage__list-bar__button"
           :class="{ opened: videoListMenu }"
@@ -22,7 +22,7 @@
             >ccm.design</a
           >
         </div>
-      </div>-->
+      </div>
 
       <div
         class="homepage__list-bar__section videos-section"

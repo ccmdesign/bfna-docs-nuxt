@@ -49,6 +49,37 @@ export interface Video {
   by?: string
 }
 
+// Valid workstream values
+const VALID_WORKSTREAMS = ['democracy', 'politics-society', 'future-of-work', 'digital-economy']
+
+// Normalize workstream values for consistency
+function normalizeWorkstream(workstream: string | undefined): string {
+  if (!workstream) return 'democracy'
+  
+  const normalized = workstream.toLowerCase().trim()
+  
+  // Check for exact matches
+  if (VALID_WORKSTREAMS.includes(normalized)) {
+    return normalized
+  }
+  
+  // Handle common variations
+  if (normalized === 'politics & society' || normalized === 'politics and society') {
+    return 'politics-society'
+  }
+  
+  if (normalized === 'future leadership') {
+    return 'future-of-work'
+  }
+  
+  if (normalized === 'digital world' || normalized === 'digital') {
+    return 'digital-economy'
+  }
+  
+  // Default fallback
+  return 'democracy'
+}
+
 export const useVideoStore = defineStore('video', {
   state: () => ({
     videoList: [] as Video[],
@@ -115,7 +146,7 @@ export const useVideoStore = defineStore('video', {
                   subtitle: fields.subtitle || '',
                   videoUrl: fields.videoUrl || '',
                   source: fields.source || 'youtube',
-                  workstream: fields.workstream || 'democracy',
+                  workstream: normalizeWorkstream(fields.workstream),
                   backgroundImage: fields.backgroundImage?.fields?.file?.url || '',
                   tags: fields.tags || [],
                   // Map other fields as needed
@@ -160,6 +191,28 @@ export const useVideoStore = defineStore('video', {
             backgroundImage: '/assets/cicle_video.png',
             workstream: 'digital-economy',
             tags: ['technology', 'privacy', 'security'],
+            by: 'Bertelsmann Foundation'
+          },
+          {
+            title: 'Politics Today',
+            subtitle: 'Understanding modern political systems',
+            description: 'A comprehensive overview of political structures and systems in modern democracies.',
+            source: 'youtube',
+            videoUrl: 'https://www.youtube.com/watch?v=example3',
+            backgroundImage: '/assets/cicle_video.png',
+            workstream: 'politics-society',
+            tags: ['politics', 'society', 'democracy'],
+            by: 'Bertelsmann Foundation'
+          },
+          {
+            title: 'Future of Work',
+            subtitle: 'How technology is changing employment',
+            description: 'An analysis of how automation, AI, and other technologies are transforming the workplace.',
+            source: 'youtube',
+            videoUrl: 'https://www.youtube.com/watch?v=example4',
+            backgroundImage: '/assets/cicle_video.png',
+            workstream: 'future-of-work',
+            tags: ['work', 'automation', 'future'],
             by: 'Bertelsmann Foundation'
           }
         ]
