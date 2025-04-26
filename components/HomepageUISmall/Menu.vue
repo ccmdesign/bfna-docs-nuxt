@@ -4,7 +4,7 @@
     :class="{ hidden: !hasMenu }"
     @click="closeMenu(true, $event)"
   >
-    <div class="menu-small__content" ref="menuContent">
+    <div class="menu-small__content" ref="menuContentRef">
       <section class="menu-small__col">
         <nav class="menu-small__nav menu-small--updates">
           <h2 class="menu-small__heading">Updates</h2>
@@ -160,38 +160,41 @@
 }
 </style>
 
-<script>
-import utils from "../../utils";
+<script setup>
+import utils from "~/composables/utils";
+import { useVideoStore } from '~/stores/video';
+import { storeToRefs } from 'pinia';
 
-export default {
-  computed: {
-    hasMenu() {
-      return this.$store.state.menuVisibility;
-    },
-  },
-  watch: {
-    hasMenu(oldValue, newValue) {
-      if (newValue) {
-        this.scrollToBottom();
-      }
-    },
-  },
-  methods: {
-    setMenuVisibility(menuVisibility) {
-      this.$store.commit("setMenuVisibility", menuVisibility);
-    },
-    closeMenu(ifBackground, event) {
-      if (ifBackground && !event.target.classList.contains("menu-small")) {
-        return;
-      }
-      this.setMenuVisibility(false);
-    },
-    scrollToBottom() {
-      this.$refs.menuContent.scrollTo(0, this.$refs.menuContent.scrollHeight);
-    },
-  },
-  mounted() {
-    this.scrollToBottom();
-  },
-};
+const videoStore = useVideoStore();
+const { menuVisibility } = storeToRefs(videoStore);
+
+const hasMenu = computed(() => menuVisibility.value);
+const menuContentRef = ref(null);
+
+function setMenuVisibility(visible) {
+  videoStore.setMenuVisibility(visible);
+}
+
+function closeMenu(ifBackground, event) {
+  if (ifBackground && !event.target.classList.contains("menu-small")) {
+    return;
+  }
+  setMenuVisibility(false);
+}
+
+function scrollToBottom() {
+  if (menuContentRef.value) {
+    menuContentRef.value.scrollTo(0, menuContentRef.value.scrollHeight);
+  }
+}
+
+watch(hasMenu, (newValue) => {
+  if (newValue) {
+    scrollToBottom();
+  }
+});
+
+onMounted(() => {
+  scrollToBottom();
+});
 </script>

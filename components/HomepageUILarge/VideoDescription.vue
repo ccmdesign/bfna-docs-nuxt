@@ -270,85 +270,88 @@
 }
 </style>
 
-<script>
-import HomeHeader from "@/components/HomepageUILarge/HomeHeader";
-import utils from "../../utils";
-import { PerfectScrollbar } from 'vue2-perfect-scrollbar'
+<script setup>
+import HomeHeader from "./HomeHeader.vue";
+import utils from "~/composables/utils";
+import { PerfectScrollbar } from 'vue2-perfect-scrollbar';
 import { useRouter } from 'vue-router';
+import { useVideoStore } from '~/stores/video';
+import { storeToRefs } from 'pinia';
 
-export default {
-  computed: {
-    hasVideos() {
-      return this.$store.getters.hasVideos;
-    },
-    currentVideo() {
-      return this.hasVideos
-        ? this.$store.state.videoList[this.$store.state.currentVideo]
-        : this.$store.getters.emptyEpisode;
-    },
-    workstream() {
-      return `video-workstream--${this.currentVideo.workstream}`;
-    },
-  },
-  props: [
-    'open',
-  ],
-  data(){
-    return {
-      isOpened: this.open
-    }
-  },
-  name: "VideoDescription",
-  components: { HomeHeader, PerfectScrollbar },
-  methods: {
-    openVideo(video) {
-      let videoId = ''
-      const source = video.source
-      if(source == 'youtube'){
-        videoId = utils.getVideoIdFromYoutubeUrl(video.videoUrl)
-      } else if(source == 'vimeo'){
-        videoId = utils.getVideoIdFromVimeoUrl(video.videoUrl)
-      }
-      if (!videoId) {
-        alert(
-          `Couldn't play video:\nvideo ID not found in "${video.videoUrl}".`
-        );
-      }
-      this.$store.commit("setHomepageVideoEffect", true);
-      setTimeout(() => {
-        this.$router.push({ name: "watchVideoId", params: { videoId, source } });
-      }, 330);
-    },
-    moreInfo() {
-      this.toTop();
-      this.isOpened = true;
-      this.$emit('hideList', false);
-      setTimeout(() => {
-        this.$router.push({ name: "documentaryInternal", params: { id: utils.slugify(this.currentVideo.title) } });
-      }, 100);
-    },
-    returnButton() {
-      this.isOpened = false;
-      window.scroll({
-        top: 0, 
-        left: 0, 
-        behavior: 'smooth'
-      });
-      setTimeout(() => {
-        this.$router.replace('/');
-      }, 100);
-    },
-    toTop() {
-      window.scroll({
-        top: 0, 
-        left: 0, 
-        behavior: 'smooth'
-      });
-    },
-    getUIType () {
-      return document.documentElement.clientWidth >= 768 ? 'large' : 'small'
-    },
-  },
-};
+const props = defineProps({
+  open: String
+});
+
+const isOpened = ref(props.open);
+const router = useRouter();
+const videoStore = useVideoStore();
+const { videoList, currentVideo } = storeToRefs(videoStore);
+
+const hasVideos = computed(() => videoStore.hasVideos);
+const currentVideoObj = computed(() => hasVideos.value
+  ? videoList.value[currentVideo.value]
+  : videoStore.emptyEpisode
+);
+
+const workstream = computed(() => `video-workstream--${currentVideoObj.value.workstream || 'democracy'}`);
+
+const emit = defineEmits(['hideList']);
+
+function openVideo(video) {
+  let videoId = '';
+  const source = video.source;
+  
+  if (source === 'youtube') {
+    videoId = utils.getVideoIdFromYoutubeUrl(video.videoUrl);
+  } else if (source === 'vimeo') {
+    videoId = utils.getVideoIdFromVimeoUrl(video.videoUrl);
+  }
+  
+  if (!videoId) {
+    alert(`Couldn't play video:\nvideo ID not found in "${video.videoUrl}".`);
+    return;
+  }
+  
+  videoStore.setHomepageVideoEffect(true);
+  setTimeout(() => {
+    router.push({ name: "watch-videoId", params: { videoId, source } });
+  }, 330);
+}
+
+function moreInfo() {
+  toTop();
+  isOpened.value = true;
+  emit('hideList', false);
+  setTimeout(() => {
+    router.push({ 
+      name: "documentaryInternal-id", 
+      params: { id: utils.slugify(currentVideoObj.value.title) } 
+    });
+  }, 100);
+}
+
+function returnButton() {
+  isOpened.value = false;
+  window.scroll({
+    top: 0, 
+    left: 0, 
+    behavior: 'smooth'
+  });
+  setTimeout(() => {
+    router.replace('/');
+  }, 100);
+}
+
+function toTop() {
+  window.scroll({
+    top: 0, 
+    left: 0, 
+    behavior: 'smooth'
+  });
+}
+
+function getUIType() {
+  return document.documentElement.clientWidth >= 768 ? 'large' : 'small';
+}
 </script>
 <style src="vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css"/>

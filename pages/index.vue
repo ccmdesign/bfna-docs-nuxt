@@ -1,8 +1,8 @@
 <template>
   <div class="homepage">
     <div class="homepage__video-load" :class="{ show: showVideoLoad }"></div>
-    <ui-small v-if="getUIType() === 'small'" />
-    <ui-large v-if="getUIType() === 'large'" />
+    <HomepageUISmall v-if="getUIType() === 'small'" />
+    <HomepageUILarge v-if="getUIType() === 'large'" />
 
     <input id="cookie-trigger" type="checkbox">
     <div class="floating-message">  
@@ -45,6 +45,8 @@
 import utils from '~/composables/utils';
 import { useVideoStore } from '~/stores/video';
 import { storeToRefs } from 'pinia';
+import HomepageUILarge from '~/components/HomepageUILarge.vue';
+import HomepageUISmall from '~/components/HomepageUISmall.vue';
 
 const videoStore = useVideoStore();
 const { homepageVideoEffect } = storeToRefs(videoStore);

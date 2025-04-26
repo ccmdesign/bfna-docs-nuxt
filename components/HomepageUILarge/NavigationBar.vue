@@ -59,20 +59,9 @@
     margin: 0;
     padding: 0;
 
-    // transform-origin: left top;
-    
-    // margin-top: 60vh;
-    
-
-    // @media (min-width: 100em) {
-    //   margin-top: 331px;
-    // }
-
     li {
       padding: 16px 32px;
       display: inline-block;
-      //transform-origin: 1px 0;
-      //transform: rotate(-90deg);
       align-self: center;
       cursor: pointer;
       font-weight: bold;
@@ -81,21 +70,9 @@
       transition: background-color 0.13s ease-in-out;
       pointer-events: all;
 
-      @media (min-width: 100em) {
-        // padding: 0 64px;
-      }
-
       &:hover {
         background-color: rgba(0, 0, 0, 0.4);
       }
-
-      // &:first-child {
-      //   margin-right: 16px;
-      // }
-
-      // &:last-child {
-      //   margin-left: 16px;
-      // }
 
       & > a {
         color: inherit;
@@ -109,17 +86,16 @@
 }
 </style>
 
-<script>
-export default {
-  computed: {
-    hasMenu() {
-      return this.$store.state.menuVisibility;
-    },
-  },
-  methods: {
-    toggleMenu() {
-      this.$store.commit("setMenuVisibility", !this.hasMenu);
-    },
-  },
-};
+<script setup>
+import { useVideoStore } from '~/stores/video';
+import { storeToRefs } from 'pinia';
+
+const videoStore = useVideoStore();
+const { menuVisibility } = storeToRefs(videoStore);
+
+const hasMenu = computed(() => menuVisibility.value);
+
+function toggleMenu() {
+  videoStore.setMenuVisibility(!hasMenu.value);
+}
 </script>
