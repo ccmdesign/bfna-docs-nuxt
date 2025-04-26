@@ -41,50 +41,42 @@
 }
 </style>
 
-<script>
+<script setup>
 import utils from '~/composables/utils';
+import { useVideoStore } from '~/stores/video';
+import { storeToRefs } from 'pinia';
 
-export default {
-  name: 'home',
-  components: {
-    'ui-large': () => import('~/components/HomepageUILarge.vue'),
-    'ui-small': () => import('~/components/HomepageUISmall.vue'),
-  },
-  computed: {
-    showVideoLoad () {
-      return this.$store.state.homepageVideoEffect;
-    },
-  },
-  methods: {
-    getUIType () {
-      return document.documentElement.clientWidth >= 768 ? 'large' : 'small'
-    },
-  },
-  mounted () {
-    this.$store.commit('setHomepageVideoEffect', false)
-    this.$store.commit('setNavigation', true)
-  },
-  metaInfo () {
-    return {
-      title: 'BFNA Documentaries',
-      meta: [
-        {
-          vmid: 'description',
-          name: 'description',
-          content: (this.$store.getters.hasVideos ? this.$store.state.videoList[this.$store.state.currentVideo] : this.$store.getters.emptyEpisode).description
-        },
-        {
-          vmid: 'og:title',
-          property: 'og:title',
-          content: 'Bertelsmann Foundation Documentaries | Films for Transatlanticists'
-        },
-        {
-          vmid: 'og:description',
-          property: 'og:description',
-          content: 'Our documentary films provide an intimate portrait of the economic, political, and social challenges facing the United States and Europe today.'
-        }
-      ]
-    }
-  }
+const videoStore = useVideoStore();
+const { homepageVideoEffect } = storeToRefs(videoStore);
+
+const showVideoLoad = computed(() => homepageVideoEffect.value);
+
+function getUIType() {
+  return document.documentElement.clientWidth >= 768 ? 'large' : 'small';
 }
+
+onMounted(() => {
+  videoStore.setHomepageVideoEffect(false);
+  videoStore.setNavigation(true);
+});
+
+useHead({
+  title: 'BFNA Documentaries',
+  meta: [
+    {
+      name: 'description',
+      content: videoStore.hasVideos 
+        ? videoStore.videoList[videoStore.currentVideo].description 
+        : videoStore.emptyEpisode.description
+    },
+    {
+      property: 'og:title',
+      content: 'Bertelsmann Foundation Documentaries | Films for Transatlanticists'
+    },
+    {
+      property: 'og:description',
+      content: 'Our documentary films provide an intimate portrait of the economic, political, and social challenges facing the United States and Europe today.'
+    }
+  ]
+});
 </script>
