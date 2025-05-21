@@ -1,14 +1,50 @@
+<script setup>
+import { useRouter, useRoute } from 'vue-router'
+import { useVideoStore } from '~/stores/video'
+import { computed, watch } from 'vue'
+
+const router = useRouter()
+const route = useRoute()
+const videoStore = useVideoStore()
+
+const currentRoute = computed(() => route.name)
+
+const hasNavigation = computed(() => videoStore.navigation)
+const hasMenu = computed(() => videoStore.menuVisibility)
+
+const isCurrentRoute = (routeName) => currentRoute.value === routeName
+
+const toggleMenu = () => {
+  videoStore.setMenuVisibility(!hasMenu.value)
+}
+
+watch(() => route.name, (to) => {
+  currentRoute.value = to
+})
+</script>
+
 <template>
-  <div class="navigation-bar">
-    <NuxtLink to="/" class="navigation-bar__logo">
-      <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
-    </NuxtLink>
-    <div class="menu-trigger" @click="toggleMenu">
-      <div class="menu-trigger__line"></div>
-      <div class="menu-trigger__line"></div>
-      <div class="menu-trigger__line"></div>
-    </div>
-  </div>
+  <ul class="navigation-bar" :class="{ show: hasNavigation }">
+    <router-link
+      tag="li"
+      to="/"
+      class="navigation-bar__item"
+      :class="{ active: isCurrentRoute('home') }"
+      ><b class="navigation-bar__icon material-symbols-outlined">home</b>
+    </router-link
+    >
+    <router-link
+      tag="li"
+      to="/documentaries"
+      class="navigation-bar__item"
+      :class="{ active: isCurrentRoute('documentaries') }"
+      ><b class="navigation-bar__icon material-symbols-outlined">list</b>
+    </router-link
+    >
+    <li class="navigation-bar__item" @click="toggleMenu">
+      <div class="navigation-bar__icon material-symbols-outlined" :class="{ hasMenu }">more_vert</div>
+    </li>
+  </ul>
 </template>
 
 <style lang="scss" scoped>
@@ -49,6 +85,8 @@
     align-items: center;
     justify-content: center;
     background-color: #08415c;
+    color: var(--color-white);
+    text-decoration: none;
 
     &::before {
       position: absolute;
@@ -75,46 +113,3 @@
   }
 }
 </style>
-
-<script>
-import { useRouter } from 'vue-router'
-import { useVideoStore } from '~/stores/video'
-import { mapState } from 'pinia'
-
-export default {
-  setup() {
-    const router = useRouter()
-    return {
-      router
-    }
-  },
-  data() {
-    return {
-      currentRoute: this.router.currentRoute.value.name,
-    };
-  },
-  computed: {
-    ...mapState(useVideoStore, ['navigation', 'menuVisibility']),
-    hasNavigation() {
-      return this.navigation;
-    },
-    hasMenu() {
-      return this.menuVisibility;
-    },
-  },
-  watch: {
-    '$route'(to, from) {
-      this.currentRoute = to.name;
-    },
-  },
-  methods: {
-    isCurrentRoute(routeName) {
-      return this.currentRoute === routeName;
-    },
-    toggleMenu() {
-      const videoStore = useVideoStore();
-      videoStore.setMenuVisibility(!this.hasMenu);
-    },
-  },
-};
-</script>

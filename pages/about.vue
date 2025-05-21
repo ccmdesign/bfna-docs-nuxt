@@ -1,3 +1,34 @@
+<script setup>
+import utils from "~/composables/utils";
+import { useVideoStore } from '~/stores/video';
+
+useHead({
+  title: "BFNA Documentaries",
+  meta: [
+    {
+      vmid: "description",
+      name: "description",
+      content: utils.getDefaultDescription(),
+    },
+    {
+      vmid: "og:title",
+      property: "og:title",
+      content: utils.getDefaultTitle(),
+    },
+    {
+      vmid: "og:description",
+      property: "og:description",
+      content: utils.getDefaultDescription(),
+    },
+  ],
+});
+
+const videoStore = useVideoStore();
+videoStore.setHomepageVideoEffect(false);
+videoStore.setNavigation(true);
+
+</script>
+
 <template>
   <div class="app-window app-page__wrapper">
     <div class="app-window__title app-page__wrapper">
@@ -27,7 +58,7 @@
   </div>
 </template>
 
-<!--
+
 <style lang="scss" scoped>
 .logo {
   max-width: 350px;
@@ -63,38 +94,3 @@
   }
 }
 </style>
--->
-
-<script>
-import utils from "~/composables/utils";
-
-export default {
-  name: 'aboutUsView',
-  metaInfo() {
-    return {
-      title: "BFNA Documentaries",
-      meta: [
-        {
-          vmid: "description",
-          name: "description",
-          content: utils.getDefaultDescription(),
-        },
-        {
-          vmid: "og:title",
-          property: "og:title",
-          content: utils.getDefaultTitle(),
-        },
-        {
-          vmid: "og:description",
-          property: "og:description",
-          content: utils.getDefaultDescription(),
-        },
-      ],
-    };
-  },
-  mounted () {
-    this.$store.commit('setHomepageVideoEffect', false)
-    this.$store.commit('setNavigation', true)
-  }
-}
-</script>

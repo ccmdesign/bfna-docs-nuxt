@@ -1,3 +1,129 @@
+<script setup>
+import { ref, computed, onMounted, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import utils from "@/composables/utils";
+
+import Slide from "@/components/HomepageUILarge/Slide";
+import VideoList from "@/components/HomepageUILarge/VideoList";
+import NavigationBarLarge from "@/components/HomepageUILarge/NavigationBar";
+import NavigationBarSmall from "@/components/HomepageUISmall/NavigationBar";
+import MenuLarge from "@/components/HomepageUILarge/Menu";
+import MenuSmall from "@/components/HomepageUISmall/Menu";
+import VideoDescription from "@/components/HomepageUILarge/VideoDescription";
+import Footer from "@/components/Footer";
+
+definePageMeta({
+  name: 'videoDescription',
+})
+
+const router = useRouter();
+const route = useRoute();
+
+const videoListMenu = ref(false);
+const animate = ref(false);
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const videoStore = useVideoStore();
+const videoList = computed(() => videoStore.videoList);
+const hasVideos = computed(() => videoStore.hasVideos);
+const currentVideo = computed(() =>
+  hasVideos.value
+    ? videoStore.currentVideo
+    : videoStore.emptyEpisode
+);
+
+function openVideo(url, source) {
+  let videoId = "";
+  if (source === "youtube") {
+    videoId = utils.getVideoIdFromYoutubeUrl(url);
+  } else if (source === "vimeo") {
+    videoId = utils.getVideoIdFromVimeoUrl(url);
+  }
+  console.log(videoId);
+  if (!videoId) {
+    alert(`Couldn't play video:\nvideo ID not found in "${url}".`);
+  }
+  videoStore.setHomepageVideoEffect(true);
+  setTimeout(() => {
+    router.push({ name: "watchVideoId", params: { videoId, source } });
+  }, 330);
+}
+
+function onPageChange(newSlide) {
+  setCurrentVideo(newSlide);
+}
+
+function setCurrentVideo(index) {
+  videoStore.commit("setCurrentVideo", index);
+}
+
+function toggleVideoList() {
+  videoListMenu.value = !videoListMenu.value;
+}
+
+function closeVideoList() {
+  videoListMenu.value = false;
+}
+
+
+function gimmeHours(date) {
+  return date.getHours() + ":" + ("0" + date.getMinutes()).slice(-2);
+}
+
+function getVideoFromUrl(slug) {
+  let video = false;
+  videoList.value.forEach((el) => {
+    if (utils.slugify(el.title) === slug) {
+      video = el;
+    }
+  });
+  return video;
+}
+
+function getUIType() {
+  if (import.meta.client) {
+    return document.documentElement.clientWidth >= 768 ? "large" : "small";
+  }
+  return "large"; // Default for server-side rendering
+}
+
+onMounted(() => {
+  animate.value = true;
+  if (import.meta.client) {
+    window.setTimeout(() => {
+      window.scroll({
+        top: 200,
+        left: 0,
+        behavior: "smooth",
+      });
+    }, 0);
+  }
+});
+
+watch(
+  () => videoList.value,
+  () => {
+    const video = getVideoFromUrl(route.params.id);
+    if (video) {
+      videoStore.setCurrentVideo(video);
+    }
+  }
+);
+</script>
+
 <template>
   <div class="homepage" :class="{ animated : animate }">
     <h1 class="sr-only">{{ currentVideo.title }}</h1>
@@ -5,7 +131,7 @@
       class="homepage__slider__background--large"
       :style="`background-image: url('${currentVideo.backgroundImage}')`"
     ></div>
-    <VideoDescription open="true" />
+    <VideoDescription :open="true" />
     <div class="award-list" :class="{ animated : animate }">
       <div class="award"  v-for="award in currentVideo.awards" :key="award.id">
         <div class="award__tip"></div>
@@ -19,8 +145,10 @@
         </div>
       </div>
     </div>
-    <navigation-bar v-if="getUIType() === 'large'" />
-    <menu-ui v-if="getUIType() === 'large'"  />
+    <navigation-bar-large v-if="getUIType() === 'large'" />
+    <navigation-bar-small v-else />
+    <MenuLarge v-if="getUIType() === 'large'" />
+    <MenuSmall v-else />
     <div class="homepage__list-bar" :class="{ animated : animate }">
       <div class="video-list__screenings-section | content-info" v-if="currentVideo.screenings && currentVideo.screenings.length > 0">
         <h2 class="section-title">Upcoming Screenings</h2>
@@ -546,7 +674,7 @@
   }
 
   &__list-bar {
-    width: 100%;
+    // width: 100%;
     z-index: 100;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
@@ -676,136 +804,3 @@
   }
 }
 </style>
-
-<script setup>
-import { useRouter, useRoute } from "vue-router";
-import utils from "~/composables/utils";
-
-const router = useRouter();
-const route = useRoute();
-const id = computed(() => route.params.id);
-
-// Rest of component logic to be refactored later
-</script>
-
-<script>
-import Slide from "@/components/HomepageUILarge/Slide";
-import VideoList from "@/components/HomepageUILarge/VideoList";
-import NavigationBar from "@/components/HomepageUILarge/NavigationBar";
-import MenuUI from "@/components/HomepageUILarge/Menu";
-import VideoDescription from "@/components/HomepageUILarge/VideoDescription";
-import Footer from "@/components/Footer"
-
-export default {
-  name: "documentary",
-  components: {
-    Footer,
-    Slide,
-    VideoList,
-    NavigationBar,
-    "menu-ui": MenuUI,
-    VideoDescription,
-  },
-  data() {
-    return {
-      videoListMenu: false,
-      videoListHeight: 0,
-      animate: false,
-      monthNames : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    };
-  },
-  computed: {
-    videoList() {
-      return this.$store.state.videoList;
-    },
-    currentIndex() {
-      return this.$store.state.currentVideo;
-    },
-    hasVideos() {
-      return this.$store.getters.hasVideos;
-    },
-    currentVideo() {
-      return this.hasVideos
-        ? this.videoList[this.currentIndex]
-        : this.$store.getters.emptyEpisode;
-    },
-  },
-  methods: {
-    openVideo(url, source) {
-      let videoId = ''
-      if(source == 'youtube'){
-        videoId = utils.getVideoIdFromYoutubeUrl(url)
-      } else if(source == 'vimeo'){
-        videoId = utils.getVideoIdFromVimeoUrl(url)
-      }
-      console.log(videoId)
-      if (!videoId) {
-        alert(
-          `Couldn't play video:\nvideo ID not found in "${url}".`
-        );
-      }
-      this.$store.commit("setHomepageVideoEffect", true);
-      setTimeout(() => {
-        this.$router.push({ name: "watchVideoId", params: { videoId, source } });
-      }, 330);
-    },
-    onPageChange(newSlide) {
-      this.setCurrentVideo(newSlide);
-    },
-    setCurrentVideo(index) {
-      this.$store.commit("setCurrentVideo", index);
-    },
-    toggleVideoList() {
-      this.videoListMenu = !this.videoListMenu;
-    },
-    closeVideoList() {
-      this.videoListMenu = false;
-    },
-    getButtonText() {
-      if(this.videoListMenu) {
-        return 'keyboard_arrow_upward'
-      } else {
-        return 'All Films'
-      }
-    },
-    gimmeHours(date) {
-      return date.getHours() + ":" + ('0' + date.getMinutes()).slice(-2);
-    },
-    getURL(slug) {
-      let url = false;
-      this.videoList.forEach(el => {
-        if(utils.slugify(el.title) == slug) {
-          url = el.videoUrl;
-        }
-      });
-      return url;
-    },
-    getUIType () {
-      if (process.client) {
-        return document.documentElement.clientWidth >= 768 ? 'large' : 'small';
-      }
-      return 'large'; // Default for server-side rendering
-    },
-  },
-  mounted() {
-    this.animate = true;
-    if (process.client) {
-      window.setTimeout(() => {
-        window.scroll({
-          top: 200, 
-          left: 0, 
-          behavior: 'smooth'
-        });
-      }, 0);
-    }
-  },
-  watch: {
-    videoList: function () {
-      let url = this.getURL(this.$route.params.id);
-      if(url) {
-        this.$store.commit("setCurrentVideo", url);
-      }
-    },
-  }
-};
-</script>

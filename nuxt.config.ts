@@ -9,18 +9,47 @@ export default defineNuxtConfig({
       contentfulToken: process.env.CONTENTFUL_ACCESS_TOKEN || ''
     }
   },
+  app: {
+    head: {
+      meta: [
+        { name: "viewport", content: "width=device-width, initial-scale=1" },],
+      link: [
+        // google icons
+        { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" },
+      ],
+      script: [
+        // vue-vimeo-player
+        { src: "//unpkg.com/vue-vimeo-player", async: true, defer: true },
+      ],
+    }
+  },
   css: [
     './assets/scss/main.scss'
   ],
   build: {
+    vendor: ['vue-vimeo-player'],
     transpile: ['vue-carousel'],
   },
   vite: {
     optimizeDeps: {
       exclude: ['vue-carousel']
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `
+            @use "@/assets/scss/_mixins.scss" as *;
+            @use "@/assets/scss/_colors.scss" as *;
+          `
+        }
+      }
     }
   },
-  ssr: true,
+  plugins: [
+    { src: '~/plugins/youtubePlayer.client.ts', mode: 'client' },
+    { src: '~/plugins/vimeoPlayer.client.ts', mode: 'client' },
+  ],
+  ssr: false,
   experimental: {
     clientFallback: true
   }

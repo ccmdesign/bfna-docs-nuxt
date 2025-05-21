@@ -1,3 +1,23 @@
+<script setup>
+import { useVideoStore } from '~/stores/video';
+import { computed } from 'vue';
+
+const videoStore = useVideoStore();
+
+const hasMenu = computed(() => videoStore.menuVisibility);
+
+function setMenuVisibility(menuVisibility) {
+  videoStore.setMenuVisibility(menuVisibility);
+}
+
+function closeMenu(ifBackground, event) {
+  if (ifBackground && !event.target.classList.contains("menu-large")) {
+    return;
+  }
+  setMenuVisibility(false);
+}
+</script>
+
 <template>
   <div
     class="menu-large"
@@ -5,7 +25,7 @@
     @click="closeMenu(true, $event)"
   >
     <div class="menu-large__content">
-      <div class="menu-large__close" @click="closeMenu(false, $event)">
+      <div class="menu-large__close material-symbols-outlined" @click="closeMenu(false, $event)">
         close
       </div>
 
@@ -116,8 +136,8 @@
 
   &__content {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    top: 0;
+    right: 0;
     left: 0;
     bottom: 0;
     padding: 90px 0;
@@ -173,29 +193,3 @@
   }
 }
 </style>
-
-<script>
-import { useVideoStore } from '~/stores/video';
-import { mapState } from 'pinia';
-
-export default {
-  computed: {
-    ...mapState(useVideoStore, ['menuVisibility']),
-    hasMenu() {
-      return this.menuVisibility;
-    },
-  },
-  methods: {
-    setMenuVisibility(menuVisibility) {
-      const videoStore = useVideoStore();
-      videoStore.setMenuVisibility(menuVisibility);
-    },
-    closeMenu(ifBackground, event) {
-      if (ifBackground && !event.target.classList.contains("menu-large")) {
-        return;
-      }
-      this.setMenuVisibility(false);
-    },
-  },
-};
-</script>

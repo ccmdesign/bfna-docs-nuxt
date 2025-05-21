@@ -4,30 +4,12 @@
       class="homepage__slider__background--large"
       :style="`background-image: url('${currentVideo.backgroundImage}')`"
     ></div>
-    <VideoDescription open="false" @eventname="hideList" />
+    <VideoDescription :open="false" @eventname="hideList" />
     <navigation-bar />
-    <menu-ui />
-    <div class="homepage__list-bar" :class="{ animated : animate }">
-      <div class="homepage__list-bar__section button-section">
-        <div
-          class="homepage__list-bar__button"
-          :class="{ opened: videoListMenu }"
-          :data-text="getButtonText()"
-          @click="toggleVideoList"
-        >
-        </div>
-        <div class="homepage__list-bar__by">
-          by
-          <a href="https://www.ccmdesign.ca" target="_blank" rel="noopener"
-            >ccm.design</a
-          >
-        </div>
-      </div>
-
-      <div
-        class="homepage__list-bar__section videos-section"
-      >
-        <video-list
+    <Menu></Menu>
+    <div class="homepage__list-bar" :class="{ animated: animate }">
+      <div class="homepage__list-bar__section videos-section">
+        <videoListComponent
           class="child"
           ref="videoListWrapper"
           :closeAction="closeVideoList"
@@ -37,6 +19,49 @@
     <Footer />
   </div>
 </template>
+
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import { useVideoStore } from "~/stores/video";
+import Slide from "@/components/HomepageUILarge/Slide";
+import VideoList from "@/components/HomepageUILarge/VideoList";
+import NavigationBar from "@/components/HomepageUILarge/NavigationBar";
+import VideoDescription from "@/components/HomepageUILarge/VideoDescription";
+import Footer from "@/components/Footer";
+import Menu from "@/components/HomepageUILarge/Menu";
+
+const videoListMenu = ref(false);
+const videoListHeight = ref(0);
+const animate = ref(false);
+
+const videoStore = useVideoStore();
+const currentVideo = computed(() =>
+  videoStore.hasVideos ? videoStore.currentVideo : videoStore.emptyEpisode
+);
+
+function closeVideoList() {
+  videoListMenu.value = false;
+}
+
+function hideList() {
+  animate.value = false;
+}
+
+const videoListComponent = markRaw(VideoList);
+const videoListWrapper = useTemplateRef(null);
+onMounted(() => {
+  if (import.meta.client) {
+    requestAnimationFrame(() => {
+      videoListHeight.value =
+        Math.max(
+          videoListWrapper.value?.getBoundingClientRect().height || 0,
+          510
+        ) + "px";
+    });
+  }
+  animate.value = true;
+});
+</script>
 
 <style lang="scss" scoped>
 .homepage {
@@ -165,102 +190,3 @@
   }
 }
 </style>
-
-<script>
-// import { Carousel } from "vue-carousel";
-import Slide from "@/components/HomepageUILarge/Slide";
-import VideoList from "@/components/HomepageUILarge/VideoList";
-import NavigationBar from "@/components/HomepageUILarge/NavigationBar";
-import MenuUI from "@/components/HomepageUILarge/Menu";
-import VideoDescription from "@/components/HomepageUILarge/VideoDescription";
-import Footer from "@/components/Footer"
-import { useVideoStore } from "~/stores/video";
-import { mapState, mapActions } from "pinia";
-
-export default {
-  name: "HomepageUILargeComponent",
-  components: {
-    // Carousel,
-    Slide,
-    VideoList,
-    Footer,
-    NavigationBar,
-    "menu-ui": MenuUI,
-    VideoDescription,
-  },
-  data() {
-    return {
-      videoListMenu: false,
-      videoListHeight: 0,
-      animate: false,
-    };
-  },
-  computed: {
-    ...mapState(useVideoStore, ["videoList", "currentVideo"]),
-    hasVideos() {
-      const videoStore = useVideoStore();
-      return videoStore.hasVideos;
-    },
-    currentIndex() {
-      return this.currentVideo;
-    },
-    currentVideo() {
-      const videoStore = useVideoStore();
-      return videoStore.hasVideos
-        ? this.videoList[this.currentIndex]
-        : videoStore.emptyEpisode;
-    },
-  },
-  methods: {
-    onPageChange(newSlide) {
-      this.setCurrentVideo(newSlide);
-    },
-    setCurrentVideo(index) {
-      const videoStore = useVideoStore();
-      videoStore.setCurrentVideoIndex(index);
-    },
-    nextSlide() {
-      if (this.currentIndex + 1 >= this.videoList.length) {
-        this.setCurrentVideo(0);
-      } else {
-        this.setCurrentVideo(this.currentIndex + 1);
-      }
-    },
-    previousSlide() {
-      if (this.currentIndex - 1 < 0) {
-        this.setCurrentVideo(this.videoList.length - 1);
-      } else {
-        this.setCurrentVideo(this.currentIndex - 1);
-      }
-    },
-    toggleVideoList() {
-      this.videoListMenu = !this.videoListMenu;
-    },
-    closeVideoList() {
-      this.videoListMenu = false;
-    },
-    getButtonText() {
-      if(this.videoListMenu) {
-        return 'keyboard_arrow_upward'
-      } else {
-        return 'All Films'
-      }
-    },
-    hideList() {
-      this.animate = false;
-    }
-  },
-  mounted() {
-    if (process.client) {
-      requestAnimationFrame(() => {
-        this.videoListHeight =
-          Math.max(
-            this.$refs.videoListWrapper.$el.getBoundingClientRect().height,
-            510
-          ) + "px";
-      });
-    }
-    this.animate = true;
-  },
-};
-</script>

@@ -1,7 +1,7 @@
 import { defineNuxtPlugin } from '#app'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-  if (process.client) {
+  if (import.meta.client) {
     try {
       // Only import these components on the client side
       const carouselModule = await import('vue-carousel')

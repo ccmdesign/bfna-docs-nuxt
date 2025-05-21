@@ -1,3 +1,114 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import PerfectScrollbar from 'perfect-scrollbar'
+import { useVideoStore } from '~/stores/video'
+
+const props = defineProps({
+  isActive: {
+    type: Boolean,
+    default: false
+  },
+  closeAction: {
+    type: Function,
+    required: false
+  }
+})
+
+const selectedWorkstream = ref('')
+const loading = ref(true)
+const videoStore = useVideoStore()
+
+const workstreams = {
+  'democracy': 'Democracy',
+  'politics-society': 'Politics & Society', 
+  'future-of-work': 'Future Leadership',
+  'digital-economy': 'Digital World'
+}
+
+const videoList = computed(() => videoStore?.videoList || [])
+const featuredList = computed(() => videoStore?.featuredVideosList || [])
+
+
+const filteredVideoList = computed(() => {
+  if (!selectedWorkstream.value) return videoList.value
+
+  return videoList.value.filter(video => {
+    const videoWorkstream = String(video.workstream || 'democracy').toLowerCase()
+    return videoWorkstream === String(selectedWorkstream.value).toLowerCase()
+  })
+})
+
+const featured = computed(() => featuredList.value)
+
+const workstreamCounts = computed(() => {
+  const counts = {}
+  Object.keys(workstreams).forEach(ws => {
+    counts[ws] = 0
+  })
+
+  videoList.value.forEach(video => {
+    const ws = String(video.workstream || 'democracy').toLowerCase()
+    if (counts[ws] !== undefined) {
+      counts[ws]++
+    }
+  })
+
+  return counts
+})
+
+const selectEpisode = (video) => {
+  if (props.closeAction) {
+    props.closeAction()
+  }
+
+  if (videoStore) {
+    videoStore.setCurrentVideo(video)
+
+    if (import.meta.client) {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      })
+    }
+  }
+}
+
+const selectWorkstream = (workstream) => {
+  if (!workstreamVideos(workstream)) return
+
+  if (selectedWorkstream.value === workstream) {
+    selectedWorkstream.value = ''
+  } else {
+    selectedWorkstream.value = workstream
+  }
+}
+
+const isWorkstreamSelected = (workstream) => {
+  return selectedWorkstream.value === workstream
+}
+
+const workstreamVideos = (workstream) => {
+  return workstreamCounts.value[workstream] > 0
+}
+
+onMounted(async () => {
+  if(videoStore && videoStore.hasVideos) {
+    loading.value = false
+  }
+
+  const container = document.querySelector('.video-list__list')
+  if (container) {
+    new PerfectScrollbar(container, {
+      wheelSpeed: 2,
+      wheelPropagation: true,
+      minScrollbarLength: 20
+    })
+  }
+})
+</script>
+
+
 <template>
 <div>
   <div v-if="loading" class="video-list-loader">
@@ -18,7 +129,7 @@
         <h3 class="section-title">Featured</h3>
         <div class="featured-list">
           <div v-for="(video, index) in featured" :key="index">
-            <div class="video-list__episode video-list__episode--featured" @click="selectEpisode(video.videoUrl)" :data-title="video.title" :aria-label="video.title">
+            <div class="video-list__episode video-list__episode--featured" @click="selectEpisode(video)" :data-title="video.title" :aria-label="video.title">
               <div
                 class="video-list__episode-thumbnail"
                 :style="{ backgroundImage: `url('${video.backgroundImage}')` }"
@@ -50,7 +161,7 @@
           <p>No videos found in this category</p>
           <button @click="selectedWorkstream = ''" class="reset-button">Show all videos</button>
         </div>
-        <div class="video-list__episode" v-for="(video, index) in filteredVideoList" :key="index" @click="selectEpisode(video.videoUrl)">
+        <div class="video-list__episode" v-for="(video, index) in filteredVideoList" :key="index" @click="selectEpisode(video)">
           <div
             class="video-list__episode-thumbnail"
             :style="{ backgroundImage: `url('${video.backgroundImage}')` }"
@@ -379,140 +490,3 @@
   }
 }
 </style>
-
-<script>
-import PerfectScrollbar from 'perfect-scrollbar'
-import { useVideoStore } from '~/stores/video'
-
-export default {
-  name: 'VideoList',
-  props: {
-    isActive: {
-      type: Boolean,
-      default: false
-    },
-    closeAction: {
-      type: Function,
-      required: false
-    }
-  },
-  data() {
-    return {
-      selectedWorkstream: '',
-      loading: true,
-      videoStore: null,
-      workstreams: {
-        'democracy': 'Democracy',
-        'politics-society': 'Politics & Society', 
-        'future-of-work': 'Future Leadership',
-        'digital-economy': 'Digital World'
-      }
-    }
-  },
-  computed: {
-    videoList() {
-      return this.videoStore?.videoList || []
-    },
-    filteredVideoList() {
-      if (!this.selectedWorkstream) return this.videoList
-      
-      return this.videoList.filter(video => {
-        // Get normalized workstream from video (default to democracy if missing)
-        const videoWorkstream = String(video.workstream || 'democracy').toLowerCase()
-        
-        // Direct match with selected workstream
-        return videoWorkstream === String(this.selectedWorkstream).toLowerCase()
-      })
-    },
-    featured() {
-      return this.videoList
-    },
-    // Count how many videos are in each workstream
-    workstreamCounts() {
-      const counts = {}
-      
-      // Initialize all workstreams with 0
-      Object.keys(this.workstreams).forEach(ws => {
-        counts[ws] = 0
-      })
-      
-      // Count videos in each workstream
-      this.videoList.forEach(video => {
-        const ws = String(video.workstream || 'democracy').toLowerCase()
-        if (counts[ws] !== undefined) {
-          counts[ws]++
-        }
-      })
-      
-      return counts
-    }
-  },
-  async mounted() {
-    this.videoStore = useVideoStore()
-    await this.fetchVideos()
-    
-    // Initialize perfect scrollbar
-    const container = this.$el.querySelector('.video-list__list')
-    if (container) {
-      new PerfectScrollbar(container, {
-        wheelSpeed: 2,
-        wheelPropagation: true,
-        minScrollbarLength: 20
-      })
-    }
-  },
-  methods: {    
-    async fetchVideos() {
-      try {
-        this.loading = true
-        if (this.videoStore && !this.videoStore.hasVideos) {
-          await this.videoStore.fetchVideos()
-        }
-      } catch (error) {
-        console.error('Error fetching videos:', error)
-      } finally {
-        this.loading = false
-      }
-    },
-    
-    selectEpisode(videoUrl) {
-      // Close the list if there's a close action
-      if (this.closeAction) {
-        this.closeAction()
-      }
-      
-      // Set the video in the store
-      if (this.videoStore) {
-        this.videoStore.setCurrentVideo(videoUrl)
-        
-        // Scroll to top
-        if (process.client) {
-          window.scroll({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-          })
-        }
-      }
-    },
-    
-    selectWorkstream(workstream) {
-      if (!this.workstreamVideos(workstream)) return
-      
-      if (this.selectedWorkstream === workstream) {
-        this.selectedWorkstream = ''
-      } else {
-        this.selectedWorkstream = workstream
-      }
-    },
-    
-    isWorkstreamSelected(workstream) {
-      return this.selectedWorkstream === workstream
-    },
-    
-    workstreamVideos(workstream) {
-      return this.workstreamCounts[workstream] > 0
-    }
-  }
-}
-</script>

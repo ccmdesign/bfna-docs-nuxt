@@ -1,7 +1,7 @@
 <template>
   <div class="large-navigation-bar" :class="{ hasMenu }">
     <div class="large-navigation-bar__button-wrapper" @click="toggleMenu">
-      <div class="large-navigation-bar__button">sort</div>
+      <div class="large-navigation-bar__button material-symbols-outlined">sort</div>
     </div>
     <ul class="large-navigation-bar__menu">
       <li><a href="https://www.bfna.org">Visit Our Homepage</a></li>
@@ -17,7 +17,7 @@
   position: fixed;
   display: flex;
   flex-direction: row;
-  width: 100%;
+  width: calc(100% - 340px);
   height: 60px;
   background-color: rgba(0, 0, 0, 0.4);
   top: 0;
@@ -76,6 +76,7 @@
 
       & > a {
         color: inherit;
+        text-decoration: none;
 
         &:hover {
           text-decoration: none;

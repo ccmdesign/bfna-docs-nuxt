@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <NuxtLink to="/">
-      <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
+      <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" class="documentaries" />
     </NuxtLink>
   </div>
 </template>

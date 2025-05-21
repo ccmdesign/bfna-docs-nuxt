@@ -14,7 +14,7 @@
   background-color: #000000;
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center center;
+  background-position: 50%;
   &:after {
     content: '';
     position: absolute;
@@ -27,20 +27,16 @@
 }
 </style>
 
-<script>
-import utils from "~/composables/utils";
+<script setup>
+import { computed } from 'vue';
+import { defineProps } from 'vue';
 
-export default {
-  data() {
-    return {
-      backgroundImage: `url('${this.imageUrl}')`,
-    };
+const props = defineProps({
+  imageUrl: {
+    type: String,
+    required: true,
   },
-  props: {
-    imageUrl: {
-      type: String,
-      required: true,
-    },
-  },
-};
+});
+
+const backgroundImage = computed(() => `url('${props.imageUrl}')`);
 </script>

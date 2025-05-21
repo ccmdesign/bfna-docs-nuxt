@@ -1,3 +1,99 @@
+<script setup>
+import { ref, computed } from 'vue';
+import HomeHeader from "./HomeHeader.vue";
+import utils from "~/composables/utils";
+import { useRouter } from 'vue-router';
+import { useVideoStore } from '~/stores/video';
+import { storeToRefs } from 'pinia';
+
+const props = defineProps({
+  open: {
+    type: Boolean,
+    default: false
+  }
+});
+
+const isOpened = ref(props.open);
+const router = useRouter();
+const videoStore = useVideoStore();
+const hasVideos = computed(() => videoStore.hasVideos);
+const currentVideoObj = computed(() => hasVideos.value
+  ? videoStore.getCurrentVideoBasedOnSlug
+  : videoStore.emptyEpisode
+);
+
+const workstream = computed(() => `video-workstream--${currentVideoObj.value.workstream || 'democracy'}`);
+
+const emit = defineEmits(['hideList']);
+
+function openVideo(video) {
+  let videoId = '';
+  const source = video.source;
+  
+  if (source === 'youtube') {
+    videoId = utils.getVideoIdFromYoutubeUrl(video.videoUrl);
+  } else if (source === 'vimeo') {
+    videoId = utils.getVideoIdFromVimeoUrl(video.videoUrl);
+  }
+  
+  if (!videoId) {
+    if (import.meta.client) {
+      alert(`Couldn't play video:\nvideo ID not found in "${video.videoUrl}".`);
+    }
+    return;
+  }
+  
+  videoStore.setHomepageVideoEffect(true);
+  setTimeout(() => {
+    router.push({ name: "watch", params: { id: videoId, source } });
+  }, 330);
+}
+
+function moreInfo() {
+  toTop();
+  isOpened.value = true;
+  emit('hideList', false);
+  setTimeout(() => {
+    router.push({
+      name: `videoDescription`,
+      path:':slug',
+      params: { slug: utils.slugify(currentVideoObj.value.title) }
+    });
+  }, 100);
+}
+
+function returnButton() {
+  isOpened.value = false;
+  if (import.meta.client) {
+    window.scroll({
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth'
+    });
+  }
+  setTimeout(() => {
+    router.replace('/');
+  }, 100);
+}
+
+function toTop() {
+  if (import.meta.client) {
+    window.scroll({
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth'
+    });
+  }
+}
+
+function getUIType() {
+  if (import.meta.client) {
+    return document.documentElement.clientWidth >= 768 ? 'large' : 'small';
+  }
+  return 'large'; // Default for SSR
+}
+</script>
+
 <template>
   <div class="full_content">
     <HomeHeader />
@@ -36,7 +132,7 @@
 .full_content {
   z-index: 1;
   //position: absolute;
-  width: 100%;
+  // width: 100%;
   max-height: 100%;
   top: 0;
   left: 0;
@@ -269,100 +365,3 @@
     }
 }
 </style>
-
-<script setup>
-import { ref, computed } from 'vue';
-import HomeHeader from "./HomeHeader.vue";
-import utils from "~/composables/utils";
-import { useRouter } from 'vue-router';
-import { useVideoStore } from '~/stores/video';
-import { storeToRefs } from 'pinia';
-
-const props = defineProps({
-  open: {
-    type: [String, Boolean],
-    default: false
-  }
-});
-
-const isOpened = ref(props.open);
-const router = useRouter();
-const videoStore = useVideoStore();
-const { videoList, currentVideo } = storeToRefs(videoStore);
-
-const hasVideos = computed(() => videoStore.hasVideos);
-const currentVideoObj = computed(() => hasVideos.value
-  ? videoList.value[currentVideo.value]
-  : videoStore.emptyEpisode
-);
-
-const workstream = computed(() => `video-workstream--${currentVideoObj.value.workstream || 'democracy'}`);
-
-const emit = defineEmits(['hideList']);
-
-function openVideo(video) {
-  let videoId = '';
-  const source = video.source;
-  
-  if (source === 'youtube') {
-    videoId = utils.getVideoIdFromYoutubeUrl(video.videoUrl);
-  } else if (source === 'vimeo') {
-    videoId = utils.getVideoIdFromVimeoUrl(video.videoUrl);
-  }
-  
-  if (!videoId) {
-    if (process.client) {
-      alert(`Couldn't play video:\nvideo ID not found in "${video.videoUrl}".`);
-    }
-    return;
-  }
-  
-  videoStore.setHomepageVideoEffect(true);
-  setTimeout(() => {
-    router.push({ name: "watch-videoId", params: { videoId, source } });
-  }, 330);
-}
-
-function moreInfo() {
-  toTop();
-  isOpened.value = true;
-  emit('hideList', false);
-  setTimeout(() => {
-    router.push({ 
-      name: "documentaryInternal-id", 
-      params: { id: utils.slugify(currentVideoObj.value.title) } 
-    });
-  }, 100);
-}
-
-function returnButton() {
-  isOpened.value = false;
-  if (process.client) {
-    window.scroll({
-      top: 0, 
-      left: 0, 
-      behavior: 'smooth'
-    });
-  }
-  setTimeout(() => {
-    router.replace('/');
-  }, 100);
-}
-
-function toTop() {
-  if (process.client) {
-    window.scroll({
-      top: 0, 
-      left: 0, 
-      behavior: 'smooth'
-    });
-  }
-}
-
-function getUIType() {
-  if (process.client) {
-    return document.documentElement.clientWidth >= 768 ? 'large' : 'small';
-  }
-  return 'large'; // Default for SSR
-}
-</script>

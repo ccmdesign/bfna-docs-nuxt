@@ -1,3 +1,54 @@
+<script setup>
+import utils from "~/composables/utils";
+import { useRouter } from "vue-router";
+import { useVideoStore } from "~/stores/video";
+import { storeToRefs } from "pinia";
+import NavigationBarSmall from "@/components/HomepageUISmall/NavigationBar";
+
+const router = useRouter();
+const videoStore = useVideoStore();
+const { videoList } = storeToRefs(videoStore);
+
+const hasVideos = computed(() => videoStore.hasVideos);
+const currentVideoObj = computed(() => hasVideos.value
+    ? videoStore.getCurrentVideoBasedOnSlug
+    : videoStore.emptyEpisode);
+
+function setCurrentVideo(video) {
+  videoStore.setCurrentVideo(video);
+  router.replace({
+    name: "videoDescription",
+    path: ':slug',
+    params: { 
+      slug: currentVideoObj.value.slug,
+    }
+  });
+}
+
+onMounted(() => {
+  videoStore.setHomepageVideoEffect(false);
+  videoStore.setNavigation(true);
+});
+
+useHead({
+  title: "BFNA Documentaries",
+  meta: [
+    {
+      name: "description",
+      content: utils.getDefaultDescription(),
+    },
+    {
+      property: "og:title",
+      content: utils.getDefaultTitle(),
+    },
+    {
+      property: "og:description",
+      content: utils.getDefaultDescription(),
+    },
+  ],
+});
+</script>
+
 <template>
   <div class="app-window app-page__wrapper">
     <div class="app-page__content">
@@ -5,7 +56,7 @@
         <li
           v-for="(video, index) in videoList"
           :key="index"
-          @click="setCurrentVideo(video.videoUrl)"
+          @click="setCurrentVideo(video)"
         >
           <div class="documentaries-view__documentary">
             <div class="documentaries-view__thumbnail-wrapper">
@@ -31,6 +82,7 @@
       </ul>
     </div>
   </div>
+  <navigation-bar-small />
 </template>
 
 <style lang="scss">
@@ -104,48 +156,11 @@
     }
   }
 }
-</style>
 
-<script setup>
-import utils from "~/composables/utils";
-import { useRouter } from "vue-router";
-import { useVideoStore } from "~/stores/video";
-import { storeToRefs } from "pinia";
-
-const router = useRouter();
-const videoStore = useVideoStore();
-const { videoList, currentVideo } = storeToRefs(videoStore);
-
-const hasVideos = computed(() => videoStore.hasVideos);
-const currentVideoObj = computed(() => hasVideos.value
-    ? videoList.value[currentVideo.value]
-    : videoStore.emptyEpisode);
-
-function setCurrentVideo(url) {
-  videoStore.setCurrentVideo(url);
-  router.replace({ name: "documentaryInternal-id", params: { id: utils.slugify(currentVideoObj.value.title) } });
+@media (min-width: 60em) {
+  .app-page__content {
+    max-width: 960px;
+    margin: 0 auto;
+  }
 }
-
-onMounted(() => {
-  videoStore.setHomepageVideoEffect(false);
-  videoStore.setNavigation(true);
-});
-
-useHead({
-  title: "BFNA Documentaries",
-  meta: [
-    {
-      name: "description",
-      content: utils.getDefaultDescription(),
-    },
-    {
-      property: "og:title",
-      content: utils.getDefaultTitle(),
-    },
-    {
-      property: "og:description",
-      content: utils.getDefaultDescription(),
-    },
-  ],
-});
-</script>
+</style>

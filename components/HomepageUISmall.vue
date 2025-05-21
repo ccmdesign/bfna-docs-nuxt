@@ -1,3 +1,55 @@
+<script setup>
+import { computed, onMounted } from "vue";
+import { useVideoStore } from "~/stores/video";
+import { useRouter } from "vue-router";
+import utils from "~/composables/utils";
+
+const store = useVideoStore();
+const router = useRouter();
+
+const videoList = computed(() => store.videoList);
+const currentIndex = computed(() => 0);
+const hasVideos = computed(() => store.hasVideos);
+const currentVideo = computed(() =>
+  hasVideos.value
+    ? store.currentVideo
+    : store.getters.emptyEpisode
+);
+
+const setCurrentVideo = (index) => {
+  store.commit("setCurrentVideo", index);
+};
+
+const onPageChange = (newSlide) => {
+  setCurrentVideo(newSlide);
+};
+
+const nextSlide = () => {
+  if (currentIndex.value + 1 >= videoList.value.length) {
+    setCurrentVideo(0);
+  } else {
+    setCurrentVideo(currentIndex.value + 1);
+  }
+};
+
+const previousSlide = () => {
+  if (currentIndex.value - 1 < 0) {
+    setCurrentVideo(videoList.value.length - 1);
+  } else {
+    setCurrentVideo(currentIndex.value - 1);
+  }
+};
+
+onMounted(() => {
+  router.replace({
+    name: "videoDescription",
+    path:':slug',
+    params: { slug: currentVideo.value.slug },
+  });
+});
+</script>
+
+
 <template>
   <div class="homepage">
     <img src="/assets/loader.gif" alt="Loading website" class="loader">
@@ -213,52 +265,3 @@
 }*/
 </style>
 -->
-
-<script>
-import utils from "~/composables/utils";
-
-export default {
-  name: "HomepageUILargeComponent",
-  computed: {
-    videoList() {
-      return this.$store.state.videoList;
-    },
-    currentIndex() {
-      return this.$store.state.currentVideo;
-    },
-    hasVideos() {
-      return this.$store.getters.hasVideos;
-    },
-    currentVideo() {
-      return this.hasVideos
-        ? this.videoList[this.currentIndex]
-        : this.$store.getters.emptyEpisode;
-    },
-  },
-  methods: {
-    onPageChange(newSlide) {
-      this.setCurrentVideo(newSlide);
-    },
-    setCurrentVideo(index) {
-      this.$store.commit("setCurrentVideo", index);
-    },
-    nextSlide() {
-      if (this.currentIndex + 1 >= this.videoList.length) {
-        this.setCurrentVideo(0);
-      } else {
-        this.setCurrentVideo(this.currentIndex + 1);
-      }
-    },
-    previousSlide() {
-      if (this.currentIndex - 1 < 0) {
-        this.setCurrentVideo(this.videoList.length - 1);
-      } else {
-        this.setCurrentVideo(this.currentIndex - 1);
-      }
-    },
-  },
-  mounted() {
-    this.$router.replace({ name: "documentaryInternal", params: { id: utils.slugify(this.currentVideo.title) } });
-  }
-};
-</script>

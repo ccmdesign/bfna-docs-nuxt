@@ -1,3 +1,42 @@
+<script setup>
+import { useVideoStore } from '~/stores/video';
+import { storeToRefs } from 'pinia';
+
+const videoStore = useVideoStore();
+const { menuVisibility } = storeToRefs(videoStore);
+
+const hasMenu = computed(() => menuVisibility.value);
+const menuContentRef = useTemplateRef(null);
+
+function setMenuVisibility(visible) {
+  videoStore.setMenuVisibility(visible);
+}
+
+function closeMenu(ifBackground, event) {
+  if (ifBackground && !event.target.classList.contains("menu-small")) {
+    return;
+  }
+  setMenuVisibility(false);
+}
+
+function scrollToBottom() {
+  if (menuContentRef.value) {
+    menuContentRef.value.scrollTo(0, menuContentRef.value.scrollHeight);
+  }
+}
+
+watch(hasMenu, (newValue) => {
+  if (newValue) {
+    scrollToBottom();
+  }
+});
+
+onMounted(() => {
+  scrollToBottom();
+});
+</script>
+
+
 <template>
   <div
     class="menu-small"
@@ -133,11 +172,16 @@
     position: absolute;
     width: 100%;
     left: 0;
+    top: 0;
     bottom: 0;
     padding: 25px 0 128px 20px;
     background-color: rgba(8, 67, 94, 0.95);
     transition: transform 0.33s ease-in-out;
     height: 100%;
+    
+    & a {
+      text-decoration: none;
+    }
 
     &::after {
       position: fixed;
@@ -159,42 +203,3 @@
   padding: 35px 0;
 }
 </style>
-
-<script setup>
-import utils from "~/composables/utils";
-import { useVideoStore } from '~/stores/video';
-import { storeToRefs } from 'pinia';
-
-const videoStore = useVideoStore();
-const { menuVisibility } = storeToRefs(videoStore);
-
-const hasMenu = computed(() => menuVisibility.value);
-const menuContentRef = ref(null);
-
-function setMenuVisibility(visible) {
-  videoStore.setMenuVisibility(visible);
-}
-
-function closeMenu(ifBackground, event) {
-  if (ifBackground && !event.target.classList.contains("menu-small")) {
-    return;
-  }
-  setMenuVisibility(false);
-}
-
-function scrollToBottom() {
-  if (menuContentRef.value) {
-    menuContentRef.value.scrollTo(0, menuContentRef.value.scrollHeight);
-  }
-}
-
-watch(hasMenu, (newValue) => {
-  if (newValue) {
-    scrollToBottom();
-  }
-});
-
-onMounted(() => {
-  scrollToBottom();
-});
-</script>
