@@ -132,23 +132,6 @@ onMounted(() => {
     }
     store.setHomepageVideoEffect(true);
     store.setNavigation(false);
-    setTimeout(() => {
-      if (source.value == 'youtube') {
-        // youtube.value.player.playVideo();
-        // setTimeout(() => {
-        //   youtube.value.player.getPlayerState().then((status) => {
-        //     if (status !== 1) {
-        //       show.value = true;
-        //     }
-        //   });
-        // }, 1000);
-
-        
-      } else {
-        console.log(34, player.value)
-        // player.value.play();
-      }
-    }, 1000);
   });
 });
 
@@ -225,7 +208,6 @@ useHead && useHead(computed(() => ({
         class="watch-view__player"
         :video-id="videoId"
         :src="`${videoObject.videoUrl}?autoplay=1&mute=1`"
-        mute
         playsinline
         :width="'100%'"
         :height="'100%'"
