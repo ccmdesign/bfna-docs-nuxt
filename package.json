@@ -24,7 +24,9 @@
     "vue-carousel": "^0.18.0",
     "vue-router": "^4.5.0",
     "vue2-perfect-scrollbar": "^1.5.56",
-    "vue3-youtube": "^0.1.9"
+    "vue3-youtube": "^0.1.9",
+    "@vimeo/player": "^2.24.1",
+    "vue3-vimeo-player": "^1.0.3"
   },
   "devDependencies": {
     "@nuxt/vite-builder": "^3.16.2",

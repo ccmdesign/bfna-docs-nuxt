@@ -17,17 +17,13 @@ export default defineNuxtConfig({
         // google icons
         { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" },
       ],
-      script: [
-        // vue-vimeo-player
-        { src: "//unpkg.com/vue-vimeo-player", async: true, defer: true },
-      ],
+      script: [],
     }
   },
   css: [
     './assets/scss/main.scss'
   ],
   build: {
-    vendor: ['vue-vimeo-player'],
     transpile: ['vue-carousel'],
   },
   vite: {
