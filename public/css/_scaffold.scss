@@ -1,3 +1,4 @@
+@use "sass:color";
 *,
 *::before,
 *::after {
@@ -143,7 +144,7 @@ a {
   -webkit-text-decoration-skip: objects;
 }
 a:hover {
-  color: lighten($colors-blue, 10);
+  color: color.adjust($colors-blue, $lightness: 10%);
   text-decoration: underline;
 }
 

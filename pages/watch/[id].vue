@@ -258,6 +258,7 @@ useHead && useHead(computed(() => ({
 </template>
 
 <style lang="scss">
+@use "sass:color";
 .watch-view {
   position: relative;
   width: 100vw;
@@ -420,7 +421,7 @@ useHead && useHead(computed(() => ({
 
     &:hover {
       text-decoration: none;
-      background-color: lighten(#007dad, 7);
+      background-color: color.adjust(#007dad, $lightness: 7%);
       color: #ffffff;
     }
   }
