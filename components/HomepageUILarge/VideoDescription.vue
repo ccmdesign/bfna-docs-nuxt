@@ -129,6 +129,7 @@ function getUIType() {
 </template>
 
 <style lang="scss">
+@use "sass:color";
 .full_content {
   z-index: 1;
   //position: absolute;
@@ -231,8 +232,8 @@ function getUIType() {
       padding: 0;
     }
     &:hover {
-      background-color: lighten(#fc8b00, 9);
-      border-color: lighten(#fc8b00, 9);
+      background-color: color.adjust(#fc8b00, $lightness: 9%);
+      border-color: color.adjust(#fc8b00, $lightness: 9%);
     }
 
     &:disabled {
@@ -268,8 +269,8 @@ function getUIType() {
     border-color: #4f8d71;
   }
   & > .video__play:hover {
-    background-color: lighten(#4f8d71, 9);
-    border-color: lighten(#4f8d71, 9);;
+    background-color: color.adjust(#4f8d71, $lightness: 9%);
+    border-color: color.adjust(#4f8d71, $lightness: 9%);
   }
 }
 
@@ -280,8 +281,8 @@ function getUIType() {
     border-color: #fc8b00;
   }
   & > .video__play:hover {
-    background-color: lighten(#fc8b00, 9);
-    border-color: lighten(#fc8b00, 9);
+    background-color: color.adjust(#fc8b00, $lightness: 9%);
+    border-color: color.adjust(#fc8b00, $lightness: 9%);
   }
 }
 
@@ -292,8 +293,8 @@ function getUIType() {
     border-color: #c73540;
   }
   & > .video__play:hover {
-    background-color: lighten(#c73540, 9);
-    border-color: lighten(#c73540, 9);
+    background-color: color.adjust(#c73540, $lightness: 9%);
+    border-color: color.adjust(#c73540, $lightness: 9%);
   }
 }
 
@@ -304,8 +305,8 @@ function getUIType() {
     border-color: #631764;
   }
   & > .video__play:hover {
-    background-color: lighten(#631764, 9);
-    border-color: lighten(#631764, 9);
+    background-color: color.adjust(#631764, $lightness: 9%);
+    border-color: color.adjust(#631764, $lightness: 9%);
   }
 }
 .award-list--mobile {
