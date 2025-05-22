@@ -1,5 +1,4 @@
 const fs = require("fs");
-const { rimraf } = require('rimraf');
 const main = require('../contentful/main')
 
 
