@@ -11,6 +11,7 @@
 </template>
 
 <style lang="scss">
+@use "sass:color";
 .large-navigation-bar {
   padding: 0 170px;
   z-index: 999;
@@ -41,9 +42,9 @@
     transition: background-color 0.13s ease-in-out;
     transform: translateX(-20px);
 
-    &:hover {
-      background-color: lighten(#08415c, 5);
-    }
+      &:hover {
+        background-color: color.adjust(#08415c, $lightness: 5%);
+      }
 
     &-wrapper {
       flex: 0;
