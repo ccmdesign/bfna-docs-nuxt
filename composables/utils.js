@@ -1,5 +1,3 @@
-import axios from "axios";
-
 const defaultDescription = 'Our documentary films provide an intimate portrait of the economic, political, and social challenges facing the United States and Europe today.'
 const defaultTitle = 'Bertelsmann Foundation Documentaries | Films for Transatlanticists'
 
