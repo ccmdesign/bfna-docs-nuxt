@@ -240,6 +240,7 @@ useHead && useHead(computed(() => ({
 </template>
 
 <style lang="scss">
+@use "sass:color";
 .watch-view {
   position: relative;
   width: 100vw;
@@ -377,16 +378,6 @@ useHead && useHead(computed(() => ({
   }
 
   &__tweet-this {
-    &-wrapper {
-      text-align: center;
-      transform: translateY(50%);
-
-      @include media-breakpoint-small {
-        transform: none;
-        padding: 16px 0 32px 0;
-      }
-    }
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -402,8 +393,18 @@ useHead && useHead(computed(() => ({
 
     &:hover {
       text-decoration: none;
-      background-color: lighten(#007dad, 7);
+      background-color: color.adjust(#007dad, $lightness: 7%);
       color: #ffffff;
+    }
+
+    &-wrapper {
+      text-align: center;
+      transform: translateY(50%);
+
+      @include media-breakpoint-small {
+        transform: none;
+        padding: 16px 0 32px 0;
+      }
     }
   }
 
