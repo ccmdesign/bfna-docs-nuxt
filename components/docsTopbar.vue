@@ -20,19 +20,25 @@
 <style scoped>
 .docs-topbar {
   display: grid;
-  background-color: #fff;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: subgrid;
+  grid-column: content-start / content-end;
+  align-items: center;
 }
 
 .docs-topbar__left {
-  grid-column: 1;
+  grid-column: content-start / col1;
 }
 
 .docs-topbar__center {
-  grid-column: 2;
+  grid-column: col1 / col3;
+
+  > * {
+    width: 100%;
+  }
 }
 
 .docs-topbar__right {
-  grid-column: 3;
+  grid-column: col3 / content-end;
+  text-align: right;
 }
 </style>

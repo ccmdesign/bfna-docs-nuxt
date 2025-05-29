@@ -1,6 +1,7 @@
 <template>
   <master-grid>
-    
+    <docs-hero />
+    <docs-grid />
   </master-grid>
 </template>
 

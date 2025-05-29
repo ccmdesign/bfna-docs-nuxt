@@ -17,11 +17,8 @@ export default {
 <style scoped>
 .master-grid {
   box-sizing: content-box;
-  padding-inline: var(--_center-padding, 1rem);
-  max-inline-size: var(--_center-measure);
-  margin-inline: auto;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: [full-start] auto [content-start] 1fr [col1] 1fr [col2] 1fr [col3] 1fr [content-end] auto [full-end];
   grid-auto-rows: auto;
   gap: var(--base-gutter);
 }
