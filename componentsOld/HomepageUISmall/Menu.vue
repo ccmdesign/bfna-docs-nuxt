@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { useVideoStore } from '~/stores/video';
 import { storeToRefs } from 'pinia';
 
@@ -202,4 +202,4 @@ onMounted(() => {
 .menu-small--archive {
   padding: 35px 0;
 }
-</style>
+</style> -->

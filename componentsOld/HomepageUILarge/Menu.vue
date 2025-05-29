@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { useVideoStore } from '~/stores/video';
 import { computed } from 'vue';
 
@@ -192,4 +192,4 @@ function closeMenu(ifBackground, event) {
     }
   }
 }
-</style>
+</style> -->
