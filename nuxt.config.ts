@@ -21,7 +21,7 @@ export default defineNuxtConfig({
     }
   },
   css: [
-    './assets/scss/main.scss'
+    'public/css/styles.css'
   ],
   build: {
     transpile: ['vue-carousel'],
@@ -29,17 +29,8 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       exclude: ['vue-carousel']
-    },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `
-            @use "@/assets/scss/_mixins.scss" as *;
-            @use "@/assets/scss/_colors.scss" as *;
-          `
-        }
-      }
     }
+    // removed scss preprocessorOptions
   },
   plugins: [
     { src: '~/plugins/youtubePlayer.client.ts', mode: 'client' },
@@ -47,5 +38,8 @@ export default defineNuxtConfig({
   ssr: false,
   experimental: {
     clientFallback: true
-  }
+  },
+  components: [
+    { path: '~/components', pathPrefix: false }
+  ],
 })

@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "node contentImporter.js && nuxt dev",
     "generate": "node contentImporter.js && nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -30,7 +30,8 @@
   "devDependencies": {
     "@nuxt/vite-builder": "^3.16.2",
     "@types/vimeo__player": "^2.18.3",
-    "sass": "^1.87.0",
-    "sass-embedded": "^1.87.0"
+    "postcss": "^8.4.0",
+    "postcss-import": "^16.0.0",
+    "postcss-preset-env": "^8.0.0"
   }
 }
