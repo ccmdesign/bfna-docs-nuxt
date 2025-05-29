@@ -27,6 +27,7 @@
 .center {
   box-sizing: content-box;
   margin-inline: auto;
+  padding-inline: var(--_center-padding, 1rem);
   max-inline-size: var(--_center-measure);
 }
 

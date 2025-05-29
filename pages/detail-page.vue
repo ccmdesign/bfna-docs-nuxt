@@ -3,6 +3,10 @@
     <docs-hero />
     
     <docs-tabs>
+      <template #series>
+        <h1>Series</h1>
+        <docs-list />
+      </template>
       <template #information>
         <docs-content-panel>
           <template #main-content>
@@ -13,7 +17,8 @@
             <h2>About Carol</h2>
             <p>Carol Anderson is the Charles Howard Candler Professor of African American Studies at Emory University and author of The Second: Race and Guns in a fatally unequal America and White Rage: The Unspoken Truth of Our Racial Divide, a New York Times Bestseller, Washington Post Notable Book of 2016, and a National Book Critics Circle Award winner. She is also the author of Eyes Off the Prize: The United Nations and the African American Struggle for Human Rights, 1944-1955; Bourgeois Radicals: The NAACP and the Struggle for Colonial Liberation, 1941-1960, and One Person, No Vote: How Voter Suppression is Destroying Our Democracy, which was long-listed for the National Book Award and a finalist for the PEN/Galbraith Award in non-fiction.</p>
           </template>
-          <template #sidebar>
+          <template #sidebar :sidebarTitle="Sidebar">
+            
             <docs-card />
             <docs-card />
             <docs-card />

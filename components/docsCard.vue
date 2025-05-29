@@ -18,7 +18,8 @@
   background-color: rgba(0, 0, 255, 0.1);
   padding: 1rem;
   border-radius: 0.5rem;
-  width: minmax(266px, 100%);
+  width: 100%;
+  /* width: minmax(266px, 100%); */
   aspect-ratio: 16 / 9;
 }
 </style>

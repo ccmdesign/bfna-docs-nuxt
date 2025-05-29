@@ -53,6 +53,5 @@
   background-color: rgba(0, 0, 255, 0.1);
   padding: 1rem;
   border-radius: 0.5rem;
-  width: 240px;
-  height: 160px;
+  aspect-ratio: 16 / 9;
 }

@@ -4,13 +4,7 @@
     <div class="hero__topbar">
       <div class="center">
         <slot name="topbar">
-          <div class="center">
-            <div class="cluster">
-              <h1>Logo</h1>
-              <input type="text" placeholder="Search" split-left split-right/>
-              <a href="#">Visit Bertelsmann Foundation</a>
-            </div>
-          </div>
+          <docs-topbar />
         </slot>
       </div>
     </div>
@@ -80,7 +74,6 @@
 
 .hero__topbar {
   grid-area: topbar;
-  background-color: #fff;
   z-index: 1;
 }
 
