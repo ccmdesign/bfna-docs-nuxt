@@ -1,15 +1,15 @@
 @layer typography {
   :root {
-    font-family: var(--body-font);
+    font-family: "trade-gothic-next", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
+    font-weight: var(--body-font-weight);
+    font-style: var(--body-font-style);
     font-size: 16px;
     line-height: 1.5;
   }
 
   body {
-    color: var(--base-color, #333);
+    color: var(--white-color);
   }
 
   h1,
@@ -24,14 +24,14 @@
   .h5,
   h6,
   .h6 {
-    font-family: var(--body-font, "Helvetica Neue", sans-serif);
+    font-family: "trade-gothic-next", sans-serif;
     margin-block: 0;
   }
 
   h1,
   .h1 {
     font-size: var(--size-4);
-    font-weight: 300;
+    font-weight: 600;
   }
   h2,
   .h2 {

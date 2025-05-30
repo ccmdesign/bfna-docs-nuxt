@@ -1,7 +1,9 @@
 <template>
   <div class="docs-topbar">
     <div class="docs-topbar__left">
-      <h1>Logo</h1>
+      <h1><nuxt-link to="/">
+        <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
+      </nuxt-link></h1>
     </div>
     
     <div class="docs-topbar__center">

@@ -28,7 +28,7 @@
     </div>
 
     <!-- Video Background-->
-    <div class="hero__video"></div>
+    <video class="hero__video" src="/assets/sample-video.webm" autoplay muted loop playsinline></video>
   </header>
 </template>
 
@@ -52,6 +52,8 @@
   grid-column: full-start / full-end;
   grid-template-rows: auto 1fr;
   aspect-ratio: 16 / 9;
+  overflow: hidden;
+  max-height: 80svh;
   grid-template-areas:
     "topbar topbar"
     "headings extras";
@@ -66,30 +68,47 @@
 .hero__topbar {
   grid-area: topbar;
   grid-column: content-start / content-end;
+  @media (max-width: 321px) { display: none; }
 }
 
 .hero__headings-panel {
-  grid-area: headings;
+  /* grid-area: headings; */
   grid-column: content-start / col3;
+  @media (max-width: 321px) { grid-column: content-start / content-end; }
   grid-row: 2 / -1;
   align-items: end;
 }
 
-.hero__headings { grid-column: content-start / col3; }
+.hero__headings { 
+  grid-column: content-start / col3; 
+  @media (max-width: 321px) { grid-column: content-start / content-end; }
+}
 
 .hero__extras {
   grid-area: extras;
   grid-column: col3 / content-end;
   align-items: end;
+  @media (max-width: 321px) { display: none; }
 }
 
 .hero__video {
   grid-column: full-start / full-end;
   grid-row: 1 / 3;
-  background-color: #ddd;
   z-index: 0;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 
+/* Hero Skin */
+.hero {
+  padding-bottom: var(--space-3xl);
+}
 
+.hero__headings {
+  --_stack-space: var(--space-s-m);
+}
+
+.hero__extras {
+}
 
 </style>

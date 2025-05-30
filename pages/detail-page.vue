@@ -1,5 +1,5 @@
 <template>
-  <div class="stack">
+  <master-grid>
     <docs-hero />
     
     <docs-tabs>
@@ -45,7 +45,7 @@
     </docs-tabs>
 
     <docs-footer />
-  </div>
+  </master-grid>
 </template>
 
 <script setup>

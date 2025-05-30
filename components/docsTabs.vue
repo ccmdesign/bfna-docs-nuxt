@@ -1,13 +1,11 @@
 <template>
   <div class="docs-tabs">
-    <div class="center">
-      <div class="tabs-container cluster">
-        <button v-for="(tab, index) in tabs" :key="index" :class="['tab-button', { active: activeTab === index }]" @click="activeTab = index">{{ tab.label }}</button>
-      </div>
+    <div class="docs-tabs__container | cluster">
+      <button v-for="(tab, index) in tabs" :key="index" :class="['tab-button', { active: activeTab === index }]" @click="activeTab = index">{{ tab.label }}</button>
+    </div>
 
-      <div class="tab-content">
-        <slot :name="tabs[activeTab].slot"></slot>
-      </div>
+    <div class="docs-tabs__content">
+      <slot :name="tabs[activeTab].slot"></slot>
     </div>
   </div>
 </template>
@@ -25,29 +23,31 @@ const activeTab = ref(0)
 
 <style scoped>
 .docs-tabs {
-  .tabs-container {
-    
+  grid-column: content-start / content-end;
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
+.docs-tabs__container {
+  grid-column: content-start / content-end;
+  cursor: pointer;
+  background-color: transparent;
+
+  &:hover {
+    color: yellow;
   }
 
-  .tab-button {
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid black;
-
-
-    &:hover {
-      color: yellow;
-    }
-
-    &.active {
-      color: green;
-      border-color: green;
-    }
+  &.active {
+    color: green;
+    border-color: green;
   }
 
-  .tab-content {
-    padding: 1rem 0;
-  }
+}
+
+.docs-tabs__content {
+  padding: 1rem 0;
+  grid-column: content-start / content-end;
+  display: grid;
+  grid-template-columns: subgrid;
 }
 </style>

@@ -1,7 +1,7 @@
 /* Color Values */
 :root {
   --white-hsl: 255, 100%, 100%;
-  --black-hsl: 0, 0%, 7%;
+  --black-hsl: 0, 0%, 3%;
 
   --base-hsl: var(--black-hsl);   /* black */   
   --primary-hsl: 45, 100%, 50%;   /* yellow */

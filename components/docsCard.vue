@@ -6,20 +6,42 @@
         <p>Card Description</p>
       </div>
     </slot>
+    <video 
+      class="card__video" 
+      src="/assets/sample-3.mov" 
+      muted 
+      loop 
+      playsinline 
+      preload="auto"
+    ></video>
   </div>
 </template>
 
 <script setup>
+
+
 </script>
 
 <style scoped>
+
+/* Docs Card Layout - SubGrid */
+
+
 .card {
-  outline: 2px solid blue;
-  background-color: rgba(0, 0, 255, 0.1);
   padding: 1rem;
-  border-radius: 0.5rem;
-  width: 100%;
-  /* width: minmax(266px, 100%); */
+  border-radius: var(--border-radius-m);
+  overflow: hidden;
   aspect-ratio: 16 / 9;
+  position: relative;
+}
+
+.card__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
 }
 </style>

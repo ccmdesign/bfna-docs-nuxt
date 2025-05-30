@@ -1,5 +1,6 @@
 <template>
   <section class="docs-grid" :hideHeader="hideHeader">
+    
     <div v-if="!hideHeader" class="docs-grid__headings">
       <div class="cluster">
         <h2 split-right>All Documentaries</h2>
@@ -12,7 +13,7 @@
         </select>
 
         <button>All Duration Range</button>
-        <button>Sorted by: Most Recent</button>
+        <button>Sorted by: Recent</button>
       </div>
     </div>
 

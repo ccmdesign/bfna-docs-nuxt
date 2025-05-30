@@ -1,13 +1,13 @@
 <template>
-  <div class="docs-list | stack">
+  <div class="docs-list">
     <slot>
       <div class="docs-list__item" v-for="item in items" :key="item.id">
-        <docs-card />
-        <div class="docs-list__item__content">
+        <docs-card class="docs-list__item-thumbnail"/>
+        <div class="docs-list__item-text">
           <h3>{{ item.title }}</h3>
           <p>{{ item.description }}</p>
         </div>
-        <div class="docs-list__item__meta | cluster">
+        <div class="docs-list__item-meta">
           <p>{{ item.year }}</p>
           <p>{{ item.timestamp }}</p>
         </div>
@@ -18,43 +18,44 @@
 
 <style scoped>
 .docs-list {
-  --_stack-space: 0;
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: content-start / content-end;
 }
 
 .docs-list__item {
+  grid-column: span 2;
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto;
-  grid-template-areas: 
-    "card"
-    "content"
-    "meta";
-
-  /* @TODO: We might work on a tablet layout */
-
+  
+  grid-template-columns: subgrid;
+  align-items: start;
+  
+  @media (max-width: 768px) {
+    grid-template-rows: auto 1fr;
+    grid-template-areas: 
+      "thumbnail thumbnail"
+      "text text"
+      "meta meta";
+  }
+  
   @media (min-width: 768px) {
-    grid-template-columns: minmax(100px, 1fr) 6fr 1fr;
-    grid-template-rows: 1fr;
-    grid-template-areas: "card content meta";
-  }
-
-  gap: 1rem;
-  padding-block: 1rem;
-
-  .docs-card {
-    grid-area: card;
-  }
-
-  .docs-list__item__content {
-    grid-area: content;
-  }
-
-  .docs-list__item__meta {
-    align-self: start;
-    justify-self: end;
-    grid-area: meta;
+    grid-column: span 4;
+    grid-template-columns: 120px 1fr 80px;
+    grid-template-areas: "thumbnail text meta";
   }
 }
+
+.docs-list__item-thumbnail { 
+  grid-area: thumbnail;
+  width: 100%;
+  aspect-ratio: 16/9;
+}
+.docs-list__item-text {
+  grid-area: text;
+  align-items: start;
+}
+.docs-list__item-meta { grid-area: meta; }
+
 </style>
 
 <script setup>
