@@ -1,20 +1,18 @@
 <template>
   <header class="hero">
-    <div class="hero__topbar">
-      <slot name="topbar">
-        <docs-topbar />
-      </slot>
-    </div>
+    
 
     <div class="hero__headings-panel">
       <div class="hero__headings | stack">
         <slot name="content">
-          <h1>Hero</h1>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
-          <div class="cluster">
-            <button class="button">Watch Now</button>
-            <button class="button">More Info</button>
+          <div class="hero__category">Democracy</div>
+          <h1 class="hero__title">I, Too</h1>
+          <div class="hero__author">By Anthony Silberfeld</div>
+          <div class="hero__meta">
+            <span class="hero__meta-time">28min</span>
+            <span class="hero__meta-year">2023</span>
           </div>
+          <p class="hero__description">For Carol Anderson, the January 6th insurrection was a predictable coda to more than two centuries of American mythology. What happens, she asks, when we discover that the history we teach our children is comprised of fables, not facts?</p>
         </slot>
       </div>
     </div>
@@ -22,7 +20,7 @@
     <div class="hero__extras">
       <slot name="extras">
         <div class="stack">
-          <docs-card />
+          
         </div>
       </slot>
     </div>
@@ -105,7 +103,7 @@
 }
 
 .hero__headings {
-  --_stack-space: var(--space-s-m);
+  --_stack-space: var(--space-xs);
 }
 
 .hero__extras {

@@ -5,7 +5,7 @@
       </nuxt-link>
     </h1>
     
-    <input class="docs-topbar__center" split-left split-right type="text" placeholder="Search"/>
+    <docs-search class="docs-topbar__center" split-left split-right />
     
     <a class="docs-topbar__right" href="#">Visit Bertelsmann Foundation <span class="icon">open_in_new</span></a>
   </div>
@@ -28,7 +28,7 @@
 }
 
 .docs-topbar__center {
-  width: 380px;
+  max-width: 380px;
 }
 
 .docs-topbar__right {

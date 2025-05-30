@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" :thumbnail="thumbnail">
     <video 
       class="card__video" 
       src="/assets/sample-3.mov" 
@@ -8,12 +8,12 @@
       playsinline 
       preload="auto"
     ></video>
-    <slot name="content">
+    <slot name="content" v-if="!thumbnail">
       <div class="card__content | stack">
         <h2 class="card__title"><nuxt-link to="/detail-page">Card Title</nuxt-link></h2>
         <div class="card__meta | cluster">
-          <span>28min</span>
-          <span>2023</span>
+          <docs-meta>28min</docs-meta>
+          <docs-meta>2023</docs-meta>
         </div>
       </div>
     </slot>
@@ -21,7 +21,12 @@
 </template>
 
 <script setup>
-
+const props = defineProps({
+  thumbnail: {
+    type: Boolean,
+    default: false
+  }
+})
 
 </script>
 
@@ -29,23 +34,24 @@
 
 /* Docs Card Layout - SubGrid */
 
-
 .card {
-  margin-block-start: var(--space-s);
+  width: 100%;
 }
 
 .card__content {
   --_stack-space: var(--space-3xs);
-  padding-block-start: var(--space-2xs);
 }
 
 .card__video {
-  aspect-ratio: 16 / 9;
   width: 100%;
-  height: 100%;
   object-fit: cover;
-  border-radius: var(--border-radius-m);
+  aspect-ratio: 16 / 9;
   overflow: hidden;
+  border-radius: var(--border-radius-m);
+
+  [thumbnail="true"] & {
+    border-radius: var(--border-radius-s);
+  }
 }
 
 .card__title a {
@@ -57,27 +63,20 @@
   color: var(--white-color);
 }
 
-.card__meta {
-  font-size: var(--size--2);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  color: var(--white-color-60-shade);
-  
-  > * { 
-    display: inline-block;
-    line-height: 1;
-    padding: var(--space-3xs) var(--space-2xs);
-    background-color: var(--white-color-10-shade); 
-  } 
-}
-
-
-
 .card {
-  display: grid;
-  grid-template-columns: 1fr;
-
+  transition: all 0.3s ease-in-out;
+  gap: var(--space-3xs-2xs);
+  
   @media (max-width: 320px) { grid-column: content-start / content-end; }
-  @media (min-width: 321px) and (max-width: 768px) { grid-column: span 2; }
+  @media (min-width: 321px) and (max-width: 768px) { grid-column: span 6; }
+
+  @media (min-width: 769px) {
+    grid-column: span 3;
+
+    /* TODO: Add hover effect with transition */
+    /* &:hover {
+      grid-column: span 4;
+    } */
+  }
 }
 </style>

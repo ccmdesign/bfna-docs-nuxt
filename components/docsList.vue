@@ -1,62 +1,80 @@
 <template>
-  <div class="docs-list">
+  <ol class="docs-list | subgrid | stack">
     <slot>
-      <div class="docs-list__item" v-for="item in items" :key="item.id">
-        <docs-card class="docs-list__item-thumbnail"/>
-        <div class="docs-list__item-text">
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.description }}</p>
+      <li class="docs-list__item | subgrid" v-for="item in items" :key="item.id">
+        <docs-card thumbnail class="docs-list__item-thumbnail"/>
+        <div class="docs-list__item-text | stack">
+          <h3 class="font-size:-1 font-weight:600">{{ item.title }}</h3>
+          <p class="font-size:-1">{{ item.description }}</p>
         </div>
-        <div class="docs-list__item-meta">
-          <p>{{ item.year }}</p>
-          <p>{{ item.timestamp }}</p>
+        <div class="docs-list__item-meta | cluster">
+          <docs-meta>{{ item.timestamp }}</docs-meta>
+          <docs-meta>{{ item.year }}</docs-meta>
         </div>
-      </div>
+      </li>
     </slot>
-  </div>
+  </ol>
 </template>
 
 <style scoped>
+
+ol {
+  list-style: decimal;
+  list-style-position: inside;
+  padding-inline-start: 0;
+}
+
 .docs-list {
-  display: grid;
-  grid-template-columns: subgrid;
-  grid-column: content-start / content-end;
+  --_stack-space: var(--space-2xs);
 }
 
 .docs-list__item {
-  grid-column: span 2;
   display: grid;
-  
-  grid-template-columns: subgrid;
-  align-items: start;
-  
-  @media (max-width: 768px) {
-    grid-template-rows: auto 1fr;
-    grid-template-areas: 
-      "thumbnail thumbnail"
-      "text text"
-      "meta meta";
-  }
-  
-  @media (min-width: 768px) {
-    grid-column: span 4;
-    grid-template-columns: 120px 1fr 80px;
-    grid-template-areas: "thumbnail text meta";
-  }
+  grid-template-columns: 140px 1fr 110px;
+  grid-template-areas: "thumbnail text meta";
+  align-items: center;
+  gap: var(--space-s);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--white-color-07-shade);
+  padding: var(--space-2xs);
+  border-radius: var(--border-radius-m);
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 
-.docs-list__item-thumbnail { 
-  grid-area: thumbnail;
-  width: 100%;
-  aspect-ratio: 16/9;
+.docs-list__item:hover {
+  background-color: var(--white-color-10-shade);
+  border-color: var(--white-color-30-shade);
+  transform: scale(1.02);
 }
+
+.docs-list__item-thumbnail {
+  grid-area: thumbnail;
+  border-radius: var(--border-radius-s) !important;
+  /* width: 100%; */
+  /* aspect-ratio: 16/9; */
+}
+
 .docs-list__item-text {
   grid-area: text;
-  align-items: start;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  --_stack-space: var(--space-3xs);
 }
-.docs-list__item-meta { grid-area: meta; }
+
+.docs-list__item-meta { 
+  grid-area: meta; 
+  --_cluster-space: var(--space-2xs);
+  justify-content: flex-end;
+}
 
 </style>
+
 
 <script setup>
   const items = [

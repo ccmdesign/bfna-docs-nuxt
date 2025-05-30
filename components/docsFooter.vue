@@ -1,13 +1,6 @@
 <template>
   <footer class="footer | subgrid">
     <ul>
-      <h4 class="h6">Topics</h4>
-      <li><a href="#">Democracy</a></li>
-      <li><a href="#">Politics & Society</a></li>
-      <li><a href="#">Digital World</a></li>
-    </ul>
-    
-    <ul>
       <h4 class="h6">The Foundation</h4>
       <li><a href="#">About the Foundation</a></li>
       <li><a href="#">Board of Directors | Team</a></li>
@@ -15,6 +8,15 @@
       <li><a href="#">Contact</a></li>
       <li><a href="#">Privacy Policy</a></li>
     </ul>
+    
+    <ul>
+      <h4 class="h6">Topics</h4>
+      <li><a href="#">Democracy</a></li>
+      <li><a href="#">Politics & Society</a></li>
+      <li><a href="#">Digital World</a></li>
+    </ul>
+    
+    
         
     <ul>
       <h4 class="h6">Updates</h4>
@@ -59,7 +61,15 @@ ul, div {
 }
 
 ul {
-  @media (min-width: 769px) { grid-column: span 1; }
+  @media (min-width: 769px) { grid-column: span 2; }
+}
+
+ul:first-child {
+  @media (min-width: 769px) { grid-column: span 3; }
+}
+
+div {
+  @media (min-width: 769px) { grid-column: span 4; }
 }
 
 /* Footer Skin */

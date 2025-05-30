@@ -4,15 +4,15 @@
       <div class="cluster">
         <h2 class="h4" split-right>All Documentaries</h2>
         
-        <select>
+        <docs-select>
           <option value="all">All</option>
           <option value="documentary">Documentary</option>
           <option value="fiction">Fiction</option>
           <option value="animation">Animation</option>
-        </select>
+        </docs-select>
 
-        <button>All Duration Range</button>
-        <button>Sorted by: Recent</button>
+        <docs-button>All Duration Range</docs-button>
+        <docs-button>Sorted by: Recent</docs-button>
       </div>
     </slot>
   </section>

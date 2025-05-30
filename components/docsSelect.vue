@@ -1,7 +1,9 @@
 <template>
-  <button class="docs-button" :icon="icon" :color="color" :size="size">
-    <slot></slot>
-  </button>
+  <div class="docs-select">
+    <select :icon="icon" :color="color" :size="size">
+      <slot></slot>
+    </select>
+  </div>
 </template>
 
 <script setup>
@@ -23,23 +25,31 @@ defineProps({
 </script>
 
 <style scoped>
-.docs-button {
-  border: 0;
+.docs-select {
+  position: relative;
+}
+
+.docs-select select {
   cursor: pointer;
   color: attr(color);
   background-color: transparent;
-  padding: var(--space-2xs) var(--space-xs);
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
 }
 
-.docs-button:before {
+.docs-select:before {
   content: attr(icon);
   font-family: var(--font-family-icon);
   font-weight: 200;
 
 }
 
-.docs-button[size="s"],
-.docs-button[size="s"]:before {
+.docs-select[size="s"],
+.docs-select[size="s"]:before {
   font-size: var(--size-1);
 }
 </style>

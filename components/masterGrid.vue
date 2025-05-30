@@ -18,7 +18,7 @@ export default {
 .master-grid {
   box-sizing: content-box;
   display: grid;
-  grid-template-columns: [full-start] minmax(auto, var(--space-xs-m)) [content-start] 1fr [col1] 1fr [col2] 1fr [col3] 1fr [content-end] minmax(auto, var(--space-xs-m)) [full-end];
+  grid-template-columns: [full-start] minmax(auto, var(--space-xs-m)) [content-start] 1fr 1fr 1fr [col1] 1fr 1fr 1fr [col2] 1fr 1fr 1fr [col3] 1fr 1fr 1fr [content-end] minmax(auto, var(--space-xs-m)) [full-end];
   grid-auto-rows: auto;
   gap: var(--base-gutter);
 }

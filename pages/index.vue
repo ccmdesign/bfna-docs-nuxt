@@ -1,8 +1,4 @@
 <template>
-  <master-grid>
-    <docs-topbar />
-    <docs-video-hero />
-
     <docs-reel id="featured-reel">
       <template #reel>
         <docs-card v-for="i in 4" :key="i"></docs-card>
@@ -26,11 +22,6 @@
     <docs-tools id="grid-heading" />
       
     <docs-grid id="grid" />
-
-    <docs-footer id="footer" />
-
-    <by-line id="by-line" />
-  </master-grid>
 </template>
 
 <script setup>
@@ -38,18 +29,6 @@
 </script>
 
 <style scoped>
-
-#featured-reel {
-  grid-row: 4 / 5;
-  z-index: 1;
-  margin-block-start: -80px;
-}
-
-#latest-heading {
-  grid-row: 5 / 6;
-  z-index: 1;
-}
-
 #latest-reel {
   grid-row: 6 / 7;
   z-index: 1;
@@ -62,16 +41,6 @@
 
 #grid {
   grid-row: 8 / 9;
-  z-index: 1;
-}
-
-#footer {
-  grid-row: 9 / 10;
-  z-index: 1;
-}
-
-#by-line {
-  grid-row: 10 / 11;
   z-index: 1;
 }
 </style>

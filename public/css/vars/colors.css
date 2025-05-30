@@ -329,6 +329,7 @@
   --white-color-20-shade: color-mix(in srgb, var(--white-color) 20%, black 80%);
   --white-color-11-shade: color-mix(in srgb, var(--white-color) 11%, black 89%);
   --white-color-10-shade: color-mix(in srgb, var(--white-color) 10%, black 90%);
+  --white-color-07-shade: color-mix(in srgb, var(--white-color) 7%, black 93%);
   --white-color-05-shade: color-mix(in srgb, var(--white-color) 5%, black 95%);
   --white-color-02-shade: color-mix(in srgb, var(--white-color) 2%, black 98%);
 
