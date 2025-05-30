@@ -1,26 +1,35 @@
 <template>
   <master-grid>
-    <docs-hero />
+    <docs-topbar />
+    <docs-video-hero />
 
-    <docs-reel hide-title>
+    <docs-reel id="featured-reel">
       <template #reel>
         <docs-card v-for="i in 4" :key="i"></docs-card>
       </template>
     </docs-reel>
 
-    <docs-reel>
-      <template #title>
-        <h2>Reel</h2>
-        <button class="icon" split-left>arrow_back</button>
-        <button class="icon">arrow_forward</button>
-      </template>
+    <docs-tools id="latest-heading">
+      <div class="cluster">
+        <h2 class="h4" split-right>Latest Releases</h2>
+        <docs-button icon="arrow_back_ios" size="s" />
+        <docs-button icon="arrow_forward_ios" size="s" />
+      </div>
+    </docs-tools>
+
+    <docs-reel id="latest-reel">
       <template #reel>
         <docs-card v-for="i in 4" :key="i"></docs-card>
       </template>
     </docs-reel>
-    <docs-grid />
 
-    <docs-footer />
+    <docs-tools id="grid-heading" />
+      
+    <docs-grid id="grid" />
+
+    <docs-footer id="footer" />
+
+    <by-line id="by-line" />
   </master-grid>
 </template>
 
@@ -30,4 +39,39 @@
 
 <style scoped>
 
+#featured-reel {
+  grid-row: 4 / 5;
+  z-index: 1;
+  margin-block-start: -80px;
+}
+
+#latest-heading {
+  grid-row: 5 / 6;
+  z-index: 1;
+}
+
+#latest-reel {
+  grid-row: 6 / 7;
+  z-index: 1;
+}
+
+#grid-heading {
+  grid-row: 7 / 8;
+  z-index: 1;
+}
+
+#grid {
+  grid-row: 8 / 9;
+  z-index: 1;
+}
+
+#footer {
+  grid-row: 9 / 10;
+  z-index: 1;
+}
+
+#by-line {
+  grid-row: 10 / 11;
+  z-index: 1;
+}
 </style>

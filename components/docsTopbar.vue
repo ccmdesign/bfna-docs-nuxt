@@ -1,18 +1,13 @@
 <template>
-  <div class="docs-topbar">
-    <div class="docs-topbar__left">
-      <h1><nuxt-link to="/">
+  <div class="docs-topbar | subgrid cluster">
+      <h1 class="docs-topbar__left"><nuxt-link to="/">
         <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
-      </nuxt-link></h1>
-    </div>
+      </nuxt-link>
+    </h1>
     
-    <div class="docs-topbar__center">
-      <input type="text" placeholder="Search"/>
-    </div>
+    <input class="docs-topbar__center" split-left split-right type="text" placeholder="Search"/>
     
-    <div class="docs-topbar__right">
-      <a href="#">Visit Bertelsmann Foundation</a>
-    </div>
+    <a class="docs-topbar__right" href="#">Visit Bertelsmann Foundation <span class="icon">open_in_new</span></a>
   </div>
 </template>
 
@@ -21,26 +16,35 @@
 
 <style scoped>
 .docs-topbar {
-  display: grid;
-  grid-template-columns: subgrid;
   grid-column: content-start / content-end;
-  align-items: center;
+  align-items: start;
+  grid-row: 1 / 2;
+  z-index: 1;
+  padding-block-start: var(--space-s);
 }
 
-.docs-topbar__left {
-  grid-column: content-start / col1;
+.docs-topbar__left img {
+  max-width: 180px;
 }
 
 .docs-topbar__center {
-  grid-column: col1 / col3;
-
-  > * {
-    width: 100%;
-  }
+  width: 380px;
 }
 
 .docs-topbar__right {
-  grid-column: col3 / content-end;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xs);
   text-align: right;
+  color: var(--white-color);
+  font-size: var(--size--1);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+
+  .icon {
+    line-height: .7;
+    font-size: var(--size-0);
+  }
 }
 </style>

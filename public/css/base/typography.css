@@ -9,6 +9,7 @@
   }
 
   body {
+    background-color: var(--base-color);
     color: var(--white-color);
   }
 
@@ -35,17 +36,17 @@
   }
   h2,
   .h2 {
-    font-size: var(--size-3);
-    font-weight: 300;
+    font-size: var(--size-1);
+    font-weight: 500;
   }
   h3,
   .h3 {
-    font-size: var(--size-2);
+    font-size: var(--size-1);
     font-weight: 500;
   }
   h4,
   .h4 {
-    font-size: var(--size-1);
+    font-size: var(--size-0);
     font-weight: 500;
   }
   h5,
@@ -55,8 +56,9 @@
   }
   h6,
   .h6 {
-    font-size: var(--size-0);
+    font-size: var(--size--1);
     font-weight: 500;
+    text-transform: uppercase;
   }
 
   p, dl, li {
