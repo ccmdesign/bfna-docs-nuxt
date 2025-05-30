@@ -94,6 +94,10 @@ const activeTab = ref(0)
   }
 }
 
+@media (max-width: 768px) {
+  :deep(.card) { grid-column: span 1; }
+}
+
 :deep(.extras) {
   grid-column: content-start / content-end;
   @media (min-width: 768px) { grid-column: 10 / content-end; }

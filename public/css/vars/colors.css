@@ -120,6 +120,7 @@
   --accent-color-02-tint: color-mix(in srgb, var(--accent-color) 2%, white 98%);
 
   --black-color-98-tint: color-mix(in srgb, var(--black-color) 98%, white 2%);
+  --black-color-95-tint: color-mix(in srgb, var(--black-color) 95%, white 5%);
   --black-color-90-tint: color-mix(in srgb, var(--black-color) 90%, white 10%);
   --black-color-80-tint: color-mix(in srgb, var(--black-color) 80%, white 20%);
   --black-color-73-tint: color-mix(in srgb, var(--black-color) 73%, white 27%);

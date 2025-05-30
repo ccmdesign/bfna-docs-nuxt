@@ -7,7 +7,6 @@
     <slot />
 
     <docs-footer id="footer" />
-    <by-line id="by-line" />
   </master-grid>
 </template>
 
@@ -33,15 +32,8 @@
   z-index: 1;
 }
 
-
-
 #footer {
   grid-row: 9 / 10;
-  z-index: 1;
-}
-
-#by-line {
-  grid-row: 10 / 11;
   z-index: 1;
 }
 </style> 

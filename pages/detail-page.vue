@@ -1,5 +1,5 @@
 <template>
-    <docs-tabs>
+    <docs-tabs id="tabs">
       <template #information>
         <div class="prose">
           <h2>Information</h2>
@@ -40,5 +40,10 @@
 </script>
 
 <style scoped>
-
+#tabs {
+  /* 
+    this should occupy the same rows as the homepage components, to have a consistent layout. 
+  */ 
+  grid-row: 4 / 9; 
+}
 </style>

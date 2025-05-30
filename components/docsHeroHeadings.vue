@@ -11,8 +11,8 @@
       <p class="hero__description | font-size:-1">For Carol Anderson, the January 6th insurrection was a predictable coda to more than two centuries of American mythology. What happens, she asks, when we discover that the history we teach our children is comprised of fables, not facts?</p>
 
       <div class="hero__actions | cluster">
-        <docs-button>Watch Now</docs-button>
-        <docs-button>More Info</docs-button>
+        <docs-button effect="pill" variant="primary" icon="play_arrow">Watch Now</docs-button>
+        <docs-button effect="pill" variant="secondary" icon-after="arrow_forward">More Info</docs-button>
       </div>
     </slot>
   </div>

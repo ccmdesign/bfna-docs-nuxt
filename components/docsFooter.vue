@@ -1,5 +1,6 @@
 <template>
   <footer class="footer | subgrid">
+    <div class="footer__content | subgrid">
     <ul>
       <h4 class="h6">The Foundation</h4>
       <li><a href="#">About the Foundation</a></li>
@@ -33,9 +34,12 @@
         </a>
         <a href="#">
           <img src="/assets/bfna-documentaries-logo.png" alt="ccm.design" />
-        </a>
+          </a>
+        </div>
       </div>
     </div>
+
+    <by-line />
   </footer>
 </template>
 
@@ -47,14 +51,23 @@
 
 /* Footer Layout - SubGrid */
 .footer {
+  grid-column: full-start / full-end;
+  display: grid;
+  grid-template-columns: subgrid;
+  background-color: var(--black-color-95-tint);
+}
+
+.footer__content {
   grid-column: content-start / content-end;
   display: grid;
   grid-template-columns: subgrid;
 }
 
 ul, div {
-  padding-block-start: var(--space-s-l);
+  
+
   @media (max-width: 769px) {
+    padding-block-start: var(--space-s);
     grid-template-columns: subgrid;
     grid-column: inherit;
   }
@@ -69,12 +82,12 @@ ul:first-child {
 }
 
 div {
-  @media (min-width: 769px) { grid-column: span 4; }
+  @media (min-width: 769px) { grid-column: span 5; }
 }
 
 /* Footer Skin */
 .footer {
-  padding-block: var(--space-xl);
+  padding-block: var(--space-l) 0;
   
   p, li { font-size: var(--size--1); }
   h4 { padding-block-end: var(--space-2xs-xs); }

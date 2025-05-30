@@ -67,7 +67,9 @@ const props = defineProps({
   transition: all 0.3s ease-in-out;
   gap: var(--space-3xs-2xs);
   
-  @media (max-width: 320px) { grid-column: content-start / content-end; }
+  @media (max-width: 320px) { 
+    grid-column: content-start / content-end; 
+  }
   @media (min-width: 321px) and (max-width: 768px) { grid-column: span 6; }
 
   @media (min-width: 769px) {
