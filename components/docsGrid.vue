@@ -22,6 +22,7 @@ const props = defineProps({
   grid-column: content-start / content-end;
   display: grid;
   gap: var(--base-gutter);
+  padding-block-end: var(--space-s-m);
 }
 
 
