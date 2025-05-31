@@ -15,7 +15,7 @@
 /* Reel Grid Layout - SubGrid */
 
 .reel-grid {
-  grid-column: content-start / content-end;
+  grid-column: full-start / full-end;
   
   @media (min-width: 769px) {
     display: block;
@@ -34,41 +34,49 @@
 
 .reel-grid {
   display: flex;
+  padding-block-end: var(--space-s-m);
   block-size: auto;
   overflow-x: auto;
   overflow-y: hidden;
-  scrollbar-color: #fff #000;
   gap: var(--base-gutter);
 }
 
 .reel-grid::-webkit-scrollbar {
-  block-size: 1rem;
+  height: 1px;
+  
 }
 
 .reel-grid::-webkit-scrollbar-track {
-  background-color: #000;
+  background-color: transparent;
 }
 
 .reel-grid::-webkit-scrollbar-thumb {
-  background-color: #000;
-  background-image: linear-gradient(#000 0, #000 0.25rem, #fff 0.25rem, #fff 0.75rem, #000 0.75rem);
+  background-color: var(--white-color-30-shade);
 }
 
 .reel-grid > * {
   flex: 1 0 auto;
 }
 
+.reel-grid > :first-child {
+  margin-inline-start: calc(var(--space-xs-m) + var(--base-gutter));
+}
+
+.reel-grid > :last-child {
+  margin-inline-end: calc(var(--space-xs-m) + var(--base-gutter));
+}
+
 .reel-grid > * {
   block-size: 100%;
   flex-basis: auto;
-  max-width: calc(75% - (var(--base-gutter)/1.4)); /* @NOTE: Magic number */
+  max-width: calc(100% - (4* var(--space-xs-m)));
 
   @media (min-width: 321px) and (max-width: 768px) {
-    max-width: calc(45% - (var(--base-gutter)/1.4)); /* @NOTE: Magic number */
+    max-width: 43.6%
   }
 
   @media (min-width: 769px) {
-    max-width: calc(25% - (var(--base-gutter)/1.4)); /* @NOTE: Magic number */
+    max-width: calc(25% - var(--base-gutter)*2.25); /* @NOTE: Magic number */
   }
 }
 </style>
