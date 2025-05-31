@@ -29,10 +29,10 @@
     <div class="stack">
       <p>Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.</p>
       <div class="cluster">
-        <a href="#">
+        <a class="footer__logo" href="#">
           <img src="/assets/bertelsmann-logo.png" alt="Bertelsmann Foundation" />
         </a>
-        <a href="#">
+        <a class="footer__logo" href="#">
           <img src="/assets/bfna-documentaries-logo.png" alt="ccm.design" />
           </a>
         </div>
@@ -99,8 +99,18 @@ ul {
   margin: 0;
 }
 
+
+
+.footer__logo {
+  max-width: calc(50% - var(--space-m));
+
+  @media (min-width: 769px) {
+    max-width: 120px;
+  }
+}
+
 img {
-  max-width: 80px;
+  max-width: 100%;
 }
 
 
