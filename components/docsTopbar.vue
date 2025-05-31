@@ -7,7 +7,7 @@
     
     <docs-search class="docs-topbar__center" split-left split-right />
     
-    <a class="docs-topbar__right" href="#">Visit Bertelsmann Foundation <span class="icon">open_in_new</span></a>
+    <a class="docs-topbar__right | hide-on-mobile" href="#">Visit Bertelsmann Foundation <span class="icon">open_in_new</span></a>
   </div>
 </template>
 

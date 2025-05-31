@@ -55,3 +55,9 @@
   border-radius: 0.5rem;
   aspect-ratio: 16 / 9;
 }
+
+.hide-on-mobile {
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
