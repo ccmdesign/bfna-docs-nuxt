@@ -4,7 +4,7 @@
       <div class="cluster">
         <h2 class="h4" split-right>All Documentaries</h2>
         
-        <docs-select>
+        <docs-select size="s">
           <option value="all">All</option>
           <option value="documentary">Documentary</option>
           <option value="fiction">Fiction</option>

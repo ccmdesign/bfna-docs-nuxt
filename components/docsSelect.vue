@@ -1,6 +1,6 @@
 <template>
-  <div class="docs-select">
-    <select :icon="icon" :color="color" :size="size">
+  <div class="docs-select" :size="size" :icon="icon" :color="color">
+    <select  >
       <slot></slot>
     </select>
   </div>
@@ -48,8 +48,8 @@ defineProps({
 
 }
 
-.docs-select[size="s"],
+.docs-select[size="s"] select,
 .docs-select[size="s"]:before {
-  font-size: var(--size-1);
+  font-size: var(--size-0);
 }
 </style>
