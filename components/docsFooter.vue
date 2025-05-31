@@ -104,8 +104,12 @@ ul {
 .footer__logo {
   max-width: calc(50% - var(--space-m));
 
-  @media (min-width: 769px) {
+  @media (min-width: 321px) and (max-width: 768px) {
     max-width: 120px;
+  }
+
+  @media (min-width: 1025px) {
+    max-width: 150px;
   }
 }
 
