@@ -50,6 +50,8 @@ defineProps({
 }
 
 
+.docs-button[icon]:empty { padding-inline: 0; }
+
 .docs-button[icon]:before,
 .docs-button[icon-after]:after {
   line-height: 0;

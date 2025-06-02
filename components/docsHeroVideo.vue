@@ -1,6 +1,6 @@
 <template>
   <div class="hero__video">
-    <video class="hero__video-media" src="/assets/sample-2.mov" autoplay muted loop playsinline></video>
+    <video class="hero__video-media" src="/assets/sample-3.mov" muted loop playsinline></video>
   </div>
 </template>
 

@@ -34,7 +34,7 @@
 
 .reel-grid {
   display: flex;
-  padding-block-end: var(--space-s-m);
+  padding-block: var(--space-s-m);
   block-size: auto;
   overflow-x: auto;
   overflow-y: hidden;

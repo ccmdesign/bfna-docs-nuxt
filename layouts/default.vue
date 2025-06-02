@@ -1,8 +1,9 @@
 <template>
   <master-grid>
     <docs-topbar id="topbar" />
-    <docs-video-hero id="hero-video" />
+    <docs-hero-video id="hero-video" />
     <docs-hero-headings id="hero" />
+    <docs-hero-extra id="hero-extra" />
 
     <slot />
 
@@ -14,6 +15,13 @@
 #hero-video {
   grid-row: 1 / 4;
   z-index: 0;
+}
+
+#hero-extra {
+  grid-column: 9/14;
+  grid-row: 3 / 4;
+  z-index: 1;
+  align-self: center;
 }
 
 #hero {
