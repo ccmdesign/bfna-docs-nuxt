@@ -75,7 +75,7 @@ videoStore.setNavigation(true);
     padding: 32px 0;
 
     .highlight {
-      color: $colors-green;
+      color: var(--primary-color);
       letter-spacing: 3px;
     }
   }

@@ -21,7 +21,10 @@ export interface Video {
     column_1_text?: string
     column_2_title?: string
     column_2_text?: string
-    screenshot_extras?: Array<{ id: string, url: string, title: string }>
+    screenshot_extras?: Array<{ id: string, url: string, title: string }>,
+    duration?: string,
+    year?: string,
+    thumbnail?: string
   }
   awards?: Array<{
     id: string
@@ -51,41 +54,11 @@ export interface Video {
   by?: string
 }
 
-// Valid workstream values
-const VALID_WORKSTREAMS = ['democracy', 'politics-society', 'future-of-work', 'digital-economy']
-
-// Normalize workstream values for consistency
-function normalizeWorkstream(workstream: string | undefined): string {
-  if (!workstream) return 'democracy'
-  
-  const normalized = workstream.toLowerCase().trim()
-  
-  // Check for exact matches
-  if (VALID_WORKSTREAMS.includes(normalized)) {
-    return normalized
-  }
-  
-  // Handle common variations
-  if (normalized === 'politics & society' || normalized === 'politics and society') {
-    return 'politics-society'
-  }
-  
-  if (normalized === 'future leadership') {
-    return 'future-of-work'
-  }
-  
-  if (normalized === 'digital world' || normalized === 'digital') {
-    return 'digital-economy'
-  }
-  
-  // Default fallback
-  return 'democracy'
-}
-
 export const useVideoStore = defineStore('video', {
   state: () => ({
     videoList: [] as Video[],
     currentVideo: {} as Video,
+    latest: [] as Video[],
     featuredVideosList: [] as Video[],
     homepageVideoEffect: false,
     navigation: true,
@@ -138,6 +111,8 @@ export const useVideoStore = defineStore('video', {
     setFeaturedList(videos: Video[]) {
       this.featuredVideosList = videos
     },
-
+    setLatestVideos(videos: Video[]) {
+      this.latest = videos
+    }
   }
 }) 

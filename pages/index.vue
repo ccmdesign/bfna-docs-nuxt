@@ -1,7 +1,7 @@
 <template>
     <docs-reel id="featured-reel">
       <template #reel>
-        <docs-card v-for="i in 6" :key="i" thumbnail></docs-card>
+        <docs-card v-for="i in videoStore.featuredVideosList" :video="i" thumbnail :key="i.id"></docs-card>
       </template>
     </docs-reel>
 
@@ -15,16 +15,19 @@
 
     <docs-reel id="latest-reel">
       <template #reel>
-        <docs-card v-for="i in 6" :key="i"></docs-card>
+        <docs-card v-for="i in videoStore.latest" :video="i" :key="i.id"></docs-card>
       </template>
     </docs-reel>
 
     <docs-tools id="grid-heading" />
       
-    <docs-grid id="grid" />
+    <docs-grid id="grid" :videos="videoStore.videoList" />
 </template>
 
 <script setup>
+import { useVideoStore } from '~/stores/video';
+
+const videoStore = useVideoStore();
 
 </script>
 

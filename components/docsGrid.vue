@@ -1,7 +1,7 @@
 <template>
   <section class="docs-grid | subgrid">
     <slot>
-      <docs-card v-for="i in 23" :key="i"></docs-card>
+      <docs-card v-for="video in videos" :key="video.id" :video="video"></docs-card>
     </slot>
   </section>
 </template>
@@ -11,6 +11,10 @@ const props = defineProps({
   hideHeader: {
     type: Boolean,
     default: false
+  },
+  videos: {
+    type: Array,
+    default: () => []
   }
 })
 </script>

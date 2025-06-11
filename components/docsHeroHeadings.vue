@@ -1,14 +1,14 @@
 <template>
   <div class="hero-headings | subgrid stack">
     <slot name="content">
-      <div class="hero__category | font-size:-1">Democracy</div>
-      <h1 class="hero__title | font-size:5">I, Too</h1>
-      <div class="hero__author | font-size:-1">By Anthony Silberfeld</div>
+      <div class="hero__category | font-size:-1">{{ currentVideo.workstream }}</div>
+      <h1 class="hero__title | font-size:5">{{ currentVideo.title }}</h1>
+      <div class="hero__author | font-size:-1">By {{ currentVideo.by }}</div>
       <div class="hero__meta | cluster">
-        <docs-meta>28min</docs-meta>
-        <docs-meta>2023</docs-meta>
+        <docs-meta>{{ currentVideo.video_info.duration }}min</docs-meta>
+        <docs-meta>{{ currentVideo.video_info.year }}</docs-meta>
       </div>
-      <p class="hero__description | font-size:-1">For Carol Anderson, the January 6th insurrection was a predictable coda to more than two centuries of American mythology. What happens, she asks, when we discover that the history we teach our children is comprised of fables, not facts?</p>
+      <p class="hero__description | font-size:-1">{{ currentVideo.description }}</p>
 
       <div class="hero__actions | cluster">
         <docs-button effect="pill" variant="primary" icon="play_arrow">Watch Now</docs-button>
@@ -19,6 +19,9 @@
 </template>
 
 <script setup>
+import { useVideoStore } from '~/stores/video';
+
+const { currentVideo } = useVideoStore();
 
 </script>
 

@@ -1,10 +1,10 @@
-<template>
+<!-- <template>
   <div class="card" :thumbnail="thumbnail">
     <video 
       ref="videoRef"
       @mouseenter="playVideo" @mouseleave="pauseVideo"
       class="card__video" 
-      src="/assets/sample-video.webm" 
+      :src="video.videoUrl" 
       :muted="true"
       loop 
       playsinline 
@@ -12,10 +12,10 @@
     ></video>
     <slot name="content" v-if="!thumbnail">
       <div class="card__content | stack">
-        <h2 class="card__title"><nuxt-link to="/detail-page">Card Title</nuxt-link></h2>
+        <h2 class="card__title"><nuxt-link to="/detail-page">{{ video.title }}</nuxt-link></h2>
         <div class="card__meta | cluster">
-          <docs-meta>28min</docs-meta>
-          <docs-meta>2023</docs-meta>
+          <docs-meta>{{ video.video_info.duration }} min</docs-meta>
+          <docs-meta>{{ video.video_info.year }}</docs-meta>
         </div>
       </div>
     </slot>
@@ -28,6 +28,18 @@ const props = defineProps({
   thumbnail: {
     type: Boolean,
     default: false
+  },
+  video: {
+    type: Object,
+    default: () => ({
+      id: '234khjn6-45sdfvklj-2345',
+      title: 'Card Title',
+      videoUrl: '/assets/sample-video.webm',
+      video_info: {
+        duration: '35',
+        year: '2025'
+      }
+    })
   }
 })
 
@@ -45,7 +57,123 @@ function pauseVideo() {
     videoRef.value.pause()
   }
 }
+</script> -->
+<script setup>
+import { ref, computed } from 'vue'
+const props = defineProps({
+  thumbnail: {
+    type: Boolean,
+    default: false
+  },
+  video: {
+    type: Object,
+    default: () => ({
+      id: '234khjn6-45sdfvklj-2345',
+      title: 'Card Title',
+      videoUrl: '/assets/sample-video.webm',
+      backgroundImage: '/assets/sample-thumb.jpg',
+      video_info: {
+        duration: '35',
+        year: '2025'
+      }
+    })
+  }
+})
+
+const showIframe = ref(false)
+
+let hoverTimeout = null
+
+const handleMouseEnter = () => {
+  clearTimeout(hoverTimeout)
+  hoverTimeout = setTimeout(() => {
+    showIframe.value = true
+  }, 400) // 400ms delay, adjust as needed
+}
+
+const handleMouseLeave = () =>{
+  clearTimeout(hoverTimeout)
+  showIframe.value = false
+}
+
+
+// Helper functions for embed URLs
+function isYouTube(url) {
+  return /youtube\.com|youtu\.be/.test(url)
+}
+function isVimeo(url) {
+  return /vimeo\.com/.test(url)
+}
+function youtubeEmbedUrl(url) {
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/)
+  return match
+    ? `https://www.youtube.com/embed/${match[1]}?rel=0&autoplay=1&mute=1&controls=0&modestbranding=1`
+    : ''
+}
+
+function vimeoEmbedUrl(url) {
+  const match = url.match(/vimeo\.com\/(\d+)/)
+  return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=1&muted=1&#t=50s` : ''
+}
+
+const backgroundStyle = computed(() => {
+  const imageUrl = props.video.video_info.thumbnail ? props.video.video_info.thumbnail : props.video.video_info.thumb
+  
+  return {
+    backgroundImage: `url('${!props.thumbnail ? imageUrl : props.video.backgroundImage}')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }
+})
 </script>
+
+<template>
+  <div
+    class="card"
+    :thumbnail="thumbnail"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+  >
+    <template v-if="showIframe && isYouTube(video.videoUrl)">
+      <iframe
+        class="card__video"
+        :src="youtubeEmbedUrl(video.videoUrl)"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+      ></iframe>
+    </template>
+    <template v-else-if="showIframe && isVimeo(video.videoUrl)">
+      <iframe
+        class="card__video"
+        :src="vimeoEmbedUrl(video.videoUrl)"
+        frameborder="0"
+        allow="autoplay; fullscreen"
+        allowfullscreen
+      ></iframe>
+      <!-- <vimeoPlayer
+        class="card__video"
+        :vimeo-url="video.videoUrl"
+        :autoplay="true"
+        playsinline
+        allowfullscreen
+        ref="player"
+      ></vimeoPlayer> -->
+    </template>
+    <template v-else>
+      <div class="card__video card__video--bg" :style="backgroundStyle"></div>
+    </template>
+    <slot name="content" v-if="!thumbnail">
+      <div class="card__content | stack">
+        <h2 class="card__title"><nuxt-link to="/detail-page">{{ video.title }}</nuxt-link></h2>
+        <div class="card__meta | cluster">
+          <docs-meta>{{ video.video_info.duration }} min</docs-meta>
+          <docs-meta>{{ video.video_info.year }}</docs-meta>
+        </div>
+      </div>
+    </slot>
+  </div>
+</template>
 
 <style scoped>
 
@@ -53,10 +181,7 @@ function pauseVideo() {
 
 .card {
   width: 100%;
-
-  &:hover {
-    
-  }
+  border-radius: var(--border-radius-m);
 }
 
 .card__content {

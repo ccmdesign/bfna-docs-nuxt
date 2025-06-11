@@ -37,11 +37,12 @@ function checkFolder(dirName) {
   });
 }
 
-const handleDocumentaries = (docsItems) => {
+const handleDocumentaries = async (docsItems) => {
   let documentaries = []
-  docsItems.forEach(doc => {
+  for (const doc of docsItems) {
     let fields = doc.fields
     let source = ''
+    const extraVideoInfo = await main.extractVideoInfo(fields)
     if (fields.video_url.includes('youtu')) {
       source = 'youtube'
     } else if (fields.video_url.includes('vimeo')) {
@@ -163,6 +164,7 @@ const handleDocumentaries = (docsItems) => {
     documentaries.push({
       id: doc.sys.id,
       videoId: doc.sys.id,
+      updated: doc.sys.updatedAt,
       title: fields.title,
       subtitle: fields.subtitle,
       by: fields.by,
@@ -173,12 +175,11 @@ const handleDocumentaries = (docsItems) => {
       backgroundImage: fields.background_image.fields.file.url,
       source: source,
       screenings: screeningsList,
-      video_info: videoInfo,
+      video_info: { ...videoInfo, ...extraVideoInfo },
       resources: resourcesList,
       awards: awardList
     })
-  })
-
+  }
   return documentaries
 }
 
@@ -188,24 +189,24 @@ const getManagedDocs = async () => {
     include: 2,
   })
 
-  data.items.map(({ fields }) => {
+  data.items.map(async ({ fields }) => {
     
     const trailer = [fields.trailer]; // trailer
-    const trailerDoc = handleDocumentaries(trailer);
+    const trailerDoc = await handleDocumentaries(trailer);
     trailerDoc.forEach((doc) => {
       doc.slug = main.slugify(doc.title);
       writeContent(doc, 'trailer', true);
     });
         
     const featured = [fields.featured]; // main video
-    const featuredDocs = handleDocumentaries(featured);
+    const featuredDocs = await handleDocumentaries(featured);
     featuredDocs.forEach((doc) => {
       doc.slug = main.slugify(doc.title);
       writeContent(doc, 'featuredvideo', true);
     });
 
     const featuredOrder = fields.featuredOrder; // four featured videos
-    const featuredOrderDocs = handleDocumentaries(featuredOrder);
+    const featuredOrderDocs = await handleDocumentaries(featuredOrder);
     featuredOrderDocs.forEach((doc, index) => {
       doc.slug = main.slugify(doc.title);
       doc.featuredOrder = index;
@@ -213,11 +214,36 @@ const getManagedDocs = async () => {
     });
     
     const allVideos = fields.order; // all videos
-    const allVideosDocs = [...featuredDocs, ...handleDocumentaries(allVideos)];
+    const allVideosDocs = [...featuredDocs, ...await handleDocumentaries(allVideos)];
     allVideosDocs.forEach((doc, index) => {
       doc.slug = main.slugify(doc.title);
       doc.order = index;
       writeContent(doc, 'allvideos', true);
+    });
+
+    // Filter latest releases from allVideosDocs
+    const latestReleasesFiltered = allVideosDocs.filter(doc => {
+      // Try to get the release date from screenings or a known date field
+      let releaseDate = new Date(doc.updated);
+
+      // If no date found, exclude
+      if (!releaseDate || isNaN(releaseDate)) return false;
+
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const previousYear = currentYear - 1;
+
+      // Check if releaseDate is in the current or previous year and not in the future
+      return (
+        (releaseDate.getFullYear() === currentYear || releaseDate.getFullYear() === previousYear) &&
+        releaseDate <= now
+      );
+    });
+
+    latestReleasesFiltered.forEach((doc, index) => {
+      doc.slug = main.slugify(doc.title);
+      doc.order = index;
+      writeContent(doc, 'latest', true);
     });
 
   });

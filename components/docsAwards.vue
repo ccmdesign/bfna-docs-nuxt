@@ -10,7 +10,7 @@
 
     <div class="dot-container | cluster">
       <div
-        v-for="(a, i) in awards"
+        v-for="(a, i) in currentVideo.awards"
         :key="i"
         class="dot"
         :class="{ active: i === current }"
@@ -27,6 +27,9 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useVideoStore } from '~/stores/video';
+
+const { currentVideo } = useVideoStore();
 
 const awards = [
   {
@@ -47,9 +50,9 @@ const awards = [
 ]
 
 const current = ref(0)
-const total = awards.length
+const total = currentVideo.awards.length
 
-const currentAward = computed(() => awards[current.value])
+const currentAward = computed(() => currentVideo.awards[current.value])
 
 function prev() {
   current.value = (current.value - 1 + total) % total
