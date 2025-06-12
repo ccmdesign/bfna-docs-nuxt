@@ -8,12 +8,12 @@
     <docs-tools id="latest-heading">
       <div class="cluster">
         <h2 class="h4" split-right>Latest Releases</h2>
-        <docs-button icon="arrow_back_ios" size="s" @click="scrollLatestReel(-1)" />
-        <docs-button icon="arrow_forward_ios" size="s" @click="scrollLatestReel(1)" />
+        <docs-button icon="arrow_back_ios" size="s" @click="slideLeft" />
+        <docs-button icon="arrow_forward_ios" size="s" @click="slideRight"/>
       </div>
     </docs-tools>
 
-    <docs-reel id="latest-reel" ref="latestReelRef">
+    <docs-reel id="latest-reel" ref="latestReel">
       <template #reel>
         <docs-card v-for="i in videoStore.latest" :video="i" :key="i.id"></docs-card>
       </template>
@@ -29,6 +29,20 @@ import { useVideoStore } from '~/stores/video';
 import { ref, onMounted } from 'vue';
 
 const videoStore = useVideoStore();
+const latestReel = ref(null);
+
+const slideLeft = () => {
+  if (latestReel.value && latestReel.value.$el) {
+    latestReel.value.$el.scrollBy({ left: -500, behavior: 'smooth' });
+  }
+};
+
+const slideRight = () => {
+  if (latestReel.value && latestReel.value.$el) {
+    latestReel.value.$el.scrollBy({ left: 500, behavior: 'smooth' });
+  }
+};
+
 
 const latestReelRef = ref(null);
 
