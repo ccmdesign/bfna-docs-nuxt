@@ -3,19 +3,17 @@ const defaultTitle = 'Bertelsmann Foundation Documentaries | Films for Transatla
 
 const _default = {
   getVideoIdFromYoutubeUrl: function (videoUrl) {
-    const regex = /(?:youtube(?:-nocookie)?\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/g;
-    const results = regex.exec(videoUrl);
-    return results.length > 1 ? results[1] : null;
+    const regex = /(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/g
+    const results = regex.exec(videoUrl)
+    return results && results[1] ? results[1] : null
   },
   getVideoIdFromVimeoUrl: function (videoUrl) {
-    let results = ''
-    let split = videoUrl.split('/')
-    if(split[split.length - 1].length >= 2) {
-      results = split[split.length - 1]
-    } else {
-      results = split[split.length - 2]
+    const parts = videoUrl.split('/')
+    let idPart = parts.pop() || ''
+    if (idPart.length < 2 && parts.length > 0) {
+      idPart = parts.pop()
     }
-    return results
+    return idPart ? idPart.split('?')[0] : ''
   },
   getDefaultDescription: function () {
     return defaultDescription;
