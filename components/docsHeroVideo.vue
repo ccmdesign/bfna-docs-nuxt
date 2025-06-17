@@ -1,9 +1,22 @@
 <script setup>
 import { useVideoStore } from '~/stores/video';
 import { storeToRefs } from 'pinia';
+import { useRoute } from 'vue-router';
+import { watch } from 'vue';
 
 const videoStore = useVideoStore();
 const { isPlaying, currentVideo } = storeToRefs(videoStore);
+const { setIsPlaying } = videoStore;
+const route = useRoute();
+
+watch(
+  [() => currentVideo.value, () => route.fullPath],
+  () => {
+    setIsPlaying(false);
+  },
+  { immediate: true }
+);
+
 </script>
 
 <template>
