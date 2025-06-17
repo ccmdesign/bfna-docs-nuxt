@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export interface Video {
   videoId: string
   slug: string
+  series: string[]
   order: number
   title: string
   description: string
@@ -54,6 +55,14 @@ export interface Video {
   by?: string
 }
 
+export interface Series {
+  serieId: string
+  slug: string
+  title: string
+  description: string
+  documentaries?: Array<{ id: string }>,
+}
+
 export const useVideoStore = defineStore('video', {
   state: () => ({
     videoList: [] as Video[],
@@ -62,7 +71,15 @@ export const useVideoStore = defineStore('video', {
     featuredVideosList: [] as Video[],
     homepageVideoEffect: false,
     navigation: true,
-    menuVisibility: false
+    menuVisibility: false,
+    showDetails: false,
+    series: {} as Series,
+    isPlaying: false,
+    filterItems: {},
+    filterOptions: {
+      workstream: 'all',
+      sort: 'desc'
+    }
   }),
   
   getters: {
@@ -93,7 +110,7 @@ export const useVideoStore = defineStore('video', {
     },
     setCurrentVideoFromSlug(slug: string) {
       if (slug !== '') {
-        this.currentVideo = this.videoList.find(video => video.videoId === slug) || this.emptyEpisode
+        this.currentVideo = this.videoList.find(video => video.slug === slug) || this.emptyEpisode
       }
     },
     setHomepageVideoEffect(val: boolean) {
@@ -113,6 +130,21 @@ export const useVideoStore = defineStore('video', {
     },
     setLatestVideos(videos: Video[]) {
       this.latest = videos
-    }
+    },
+    setShowDetails(val: boolean) {
+      this.showDetails = val
+    },
+    setSeries(series: Series) {
+      this.series = series
+    },
+    setIsPlaying(val: boolean) {
+      this.isPlaying = val
+    },
+    setFiltersItems(filters: any) {
+      this.filterItems = filters
+    },
+    setFilterOptions(options: any) {
+      this.filterOptions = options
+    },
   }
 }) 

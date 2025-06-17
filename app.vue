@@ -21,4 +21,10 @@ videoStore.setVideos(allvideos.value);
 const { data: latest } = await useAsyncData('latest', () => queryCollection('latest').order('order', 'ASC').all())
 videoStore.setLatestVideos(latest.value);
 
+const { data: series } = await useAsyncData('series', () => queryCollection('series').all())
+videoStore.setSeries(series.value);
+
+const { data: filters } = await useAsyncData('filters', () => queryCollection('filters').first())
+videoStore.setFiltersItems(filters.value);
+
 </script>

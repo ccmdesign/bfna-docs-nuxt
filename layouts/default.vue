@@ -32,7 +32,7 @@
 #featured-reel {
   grid-row: 4 / 5;
   z-index: 1;
-  margin-block-start: -80px;
+  margin-block-start: -30px;
 }
 
 #latest-heading {

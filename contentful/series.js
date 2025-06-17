@@ -1,12 +1,6 @@
 const fs = require("fs");
 const main = require('../contentful/main')
 
-let displayFilters = {
-  workstreams: [],
-  years: [],
-  durations: [],
-}
-
 
 const writeContent = async (item, folder, log=false) => {
   const dir = `./content/${folder}`;
@@ -43,18 +37,12 @@ function checkFolder(dirName) {
   });
 }
 
-const handleDocumentaries = async (docsItems, series=[]) => {
+const handleDocumentaries = async (docsItems) => {
   let documentaries = []
   for (const doc of docsItems) {
     let fields = doc.fields
     let source = ''
     const extraVideoInfo = await main.extractVideoInfo(fields)
-
-    // Available fields for filtering
-    displayFilters.years.push(extraVideoInfo.year);
-    displayFilters.durations.push(extraVideoInfo.duration);
-    displayFilters.workstreams.push(fields.workstream);
-
     if (fields.video_url.includes('youtu')) {
       source = 'youtube'
     } else if (fields.video_url.includes('vimeo')) {
@@ -189,14 +177,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
       screenings: screeningsList,
       video_info: { ...videoInfo, ...extraVideoInfo },
       resources: resourcesList,
-      awards: awardList,
-      // Series structure: [{ serieId, items: [other documentary ids in this series except current] }]
-      series: series
-      .filter(s => s.documentaries.includes(doc.sys.id))
-      .map(s => ({
-        serieId: s.serieId,
-        items: s.documentaries.filter(id => id !== doc.sys.id)
-      }))
+      awards: awardList
     })
   }
   return documentaries
@@ -208,94 +189,21 @@ const getSeries = async () => {
     include: 2,
   })
 
-  return data.items.map(({ fields, sys }) => {
+  data.items.map(async ({ fields, sys }) => {
 
-    return {
+    const doc = {
       serieId: sys.id,
       title: fields.title,
       slug: main.slugify(fields.title),
       description: fields.description.content[0].content[0].value,
-      documentaries: fields.items.map(item => item.sys.id),
+      documentaries: await handleDocumentaries(fields.items),
       updated: fields.updatedAt
-    }   
-  });
-}
-
-const getManagedDocs = async () => {
-  const data = await main.contentfulClient.getEntries({
-    content_type: 'bfnaDocsDisplayManagement',
-    include: 2,
-  })
-
-  const seriesDocs = await getSeries();
-
-  data.items.map(async ({ fields }) => {
-    
-    const trailer = [fields.trailer]; // trailer
-    const trailerDoc = await handleDocumentaries(trailer, seriesDocs);
-    trailerDoc.forEach((doc) => {
-      doc.slug = main.slugify(doc.title);
-      writeContent(doc, 'trailer', true);
-    });
+    }
+    writeContent(doc, 'series', true);
         
-    const featured = [fields.featured]; // main video
-    const featuredDocs = await handleDocumentaries(featured, seriesDocs);
-    featuredDocs.forEach((doc) => {
-      doc.slug = main.slugify(doc.title);
-      writeContent(doc, 'featuredvideo', true);
-    });
-
-    const featuredOrder = fields.featuredOrder; // four featured videos
-    const featuredOrderDocs = await handleDocumentaries(featuredOrder, seriesDocs);
-    featuredOrderDocs.forEach((doc, index) => {
-      doc.slug = main.slugify(doc.title);
-      doc.featuredOrder = index;
-      writeContent(doc, 'fourvideos', true);
-    });
-    
-    const allVideos = fields.order; // all videos
-    const allVideosDocs = [...featuredDocs, ...await handleDocumentaries(allVideos, seriesDocs)];
-    allVideosDocs.forEach((doc, index) => {
-      doc.slug = main.slugify(doc.title);
-      doc.order = index;
-      writeContent(doc, 'allvideos', true);
-    });
-
-    // Filter latest releases from allVideosDocs
-    const latestReleasesFiltered = allVideosDocs.filter(doc => {
-      // Try to get the release date from screenings or a known date field
-      let releaseDate = new Date(doc.updated);
-
-      // If no date found, exclude
-      if (!releaseDate || isNaN(releaseDate)) return false;
-
-      const now = new Date();
-      const currentYear = now.getFullYear();
-      const previousYear = currentYear - 1;
-
-      // Check if releaseDate is in the current or previous year and not in the future
-      return (
-        (releaseDate.getFullYear() === currentYear || releaseDate.getFullYear() === previousYear) &&
-        releaseDate <= now
-      );
-    });
-
-    latestReleasesFiltered.forEach((doc, index) => {
-      doc.slug = main.slugify(doc.title);
-      doc.order = index;
-      writeContent(doc, 'latest', true);
-    });
-
-    // Write display filters
-    displayFilters.workstreams = [...new Set(displayFilters.workstreams.flat())].sort();
-    displayFilters.years = [...new Set(displayFilters.years)].sort((a, b) => b - a);
-    displayFilters.durations = [...new Set(displayFilters.durations)].sort((a, b) => b - a);
-    displayFilters.slug = main.slugify('filters');
-    writeContent(displayFilters, 'filters', true);
-
   });
 }
 
 module.exports = async function () {
-  return await getManagedDocs();
+  return await getSeries();
 }

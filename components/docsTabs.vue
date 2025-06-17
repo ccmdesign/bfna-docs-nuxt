@@ -18,11 +18,23 @@
 </template>
 
 <script setup>
+import { useVideoStore } from '~/stores/video';
+const videoStore = useVideoStore();
+const { currentVideo } = storeToRefs(videoStore);
+
+const seriesLength = computed(() => {
+  return currentVideo.value.series.reduce((acc, serie) => acc + serie.items.length, 0);
+});
+
+const resourcesLength = computed(() => {
+  return currentVideo.value.resources ? currentVideo.value.resources.length : 0;
+});
+
 const tabs = [
   { label: 'Information', slot: 'information', count: 1, class: '' },
-  { label: 'Series', slot: 'series', count: 4, class: '' },
+  { label: 'Series', slot: 'series', count: seriesLength, class: '' },
   { label: 'Trailer & More', slot: 'extras', count: 1, class: '' },
-  { label: 'Related', slot: 'related', count: 1, class: '' }
+  { label: 'Related', slot: 'related', count: resourcesLength, class: '' }
 ]
 
 const activeTab = ref(0)

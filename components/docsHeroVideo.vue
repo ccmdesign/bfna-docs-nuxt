@@ -1,14 +1,34 @@
+<script setup>
+import { useVideoStore } from '~/stores/video';
+import { storeToRefs } from 'pinia';
+
+const videoStore = useVideoStore();
+const { isPlaying, currentVideo } = storeToRefs(videoStore);
+</script>
+
 <template>
-  <div class="hero__video">
-    <video class="hero__video-media" src="/assets/sample-3.mov" muted loop playsinline></video>
+  <Youtube-Player 
+    v-if="isPlaying && currentVideo.source === 'youtube'"
+    class="hero__video"
+    :video-id="currentVideo.videoId"
+    :src="`${currentVideo.videoUrl}?autoplay=1&mute=1`"
+    :controls="true"
+    :modest-branding="false"
+    :width="'100%'"
+    :height="'100%'"
+    allowfullscreen
+    ref="youtube"
+  ></Youtube-Player>
+  
+  <vimeoPlayer v-else-if="isPlaying && currentVideo.source === 'vimeo'" :vimeoUrl="currentVideo.videoUrl" class="hero__video" :controls="true" />
+  
+  <div v-else class="hero__video">
+    <!-- <video class="hero__video-media" src="/assets/sample-3.mov" muted loop playsinline></video> -->
+    <div class="hero__video-media" :style="{ backgroundImage: `url('${currentVideo.backgroundImage}')`, height: '100%' }"></div>
   </div>
 </template>
 
-<script setup>
-
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 .hero__video {
   max-width: 100%;
   grid-column: full-start / full-end;

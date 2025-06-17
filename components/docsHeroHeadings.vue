@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-headings | subgrid stack">
+  <div v-if="!isPlaying" class="hero-headings | subgrid stack">
     <slot name="content">
       <div class="hero__category | font-size:-1">{{ currentVideo.workstream }}</div>
       <h1 class="hero__title | font-size:5">{{ currentVideo.title }}</h1>
@@ -11,8 +11,9 @@
       <p class="hero__description | font-size:-1">{{ currentVideo.description }}</p>
 
       <div class="hero__actions | cluster">
-        <docs-button effect="pill" variant="primary" icon="play_arrow">Watch Now</docs-button>
-        <docs-button effect="pill" variant="secondary" icon-after="arrow_forward">More Info</docs-button>
+        <docs-button effect="pill" variant="primary" icon="play_arrow" @click="playVideo">Watch Now</docs-button>
+        <docs-button v-if="route.params.slug" effect="pill" variant="secondary" icon-after="arrow_backward" @click="backHome(currentVideo)">Back to list</docs-button>
+        <docs-button v-else effect="pill" variant="secondary" icon-after="arrow_forward" @click="moreInfo(currentVideo)">More Info</docs-button>
       </div>
     </slot>
   </div>
@@ -20,8 +21,31 @@
 
 <script setup>
 import { useVideoStore } from '~/stores/video';
+import { storeToRefs } from 'pinia';
 
-const { currentVideo } = useVideoStore();
+const route = useRoute();
+const videoStore = useVideoStore();
+const { isPlaying, currentVideo } = storeToRefs(videoStore);
+
+const playVideo = () => {
+  videoStore.setIsPlaying(true);
+}
+
+const router = useRouter();
+const moreInfo = (video) => {
+  
+  setTimeout(() => {
+    router.push({
+      name: `video-detail`,
+      path: video.slug,
+      params: { slug: video.slug }
+    });
+  }, 100);
+}
+
+const backHome = () => {
+  router.push({ name: 'index' });
+}
 
 </script>
 

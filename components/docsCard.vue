@@ -1,65 +1,7 @@
-<!-- <template>
-  <div class="card" :thumbnail="thumbnail">
-    <video 
-      ref="videoRef"
-      @mouseenter="playVideo" @mouseleave="pauseVideo"
-      class="card__video" 
-      :src="video.videoUrl" 
-      :muted="true"
-      loop 
-      playsinline 
-      preload="auto"
-    ></video>
-    <slot name="content" v-if="!thumbnail">
-      <div class="card__content | stack">
-        <h2 class="card__title"><nuxt-link to="/detail-page">{{ video.title }}</nuxt-link></h2>
-        <div class="card__meta | cluster">
-          <docs-meta>{{ video.video_info.duration }} min</docs-meta>
-          <docs-meta>{{ video.video_info.year }}</docs-meta>
-        </div>
-      </div>
-    </slot>
-  </div>
-</template>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-const props = defineProps({
-  thumbnail: {
-    type: Boolean,
-    default: false
-  },
-  video: {
-    type: Object,
-    default: () => ({
-      id: '234khjn6-45sdfvklj-2345',
-      title: 'Card Title',
-      videoUrl: '/assets/sample-video.webm',
-      video_info: {
-        duration: '35',
-        year: '2025'
-      }
-    })
-  }
-})
-
-const videoRef = ref(null)
-
-function playVideo() {
-  if (videoRef.value) {
-    videoRef.value.muted = false
-    videoRef.value.play()
-  }
-}
-function pauseVideo() {
-  if (videoRef.value) {
-    videoRef.value.muted = true
-    videoRef.value.pause()
-  }
-}
-</script> -->
 <script setup>
 import { ref, computed } from 'vue'
+import { useVideoStore } from '~/stores/video';
+
 const props = defineProps({
   thumbnail: {
     type: Boolean,
@@ -81,19 +23,26 @@ const props = defineProps({
 })
 
 const showIframe = ref(false)
-
+const showPreload = ref(false)
 let hoverTimeout = null
-
+let preloadTimeout = null
 const handleMouseEnter = () => {
+  showPreload.value = true
+  showIframe.value = true
   clearTimeout(hoverTimeout)
+ 
   hoverTimeout = setTimeout(() => {
-    showIframe.value = true
-  }, 400) // 400ms delay, adjust as needed
+    showPreload.value = false
+  }, 4000) // 400ms delay, adjust as needed
+
 }
 
 const handleMouseLeave = () =>{
   clearTimeout(hoverTimeout)
+  clearTimeout(preloadTimeout)
+  showPreload.value = false
   showIframe.value = false
+
 }
 
 
@@ -120,21 +69,51 @@ const backgroundStyle = computed(() => {
   const imageUrl = props.video.video_info.thumbnail ? props.video.video_info.thumbnail : props.video.video_info.thumb
   
   return {
-    backgroundImage: `url('${!props.thumbnail ? imageUrl : props.video.backgroundImage}')`,
+    backgroundImage: `url('${props.thumbnail ? imageUrl : props.video.backgroundImage}')`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }
 })
+
+const router = useRouter();
+const videoStore = useVideoStore();
+const moreInfo = (video) => {
+  videoStore.setCurrentVideo(video);
+  
+  setTimeout(() => {
+    router.push({
+      name: `video-detail`,
+      path: video.slug,
+      params: { slug: video.slug }
+    });
+  }, 100);
+}
+
+const handleCurrentVideo = (video) => {
+  videoStore.setCurrentVideo(video);
+}
 </script>
 
 <template>
   <div
     class="card"
     :thumbnail="thumbnail"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-  >
-    <template v-if="showIframe && isYouTube(video.videoUrl)">
+    @pointerenter="handleMouseEnter"
+    @pointerleave="handleMouseLeave"
+    @click="handleCurrentVideo(video)">
+    <template v-if="showPreload">
+      <img 
+        ref="videoRef"
+        class="card__video" 
+        src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/3c668970-f366-4d08-b7d7-a7e4ed41857e.gif?ClientID=sulu&Date=1749682948&Signature=d6992d6fd2734b57e2f958383092ac7acad5c256" 
+        :muted="true"
+        loop 
+        playsinline
+        autoplay 
+        preload="auto"
+      ></img>
+    </template>
+    <template v-else-if="showIframe && isYouTube(video.videoUrl)">
       <iframe
         class="card__video"
         :src="youtubeEmbedUrl(video.videoUrl)"
@@ -159,13 +138,23 @@ const backgroundStyle = computed(() => {
         allowfullscreen
         ref="player"
       ></vimeoPlayer> -->
+      <!-- <img 
+        ref="videoRef"
+        class="card__video" 
+        src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/3c668970-f366-4d08-b7d7-a7e4ed41857e.gif?ClientID=sulu&Date=1749682948&Signature=d6992d6fd2734b57e2f958383092ac7acad5c256" 
+        :muted="true"
+        loop 
+        playsinline
+        autoplay 
+        preload="auto"
+      ></img> -->
     </template>
     <template v-else>
       <div class="card__video card__video--bg" :style="backgroundStyle"></div>
     </template>
     <slot name="content" v-if="!thumbnail">
       <div class="card__content | stack">
-        <h2 class="card__title"><nuxt-link to="/detail-page">{{ video.title }}</nuxt-link></h2>
+        <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
         <div class="card__meta | cluster">
           <docs-meta>{{ video.video_info.duration }} min</docs-meta>
           <docs-meta>{{ video.video_info.year }}</docs-meta>

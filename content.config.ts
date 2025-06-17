@@ -1,7 +1,31 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
+import series from './contentful/series'
 
 export default defineContentConfig({
   collections: {
+    filters: defineCollection({
+      source: 'filters/*.json',
+      type: 'data',
+      // Define custom schema for docs collection
+      schema: z.object({
+        years: z.array(z.string()),
+        workstreams: z.array(z.string()),
+        durations: z.array(z.string()),
+        slug: z.string()
+      })
+    }),
+    series: defineCollection({
+      source: 'series/*.json',
+      type: 'data',
+      // Define custom schema for docs collection
+      schema: z.object({
+        serieId: z.string(),
+        title: z.string(),
+        description: z.string(),
+        documentaries: z.array(z.unknown()),
+        slug: z.string()
+      })
+    }),
     latest: defineCollection({
       source: 'latest/*.json',
       type: 'data',
@@ -40,6 +64,7 @@ export default defineContentConfig({
             year: z.number()
           })
         ),
+        series: z.array(z.unknown()),
         slug: z.string()
       })
     }),
@@ -81,6 +106,7 @@ export default defineContentConfig({
             year: z.number()
           })
         ),
+        series: z.array(z.unknown()),
         slug: z.string()
       })
     }),
@@ -118,6 +144,7 @@ export default defineContentConfig({
             year: z.number()
           })
         ),
+        series: z.array(z.unknown()),
         slug: z.string(),
         featuredOrder: z.number()
       })
@@ -156,6 +183,7 @@ export default defineContentConfig({
             year: z.number()
           })
         ),
+        series: z.array(z.unknown()),
         slug: z.string()
       })
     }),
@@ -193,6 +221,7 @@ export default defineContentConfig({
             year: z.number()
           })
         ),
+        series: z.array(z.unknown()),
         slug: z.string(),
       })
     })

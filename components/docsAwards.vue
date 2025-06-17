@@ -4,7 +4,7 @@
     <h4 class="doc-awards__title">{{ currentAward.title }}</h4>
     <div class="cluster doc-awards__meta">
       <docs-meta>{{ currentAward.year }}</docs-meta>
-      <docs-meta>{{ currentAward.festival }}</docs-meta>
+      <docs-meta>{{ currentAward.institution }}</docs-meta>
     </div>
     <span class="doc-awards__counter">{{ current+1 }}/{{ total }}</span>
 

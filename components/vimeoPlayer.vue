@@ -8,19 +8,13 @@ const props = defineProps({
     type: String,
     required: true
   },
-  width: {
-    type: Number,
-    default: 640
-  },
-  height: {
-    type: Number,
-    default: 360
+  controls: {
+    type: Boolean,
+    default: false
   }
 })
 
 const vimeoId = utils.getVideoIdFromVimeoUrl(props.vimeoUrl);
-
-
 const playerContainer = ref<HTMLElement | null>(null)
 const player = ref<Player | null>(null)
 
@@ -30,7 +24,7 @@ onMounted(() => {
       id: vimeoId,
       muted: true,
       autoplay: true,
-      controls: false,
+      controls: props.controls,
       responsive: true,
       loop: true,
     })
@@ -50,7 +44,6 @@ onMounted(() => {
 
     player.value.on('timeupdate', async (data) => {
       const { seconds } = data;
-      console.log('Current time:', seconds);
       if (seconds >= 45 && isLooping) {
         try {
           await player.value?.setCurrentTime(30);
@@ -65,7 +58,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (player.value) {
-    player.value.unload();
     player.value = null;
   }
 });

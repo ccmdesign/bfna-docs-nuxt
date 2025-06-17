@@ -1,5 +1,5 @@
 <template>
-  <div class="doc-hero-extra">
+  <div v-if="!isPlaying" class="doc-hero-extra">
     <slot>
       <docs-awards v-if="currentVideo.awards.length" />
     </slot>
@@ -8,8 +8,10 @@
 
 <script setup>
 import { useVideoStore } from '~/stores/video';
+import { storeToRefs } from 'pinia';
 
-const { currentVideo } = useVideoStore();
+const videoStore = useVideoStore();
+const { isPlaying, currentVideo } = storeToRefs(videoStore);
 
 </script>
 

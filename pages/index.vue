@@ -1,34 +1,44 @@
 <template>
-    <docs-reel id="featured-reel">
-      <template #reel>
-        <docs-card v-for="i in videoStore.featuredVideosList" :video="i" thumbnail :key="i.id"></docs-card>
-      </template>
-    </docs-reel>
+  <docs-reel id="featured-reel">
+    <template #reel>
+      <docs-card v-for="i in videoStore.featuredVideosList" :video="i" thumbnail :key="i.id"></docs-card>
+    </template>
+  </docs-reel>
 
-    <docs-tools id="latest-heading">
-      <div class="cluster">
-        <h2 class="h4" split-right>Latest Releases</h2>
-        <docs-button icon="arrow_back_ios" size="s" @click="slideLeft" />
-        <docs-button icon="arrow_forward_ios" size="s" @click="slideRight"/>
-      </div>
-    </docs-tools>
+  <docs-tools id="latest-heading">
+    <div class="cluster">
+      <h2 class="h4" split-right>Latest Releases</h2>
+      <docs-button icon="arrow_back_ios" size="s" @click="slideLeft" />
+      <docs-button icon="arrow_forward_ios" size="s" @click="slideRight"/>
+    </div>
+  </docs-tools>
 
-    <docs-reel id="latest-reel" ref="latestReel">
-      <template #reel>
-        <docs-card v-for="i in videoStore.latest" :video="i" :key="i.id"></docs-card>
-      </template>
-    </docs-reel>
+  <docs-reel id="latest-reel" ref="latestReel">
+    <template #reel>
+      <docs-card v-for="i in videoStore.latest" :video="i" :key="i.id"></docs-card>
+    </template>
+  </docs-reel>
 
-    <docs-tools id="grid-heading" />
-      
-    <docs-grid id="grid" :videos="videoStore.videoList" />
+  <docs-tools id="grid-heading" />
+    
+  <docs-grid id="grid" :videos="videos" />
 </template>
 
 <script setup>
 import { useVideoStore } from '~/stores/video';
-import { ref, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
 
 const videoStore = useVideoStore();
+const { filterOptions } = storeToRefs(videoStore);
+
+const videos = computed(() => {
+  return videoStore.videoList.filter(video => {
+    return (filterOptions.value.workstream === 'all' || video.workstream === filterOptions.value.workstream);
+  }).sort((a, b) => {
+    return filterOptions.value.sort === 'desc' ? b.video_info.year - a.video_info.year : a.video_info.year - b.video_info.year;
+  });
+});
+
 const latestReel = ref(null);
 
 const slideLeft = () => {
