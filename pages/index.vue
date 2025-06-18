@@ -32,7 +32,22 @@ const videoStore = useVideoStore();
 const { filterOptions } = storeToRefs(videoStore);
 
 const videos = computed(() => {
+
   return videoStore.videoList.filter(video => {
+    // Filter by duration range
+    if (filterOptions.value.durationRange !== 'all') {
+      const duration = video.video_info.duration;
+      const [min, max] = filterOptions.value.durationRange.split('-').map(Number);
+      if (max) {
+        if (duration < min || duration > max) {
+          return false;
+        }
+      } else {
+        if (duration < min) {
+          return false;
+        }
+      }
+    }
     return (filterOptions.value.workstream === 'all' || video.workstream === filterOptions.value.workstream);
   }).sort((a, b) => {
     return filterOptions.value.sort === 'desc' ? b.video_info.year - a.video_info.year : a.video_info.year - b.video_info.year;
@@ -53,23 +68,6 @@ const slideRight = () => {
   }
 };
 
-
-const latestReelRef = ref(null);
-
-function scrollLatestReel(direction) {
-  const root = latestReelRef.value?.$el || latestReelRef.value;
-  const reel = root?.querySelector ? root.querySelector('.reel-grid') : null;
-  console.log('scrolling', { root, reel });
-  if (!reel) return;
-  // Try to scroll by the width of one card, fallback to 300px
-  const card = reel.querySelector('.card');
-  const scrollAmount = card ? card.offsetWidth + 24 : 300; // 24px is a guess for gap
-  reel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
-}
-
-onMounted(() => {
-  // Optionally, could do something here if needed
-});
 </script>
 
 <style scoped>

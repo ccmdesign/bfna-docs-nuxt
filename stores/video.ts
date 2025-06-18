@@ -78,7 +78,8 @@ export const useVideoStore = defineStore('video', {
     filterItems: {},
     filterOptions: {
       workstream: 'all',
-      sort: 'desc'
+      sort: 'desc',
+      durationRange: 'all',
     }
   }),
   
