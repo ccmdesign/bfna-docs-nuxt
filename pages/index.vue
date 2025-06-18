@@ -1,7 +1,7 @@
 <template>
   <docs-reel id="featured-reel">
     <template #reel>
-      <docs-card v-for="i in videoStore.featuredVideosList" :video="i" thumbnail :key="i.id"></docs-card>
+      <docs-card v-for="i in videoStore.featuredVideosList" :video="i" thumbnail :featured="true" :key="i.id"></docs-card>
     </template>
   </docs-reel>
 

@@ -7,6 +7,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+    featured: {
+    type: Boolean,
+    default: false
+  },
   video: {
     type: Object,
     default: () => ({
@@ -87,7 +91,7 @@ const handleCurrentVideo = (video) => {
     @pointerenter="handleMouseEnter"
     @pointerleave="handleMouseLeave"
     @click="handleCurrentVideo(video)">
-    <template v-if="showIframe && isYouTube(video.videoUrl)">
+    <template v-if="!featured && showIframe && isYouTube(video.videoUrl)">
       <iframe
         :key="showIframe + video.videoUrl"
         class="card__video"
@@ -97,23 +101,23 @@ const handleCurrentVideo = (video) => {
         allowfullscreen
       ></iframe>
     </template>
-    <template v-else-if="showIframe && isVimeo(video.videoUrl)">
-      <iframe
+    <template v-else-if="!featured && showIframe && isVimeo(video.videoUrl)">
+      <!-- <iframe
         :key="showIframe + video.videoUrl"
         class="card__video"
         :src="vimeoEmbedUrl(video.videoUrl)"
         frameborder="0"
         allow="autoplay; fullscreen"
         allowfullscreen
-      ></iframe>
-      <!-- <vimeoPlayer
+      ></iframe> -->
+      <vimeoPlayer
         class="card__video"
         :vimeo-url="video.videoUrl"
         :autoplay="true"
         playsinline
         allowfullscreen
         ref="player"
-      ></vimeoPlayer> -->
+      ></vimeoPlayer>
       <!-- <img 
         ref="videoRef"
         class="card__video" 
