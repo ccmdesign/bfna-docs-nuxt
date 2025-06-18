@@ -27,22 +27,13 @@
 
     <template #extras>
       <docs-grid>
-        <docs-card :video="currentVideo" :thumbnail="true" :key="currentVideo.id"></docs-card>
+        <docs-card v-if="trailer" :video="trailer" :thumbnail="true" :key="trailer.id"></docs-card>
       </docs-grid>
     </template>
 
     <template #related>
       <docs-grid>
-        <!-- <docs-card /> -->
         <docsRelatedItemsCard :resource="res" v-for="res in currentVideo.resources" :key="res.id" />
-          
-<!--           
-          <NuxtLink v-if="res.extension === 'pdf'"
-            external
-            target="_blank"
-            :to="res.url">
-            <img src="/assets/cicle_pdf.png" />
-          </NuxtLink> -->
       </docs-grid>
     </template>
   </docs-tabs>
@@ -59,6 +50,15 @@ const route = useRoute();
 const videoStore = useVideoStore();
 videoStore.setCurrentVideoFromSlug(route.params.slug);
 const { currentVideo } = storeToRefs(videoStore);
+
+const trailer = computed(() => {
+  return currentVideo.value.video_info.teaser_url ? 
+  {
+    id: currentVideo.value.id,
+    videoUrl: currentVideo.value.video_info.teaser_url,
+    video_info: currentVideo.value.video_info,
+  } : null;
+});
 
 const series = computed(() => {
   let serieInfo = {}
