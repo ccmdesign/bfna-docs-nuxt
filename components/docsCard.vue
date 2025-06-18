@@ -23,28 +23,14 @@ const props = defineProps({
 })
 
 const showIframe = ref(false)
-const showPreload = ref(false)
-let hoverTimeout = null
-let preloadTimeout = null
 const handleMouseEnter = () => {
-  showPreload.value = true
-  showIframe.value = true
-  clearTimeout(hoverTimeout)
- 
-  hoverTimeout = setTimeout(() => {
-    showPreload.value = false
-  }, 4000) // 400ms delay, adjust as needed
 
+  showIframe.value = true
 }
 
 const handleMouseLeave = () =>{
-  clearTimeout(hoverTimeout)
-  clearTimeout(preloadTimeout)
-  showPreload.value = false
   showIframe.value = false
-
 }
-
 
 // Helper functions for embed URLs
 function isYouTube(url) {
@@ -101,20 +87,9 @@ const handleCurrentVideo = (video) => {
     @pointerenter="handleMouseEnter"
     @pointerleave="handleMouseLeave"
     @click="handleCurrentVideo(video)">
-    <template v-if="showPreload">
-      <img 
-        ref="videoRef"
-        class="card__video" 
-        src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/3c668970-f366-4d08-b7d7-a7e4ed41857e.gif?ClientID=sulu&Date=1749682948&Signature=d6992d6fd2734b57e2f958383092ac7acad5c256" 
-        :muted="true"
-        loop 
-        playsinline
-        autoplay 
-        preload="auto"
-      ></img>
-    </template>
-    <template v-else-if="showIframe && isYouTube(video.videoUrl)">
+    <template v-if="showIframe && isYouTube(video.videoUrl)">
       <iframe
+        :key="showIframe + video.videoUrl"
         class="card__video"
         :src="youtubeEmbedUrl(video.videoUrl)"
         frameborder="0"
@@ -124,6 +99,7 @@ const handleCurrentVideo = (video) => {
     </template>
     <template v-else-if="showIframe && isVimeo(video.videoUrl)">
       <iframe
+        :key="showIframe + video.videoUrl"
         class="card__video"
         :src="vimeoEmbedUrl(video.videoUrl)"
         frameborder="0"
