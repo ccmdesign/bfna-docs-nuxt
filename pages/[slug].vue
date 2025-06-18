@@ -34,14 +34,15 @@
     <template #related>
       <docs-grid>
         <!-- <docs-card /> -->
-         <div v-for="res in currentVideo.resources" :key="res.id" class="downloadable-docs">
+        <docsRelatedItemsCard :resource="res" v-for="res in currentVideo.resources" :key="res.id" />
+          
+<!--           
           <NuxtLink v-if="res.extension === 'pdf'"
             external
             target="_blank"
             :to="res.url">
             <img src="/assets/cicle_pdf.png" />
-          </NuxtLink>
-         </div>
+          </NuxtLink> -->
       </docs-grid>
     </template>
   </docs-tabs>
