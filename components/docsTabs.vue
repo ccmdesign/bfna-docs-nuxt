@@ -26,7 +26,7 @@ const seriesLength = computed(() => {
   return currentVideo.value.series.reduce((acc, serie) => acc + serie.items.length, 0);
 });
 
-const relatedLength = computed(() => {
+const trailerLength = computed(() => {
   return currentVideo.value.video_info.teaser_url ? currentVideo.value.video_info.teaser_url.length : 0;
 });
 
@@ -51,11 +51,11 @@ const tabs = computed(() => {
   if(informationLength.value > 0) {
     tablist.unshift(information);
   }
-  if(relatedLength.value > 0) {
-    tablist.push(related);
-  }
-  if(currentVideo.value.video_info.teaser_url) {
+  if(trailerLength.value > 0) {
     tablist.push(trailer);
+  }
+  if(resourcesLength.value > 0) {
+    tablist.push(related);
   }
   return tablist;
 });
