@@ -46,7 +46,8 @@ watch(
   max-width: 100%;
   grid-column: full-start / full-end;
   z-index: 0;
-  aspect-ratio: 16 / 9;
+  // aspect-ratio: 16 / 9;
+  aspect-ratio: 17 / 8;
   object-fit: cover;
   position: relative;
 }
@@ -54,6 +55,9 @@ watch(
 .hero__video-media {
   width: 100%;
   object-fit: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .hero__video::after {
