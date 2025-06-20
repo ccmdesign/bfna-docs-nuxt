@@ -26,16 +26,39 @@ const seriesLength = computed(() => {
   return currentVideo.value.series.reduce((acc, serie) => acc + serie.items.length, 0);
 });
 
+const relatedLength = computed(() => {
+  return currentVideo.value.video_info.teaser_url ? currentVideo.value.video_info.teaser_url.length : 0;
+});
+
+const informationLength = computed(() => {
+  return currentVideo.value.video_info ? currentVideo.value.video_info.column_1_title.length : 0;
+});
+
 const resourcesLength = computed(() => {
   return currentVideo.value.resources ? currentVideo.value.resources.length : 0;
 });
 
-const tabs = [
-  { label: 'Information', slot: 'information', count: 1, class: '' },
-  { label: 'Series', slot: 'series', count: seriesLength, class: '' },
-  { label: 'Trailer & More', slot: 'extras', count: 1, class: '' },
-  { label: 'Related', slot: 'related', count: resourcesLength, class: '' }
-]
+const information = { label: 'Information', slot: 'information', count: 1, class: '' };
+const series = { label: 'Series', slot: 'series', count: seriesLength, class: '' };
+const trailer = { label: 'Trailer & More', slot: 'extras', count: 1, class: '' };
+const related = { label: 'Related', slot: 'related', count: resourcesLength, class: '' };
+
+const tabs = computed(() => {
+  const tablist = []
+  if(seriesLength.value > 0) {
+    tablist.push(series);
+  }
+  if(informationLength.value > 0) {
+    tablist.unshift(information);
+  }
+  if(relatedLength.value > 0) {
+    tablist.push(related);
+  }
+  if(currentVideo.value.video_info.teaser_url) {
+    tablist.push(trailer);
+  }
+  return tablist;
+});
 
 const activeTab = ref(0)
 </script>
