@@ -1,6 +1,6 @@
 <template>
   <div class="docs-tabs | subgrid">
-    <div class="docs-tabs__tabs | subgrid cluster">
+    <div v-if="tabs.length" class="docs-tabs__tabs | subgrid cluster">
       <button 
         v-for="(tab, index) in tabs"
         :key="index"
@@ -11,7 +11,7 @@
         </button>
     </div>
 
-    <div :class="['docs-tabs__content | subgrid', tabs[activeTab].class]">
+    <div v-if="tabs.length" :class="['docs-tabs__content | subgrid', tabs[activeTab].class]">
       <slot :name="tabs[activeTab].slot" :class="tabs[activeTab].class"></slot>
     </div>
   </div>
@@ -31,7 +31,7 @@ const trailerLength = computed(() => {
 });
 
 const informationLength = computed(() => {
-  return currentVideo.value.video_info ? currentVideo.value.video_info.column_1_title.length : 0;
+  return currentVideo.value.video_info && currentVideo.value.video_info.column_1_title ? currentVideo.value.video_info.column_1_title.length : 0;
 });
 
 const resourcesLength = computed(() => {
