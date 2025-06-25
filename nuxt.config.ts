@@ -6,7 +6,7 @@ const OG = '/assets/og_img_bfna.jpg';
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/test-utils', '@pinia/nuxt', '@nuxtjs/seo'],
+  modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/test-utils', '@pinia/nuxt', '@nuxtjs/seo', 'nuxt-og-image'],
   runtimeConfig: {
     public: {
       contentfulSpace: process.env.CONTENTFUL_SPACE_ID || '',
@@ -29,6 +29,7 @@ export default defineNuxtConfig({
       link: [
         // google icons
         { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" },
+        { rel: 'icon', type: 'image/ico', href: '/assets/favicon.ico'}
       ],
       script: [],
     }
@@ -48,7 +49,7 @@ export default defineNuxtConfig({
   plugins: [
     { src: '~/plugins/youtubePlayer.client.ts', mode: 'client' },
   ],
-  ssr: false,
+  ssr: true,
   experimental: {
     clientFallback: true
   },
