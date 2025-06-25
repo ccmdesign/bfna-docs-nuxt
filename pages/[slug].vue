@@ -84,15 +84,27 @@ onUnmounted(() => {
   videoStore.setShowDetails(false);
 });
 
+const ogImage = computed(() => {
+  return currentVideo.value.video_info?.thumb || currentVideo.value.video_info?.thumbnail;
+});
+
 useHead({
+    link: [
+    {
+      rel: 'icon',
+      type: 'image/ico',
+      href: '/favicon.ico'
+    }
+  ],
   title: `Bertelsmann Foundation documentaries | ${currentVideo.value.title}`,
   meta: [
     { property: 'og:title', content: `Breaking barriers, Building bridges | ${currentVideo.value.title}` },
     { name: "description", content: currentVideo.value.description ? currentVideo.value.description : 'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.' },
     { property: 'og:description', content: currentVideo.value.description ? currentVideo.value.description : 'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.' },
+    { name: 'twitter:title', content: currentVideo.value.title ? currentVideo.value.title : 'Bertelsmann Foundation documentaries' },
     { name: 'twitter:description', content: currentVideo.value.description ? currentVideo.value.description : 'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.' },
-    { property: 'og:image', content: currentVideo.value.video_info?.thumb || currentVideo.value.video_info?.thumbnail },
-    { name: 'twitter:image', content: currentVideo.value.video_info?.thumb || currentVideo.value.video_info?.thumbnail }
+    { property: 'og:image', content: ogImage },
+    { name: 'twitter:image', content: ogImage }
   ]
 })
 

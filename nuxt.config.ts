@@ -6,7 +6,7 @@ const OG = '/assets/og_img_bfna.jpg';
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/test-utils', '@pinia/nuxt'],
+  modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/test-utils', '@pinia/nuxt', '@nuxtjs/seo'],
   runtimeConfig: {
     public: {
       contentfulSpace: process.env.CONTENTFUL_SPACE_ID || '',
@@ -21,9 +21,9 @@ export default defineNuxtConfig({
         { property: 'og:title',  content: title},
         { property: 'og:description',  content: description},
         { property: 'og:image',  content: OG},
-        { property: 'og:image:alt',  content: `Imagem de página para ${title}`},
+        { property: 'og:image:alt',  content: `Image from ${title}`},
         { name: 'twitter:image',  content: OG},
-        { name: 'twitter:image:alt',  content: `Imagem de página para ${title}`},
+        { name: 'twitter:image:alt',  content: `Image from ${title}`},
         { name: 'twitter:description', content: description }
       ],
       link: [
