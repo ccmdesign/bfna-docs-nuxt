@@ -87,7 +87,11 @@ onUnmounted(() => {
 const ogTitle = computed(() => currentVideo.value.title ? currentVideo.value.title : 'Bertelsmann Foundation documentaries')
 
 const ogImage = computed(() => {
-  return currentVideo.value.video_info?.thumb || currentVideo.value.video_info?.thumbnail;
+  let url = currentVideo.value.video_info?.thumb || currentVideo.value.video_info?.thumbnail;
+  if (url && !url.startsWith('https://')) {
+    url = 'https://' + url.replace(/^https?:\/\//, '');
+  }
+  return url;
 });
 const ogDescription = computed(() => {
   return currentVideo.value.description ? currentVideo.value.description : 'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.';
@@ -105,19 +109,6 @@ useSeoMeta({
   ogImageWidth: 1200,
   ogImageHeight: 720,
 });
-
-// useHead({
-//   title: `Bertelsmann Foundation documentaries | ${currentVideo.value.title}`,
-//   meta: [
-//     { property: 'og:title', content: `Breaking barriers, Building bridges | ${currentVideo.value.title}` },
-//     { name: "description", content: ogDescription },
-//     { property: 'og:description', content: ogDescription },
-//     { name: 'twitter:title', content: currentVideo.value.title ? currentVideo.value.title : 'Bertelsmann Foundation documentaries' },
-//     { name: 'twitter:description', content: ogDescription },
-//     { property: 'og:image', content: ogImage },
-//     { name: 'twitter:image', content: ogImage }
-//   ]
-// })
 
 </script>
 
