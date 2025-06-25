@@ -252,14 +252,19 @@ const getManagedDocs = async () => {
       doc.featuredOrder = index;
       writeContent(doc, 'fourvideos', true);
     });
-    
+    const videosSlugs = {slug: 'slugs',slugs: []};
     const allVideos = fields.order; // all videos
     const allVideosDocs = [...featuredDocs, ...await handleDocumentaries(allVideos, seriesDocs)];
     allVideosDocs.forEach((doc, index) => {
       doc.slug = main.slugify(doc.title);
       doc.order = index;
       writeContent(doc, 'allvideos', true);
+
+      videosSlugs.slugs.push(doc.slug);
+
     });
+    writeContent(videosSlugs, 'videos-slugs');
+
 
     // Filter latest releases from allVideosDocs
     const latestReleasesFiltered = allVideosDocs.filter(doc => {

@@ -1,6 +1,19 @@
+import { promises as fs } from 'fs';
+import path from 'path';
+
 const title = 'Bertelsmann Foundation documentaries';
 const description = 'Documentaries produced by the Bertelsmann Foundation, showcasing various social and cultural topics.';
 const OG = '/assets/og_img_bfna.jpg';
+
+const contentDir = path.resolve(__dirname, 'content/videos-slugs');
+let videoRoutes: string[] = [];
+
+try {
+  const files = JSON.parse(await fs.readFile(path.join(contentDir, 'slugs.json'), 'utf-8'));
+  videoRoutes = files.slugs.map((item: any) => `/${item}`);
+} catch (e) {
+  videoRoutes = [];
+}
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -15,11 +28,7 @@ export default defineNuxtConfig({
   },
   nitro: {
   prerender: {
-    routes: [
-      '/blueprint-in-the-bluegrass',
-      '/i-too',
-      // Add all your slugs here
-    ]
+    routes: videoRoutes
   }
 },
   app: {
