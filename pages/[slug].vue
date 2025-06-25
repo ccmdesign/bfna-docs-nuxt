@@ -85,12 +85,14 @@ onUnmounted(() => {
 });
 
 useHead({
-  title: `Bertelsmann Foundation documentaries | ${currentVideo.title}`,
+  title: `Bertelsmann Foundation documentaries | ${currentVideo.value.title}`,
   meta: [
-    { property: 'og:title',  content: `Breaking barriers, Building bridges | ${currentVideo.title}`},
-    { name: "description", content: currentVideo.description?currentVideo.description:'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect..' },
-    { property: 'og:description',  content: currentVideo.description?currentVideo.description:'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect..'},
-    { name: 'twitter:description', content: currentVideo.description?currentVideo.description:'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect..' }
+    { property: 'og:title', content: `Breaking barriers, Building bridges | ${currentVideo.value.title}` },
+    { name: "description", content: currentVideo.value.description ? currentVideo.value.description : 'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.' },
+    { property: 'og:description', content: currentVideo.value.description ? currentVideo.value.description : 'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.' },
+    { name: 'twitter:description', content: currentVideo.value.description ? currentVideo.value.description : 'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.' },
+    { property: 'og:image', content: currentVideo.value.video_info?.thumb || currentVideo.value.video_info?.thumbnail },
+    { name: 'twitter:image', content: currentVideo.value.video_info?.thumb || currentVideo.value.video_info?.thumbnail }
   ]
 })
 
