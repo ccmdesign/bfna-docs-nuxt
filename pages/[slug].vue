@@ -46,6 +46,16 @@ definePageMeta({
   name: 'video-detail',
 })
 
+useHead({
+    title: `Bertelsmann Foundation documentaries | ${currentVideo.title}`,
+    meta: [
+      { property: 'og:title',  content: `Breaking barriers, Building bridges | ${currentVideo.title}`},
+      { name: "description", content: currentVideo.description?currentVideo.description:'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect..' },
+      { property: 'og:description',  content: currentVideo.description?currentVideo.description:'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect..'},
+      { name: 'twitter:description', content: currentVideo.description?currentVideo.description:'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect..' }
+    ]
+})
+
 const route = useRoute();
 const videoStore = useVideoStore();
 videoStore.setCurrentVideoFromSlug(route.params.slug);
