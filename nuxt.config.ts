@@ -13,6 +13,15 @@ export default defineNuxtConfig({
       contentfulToken: process.env.CONTENTFUL_ACCESS_TOKEN || ''
     }
   },
+  nitro: {
+  prerender: {
+    routes: [
+      '/blueprint-in-the-bluegrass',
+      '/i-too',
+      // Add all your slugs here
+    ]
+  }
+},
   app: {
     head: {
       meta: [

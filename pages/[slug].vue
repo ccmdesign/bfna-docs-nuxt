@@ -101,17 +101,12 @@ useSeoMeta({
   twitterTitle: ogTitle,
   twitterDescription: ogDescription,
   ogImage: ogImage,
-  twitterImage: ogImage
+  twitterImage: ogImage,
+  ogImageWidth: 1200,
+  ogImageHeight: 720,
 });
 
 // useHead({
-//     link: [
-//     {
-//       rel: 'icon',
-//       type: 'image/ico',
-//       href: '/assets/favicon.ico'
-//     }
-//   ],
 //   title: `Bertelsmann Foundation documentaries | ${currentVideo.value.title}`,
 //   meta: [
 //     { property: 'og:title', content: `Breaking barriers, Building bridges | ${currentVideo.value.title}` },
