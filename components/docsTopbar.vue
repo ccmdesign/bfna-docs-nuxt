@@ -1,17 +1,37 @@
 <template>
-  <div class="docs-topbar | subgrid cluster">
+  <div class="docs-topbar | subgrid cluster" :style="{ justifyContent: isMobile ? 'space-between' : 'flex-start' }">
       <h1 class="docs-topbar__left"><nuxt-link to="/">
         <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
       </nuxt-link>
     </h1>
     
-    <docs-search class="docs-topbar__center" split-left split-right />
+    <span v-if="isMobile && route.path !== '/search'" class="material-symbols-outlined" @click="() => navigateTo('/search')">search</span>
+    <docs-search v-else class="docs-topbar__center" split-left split-right />
     
     <a class="docs-topbar__right | hide-on-mobile" href="#">Visit Bertelsmann Foundation <span class="icon">open_in_new</span></a>
   </div>
 </template>
 
 <script setup>
+
+import { ref, onMounted, onUnmounted } from 'vue';
+const route = useRoute();
+const router = useRouter();
+const isMobile = ref(false);
+
+function checkMobile() {
+  isMobile.value = window.innerWidth <= 768;
+}
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
+});
+
 </script>
 
 <style scoped>

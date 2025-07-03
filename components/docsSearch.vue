@@ -1,5 +1,5 @@
 <template>
-  <input :id="'search-input' + uniqueId" class="docs-search" v-model="searchInput" type="text" placeholder="Search" @input="createSearchQuery" />
+  <input :id="'search-input' + uniqueId" class="docs-search" v-model="searchInput" type="text" :placeholder="placeholder" @input="createSearchQuery" />
 </template>
 
 <script setup>
@@ -9,7 +9,7 @@ const store = useSearchStore();
 const router = useRouter();
 const route = useRoute();
 
-
+const placeholder = 'Search for documentaries, topics, film authors...';
 const uniqueId = ref(uuidv4());
 const searchInput = ref(store.searchValue);
 const emit = defineEmits(['search']);
