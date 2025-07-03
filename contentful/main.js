@@ -88,7 +88,7 @@ const getYoutubeThumbnail = async (url) => {
   const API_URL = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`;
 
   const response = await fetch(API_URL).catch((err) =>
-    console.log(`Error trying to get thumbnails for videos "${lsId}": ${err}`)
+    console.log(`Error trying to get thumbnails for videos "${videoId}": ${err}`)
   );
 
   const json = await response.json();

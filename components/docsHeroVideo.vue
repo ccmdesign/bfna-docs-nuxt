@@ -50,6 +50,7 @@ watch(
   aspect-ratio: 17 / 8;
   object-fit: cover;
   position: relative;
+  opacity: 0.5;
 }
 
 .hero__video-media {
