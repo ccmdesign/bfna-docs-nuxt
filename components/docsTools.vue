@@ -35,7 +35,7 @@ const handleFilterSelection = () => {
 const getSortNameFromKey = (sortkey) => {
   switch (sortkey) {
     case "recent":
-      return "Recent";
+      return "Most Recent";
     case "oldest":
       return "Oldest";
     default:
@@ -66,6 +66,33 @@ const durationRangeOptions = [
   { label: "30+ mins", value: "30" }
 ];
 
+const isMobile = ref(false);
+function checkMobile() {
+  isMobile.value = window.innerWidth <= 768;
+}
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
+});
+
+
+const showMobileFilters = ref(true);
+const handleDisplayMobileFilters = () => {
+  showMobileFilters.value = !showMobileFilters.value;
+
+  if (showMobileFilters.value) {
+    workstream.value = "all";
+    durationRange.value = "all";
+    sortVal.value = "recent";
+    handleFilterSelection();
+  }
+}
+
 </script>
 
 <template>
@@ -73,22 +100,36 @@ const durationRangeOptions = [
     <slot>
       <div class="cluster">
         <h2 class="h4" split-right>All Documentaries</h2>
+
+        <docs-button v-if="isMobile && showMobileFilters" effect="pill" variant="secondary" class="btn-filter" @click="handleDisplayMobileFilters">
+          <span class="material-symbols-outlined">filter_alt</span>
+          Filters
+        </docs-button>
+
+        <div v-if="isMobile !== showMobileFilters" :class="isMobile ? 'filter-menu' : 'cluster'">
+
+          <docs-select size="s" @change="handleWorkstreamFilter">
+            <option class="select-options" value="all">All Topics</option>
+            <option class="select-options" v-for="key in filterItems.workstreams" :value="key" :key="key">{{ getWorkspaceNameFromKey(key) }}</option>
+            <!-- <option value="documentary">Documentary</option>
+            <option value="fiction">Fiction</option>
+            <option value="animation">Animation</option> -->
+          </docs-select>
+  
+          <docs-select size="s" icon="schedule" @change="handleDurationRangeFilter">
+            <option class="select-options" value="all"> All Duration Range</option>
+            <option class="select-options" v-for="item in durationRangeOptions" :value="item.value" :key="item.value">{{ item.label }}</option>
+          </docs-select>
+  
+          <!-- <docs-button>All Duration Range</docs-button> -->
+          <docs-button class="sort" data-sort="year" @click="handleSort">
+            <span class="material-symbols-outlined">format_line_spacing</span>
+            Sorted by: {{ getSortNameFromKey(sortVal) }}
+          </docs-button>
+          
+          <p v-if="isMobile && !showMobileFilters" class="" @click="handleDisplayMobileFilters">clear filters</p>
+        </div>
         
-        <docs-select size="s" @change="handleWorkstreamFilter">
-          <option class="select-options" value="all">All Docs</option>
-          <option class="select-options" v-for="key in filterItems.workstreams" :value="key" :key="key">{{ getWorkspaceNameFromKey(key) }}</option>
-          <!-- <option value="documentary">Documentary</option>
-          <option value="fiction">Fiction</option>
-          <option value="animation">Animation</option> -->
-        </docs-select>
-
-        <docs-select size="s" @change="handleDurationRangeFilter">
-          <option class="select-options" value="all">Duration Range</option>
-          <option class="select-options" v-for="item in durationRangeOptions" :value="item.value" :key="item.value">{{ item.label }}</option>
-        </docs-select>
-
-        <!-- <docs-button>All Duration Range</docs-button> -->
-        <docs-button class="sort" data-sort="year" @click="handleSort">Sorted by: {{ getSortNameFromKey(sortVal) }}</docs-button>
       </div>
     </slot>
   </section>
@@ -104,6 +145,25 @@ const durationRangeOptions = [
 .select-options {
   background-color: var(--white-color-10-shade);
   font-size: var(--font-size-s);
+}
+
+.btn-filter {
+  background-color: var(--white-color-10-shade);
+  width: 100%;
+  justify-content: center;
+  padding-block: 2px !important;
+}
+
+.filter-menu {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: var(--space-2xs);
+  background-color: var(--white-color-10-shade);
+
+  height: 70px;
+  border-radius: 15px 15px 0 0
 }
 
 </style>

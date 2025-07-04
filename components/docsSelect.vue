@@ -27,6 +27,8 @@ defineProps({
 <style scoped>
 .docs-select {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .docs-select select {
@@ -39,13 +41,20 @@ defineProps({
   font-size: inherit;
   font-family: inherit;
   font-weight: inherit;
+  /* Ensure select takes only needed width */
+  width: auto;
+  min-width: 0;
+  flex: none;
 }
 
 .docs-select:before {
   content: attr(icon);
   font-family: var(--font-family-icon);
   font-weight: 200;
-
+  margin-left: 0.5em;
+  /* Align icon vertically with select */
+  display: flex;
+  align-items: center;
 }
 
 .docs-select[size="s"] select,

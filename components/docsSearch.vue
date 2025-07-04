@@ -9,7 +9,7 @@ const store = useSearchStore();
 const router = useRouter();
 const route = useRoute();
 
-const placeholder = 'Search for documentaries, topics, film authors...';
+const placeholder = route.path !== '/search' ? 'Search for documentaries, topics, film authors...' : 'Search';
 const uniqueId = ref(uuidv4());
 const searchInput = ref(store.searchValue);
 const emit = defineEmits(['search']);
