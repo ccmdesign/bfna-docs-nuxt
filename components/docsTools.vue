@@ -99,7 +99,7 @@ const handleDisplayMobileFilters = () => {
   <section class="docs-tools | subgrid">
     <slot>
       <div class="cluster">
-        <h2 class="h4" split-right>All Documentaries</h2>
+        <h2 class="h3" split-right>All Documentaries</h2>
 
         <docs-button v-if="isMobile && showMobileFilters" effect="pill" variant="secondary" class="btn-filter" @click="handleDisplayMobileFilters">
           <span class="material-symbols-outlined">filter_alt</span>
@@ -108,7 +108,7 @@ const handleDisplayMobileFilters = () => {
 
         <div v-if="isMobile !== showMobileFilters" :class="isMobile ? 'filter-menu' : 'cluster'">
 
-          <docs-select size="s" @change="handleWorkstreamFilter">
+          <docs-select size="xs" @change="handleWorkstreamFilter">
             <option class="select-options" value="all">All Topics</option>
             <option class="select-options" v-for="key in filterItems.workstreams" :value="key" :key="key">{{ getWorkspaceNameFromKey(key) }}</option>
             <!-- <option value="documentary">Documentary</option>
@@ -116,13 +116,13 @@ const handleDisplayMobileFilters = () => {
             <option value="animation">Animation</option> -->
           </docs-select>
   
-          <docs-select size="s" icon="schedule" @change="handleDurationRangeFilter">
+          <docs-select size="xs" icon="schedule" @change="handleDurationRangeFilter">
             <option class="select-options" value="all"> All Duration Range</option>
             <option class="select-options" v-for="item in durationRangeOptions" :value="item.value" :key="item.value">{{ item.label }}</option>
           </docs-select>
   
           <!-- <docs-button>All Duration Range</docs-button> -->
-          <docs-button class="sort" data-sort="year" @click="handleSort">
+          <docs-button class="sort" size="xs" data-sort="year" @click="handleSort">
             <span class="material-symbols-outlined">format_line_spacing</span>
             Sorted by: {{ getSortNameFromKey(sortVal) }}
           </docs-button>
@@ -136,6 +136,10 @@ const handleDisplayMobileFilters = () => {
 </template>
 
 <style scoped>
+
+h2 {
+  font-weight: bold;
+}
 
 .docs-tools {
   grid-column: content-start / content-end;

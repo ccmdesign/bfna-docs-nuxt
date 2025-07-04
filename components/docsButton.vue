@@ -66,6 +66,11 @@ defineProps({
   font-size: var(--size--1);
 }
 
+.docs-select[size="xs"] select,
+.docs-select[size="xs"]:before {
+  font-size: var(--size--1);
+}
+
 .docs-button[effect="pill"] {
   border-radius: 100px;
   padding-block: calc(var(--space-2xs) + 2px) var(--space-xs);

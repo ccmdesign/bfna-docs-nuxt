@@ -7,7 +7,7 @@
 
   <docs-tools id="latest-heading">
     <div class="cluster">
-      <h2 class="h4" split-right>Latest Releases</h2>
+      <h2 class="h3" split-right>Latest Releases</h2>
       <docs-button icon="arrow_back_ios" size="s" @click="slideLeft" />
       <docs-button icon="arrow_forward_ios" size="s" @click="slideRight"/>
     </div>
@@ -71,6 +71,11 @@ const slideRight = () => {
 </script>
 
 <style scoped>
+
+h2 {
+  font-weight: bold;
+}
+
 #latest-reel {
   grid-row: 6 / 7;
   z-index: 1;

@@ -34,9 +34,9 @@
 
 .reel-grid {
   display: flex;
-  padding-block: var(--space-s-l);
+  padding-block: var(--space-xs-s);
   block-size: auto;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: hidden;
   gap: var(--base-gutter);
 }

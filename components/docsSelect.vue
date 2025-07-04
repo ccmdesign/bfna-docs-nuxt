@@ -61,4 +61,9 @@ defineProps({
 .docs-select[size="s"]:before {
   font-size: var(--size-0);
 }
+
+.docs-select[size="xs"] select,
+.docs-select[size="xs"]:before {
+  font-size: var(--size--1);
+}
 </style>

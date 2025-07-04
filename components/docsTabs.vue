@@ -23,7 +23,14 @@ const videoStore = useVideoStore();
 const { currentVideo } = storeToRefs(videoStore);
 
 const seriesLength = computed(() => {
-  return currentVideo.value.series.reduce((acc, serie) => acc + serie.items.length, 0);
+  return currentVideo.value.series.reduce((acc, serie) => acc + serie.items.length + 1, 0);
+});
+
+const seriesTitle = computed(() => {
+  if (!currentVideo.value.series.length) return '';
+  const firstSerieId = currentVideo.value.series[0].serieId;
+  const serie = videoStore.series.find(serie => serie.serieId === firstSerieId);
+  return serie ? serie.title : '';
 });
 
 const trailerLength = computed(() => {
@@ -39,17 +46,17 @@ const resourcesLength = computed(() => {
 });
 
 const information = { label: 'Information', slot: 'information', count: 1, class: '' };
-const series = { label: 'Series', slot: 'series', count: seriesLength, class: '' };
+const series = { label: seriesTitle.value, slot: 'series', count: seriesLength, class: '' };
 const trailer = { label: 'Trailer & More', slot: 'extras', count: 1, class: '' };
 const related = { label: 'Related', slot: 'related', count: resourcesLength, class: '' };
 
 const tabs = computed(() => {
   const tablist = []
-  if(seriesLength.value > 0) {
-    tablist.push(series);
-  }
   if(informationLength.value > 0) {
     tablist.unshift(information);
+  }
+  if(seriesLength.value > 0) {
+    tablist.unshift(series);
   }
   if(trailerLength.value > 0) {
     tablist.push(trailer);
@@ -75,6 +82,7 @@ const activeTab = ref(0)
   cursor: pointer;
   background-color: transparent;
   margin-inline: var(--space-2xs);
+  margin-left: 0;
   border-bottom-width: 2px;
   border-bottom-style: solid;
   border-bottom-color: transparent;

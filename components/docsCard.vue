@@ -130,14 +130,22 @@ const handleCurrentVideo = (video) => {
       ></img> -->
     </template>
     <template v-else>
-      <div class="card__video card__video--bg" :style="backgroundStyle"></div>
+      <div class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;">
+        <DocsAwardFlagOnly v-if="video.awards && video.awards.length" />
+        <DocsSeriesChip class="chip-pos" v-if="video.series && video.series.length" />
+      </div>
     </template>
     <slot name="content" v-if="!thumbnail">
-      <div class="card__content | stack">
-        <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
-        <div class="card__meta | cluster">
-          <docs-meta>{{ video.video_info.duration }} min</docs-meta>
-          <docs-meta>{{ video.video_info.year }}</docs-meta>
+      <div class="card__content-warapper">
+        <nuxt-link @click="moreInfo(video)" style="text-decoration: none;">
+          <span v-if="showIframe" class="material-symbols-outlined" style="font-size: 48px;">play_circle</span>
+        </nuxt-link>
+        <div class="card__content | stack">
+          <h2 class="card__title">{{ video.title }}</h2>
+          <div class="card__meta | cluster">
+            <docs-meta>{{ video.video_info.duration }} min</docs-meta>
+            <docs-meta>{{ video.video_info.year }}</docs-meta>
+          </div>
         </div>
       </div>
     </slot>
@@ -151,6 +159,12 @@ const handleCurrentVideo = (video) => {
 .card {
   width: 100%;
   border-radius: var(--border-radius-m);
+}
+
+.card__content-warapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xs);
 }
 
 .card__content {
@@ -235,7 +249,7 @@ const handleCurrentVideo = (video) => {
   }
   
   .card__content {
-    padding: var(--space-xs);
+    padding: var(--space-xs) var(--space-xs) var(--space-xs) 0;
     h2 { font-size: var(--size--3); }
   }
 
@@ -245,5 +259,11 @@ const handleCurrentVideo = (video) => {
   
 }
 
+.chip-pos {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  z-index: 2;
+}
 
 </style>

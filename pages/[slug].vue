@@ -2,10 +2,10 @@
   <docs-tabs id="tabs">
     <template #information>
       <div class="prose">
-        <h2>{{currentVideo.video_info.column_1_title }}</h2>
-        <p>{{ currentVideo.video_info.column_1_text }}</p>
-        <h2>{{ currentVideo.video_info.column_2_title }}</h2>
-        <p>{{ currentVideo.video_info.column_2_text }}</p>
+        <h2 class="font-size:-1" style="font-weight: bold;">{{currentVideo.video_info.column_1_title }}</h2>
+        <p class="font-size:-1">{{ currentVideo.video_info.column_1_text }}</p>
+        <h2 class="font-size:-1" style="font-weight: bold;">{{ currentVideo.video_info.column_2_title }}</h2>
+        <p class="font-size:-1">{{ currentVideo.video_info.column_2_text }}</p>
       </div>
       <!-- <div class="extras">
         <docs-card />
@@ -14,11 +14,7 @@
     </template>
 
     <template #series>
-      <div v-if="series.items.length" class="prose" style="padding-bottom: 2.5rem;">
-        <h2>{{series.title }}</h2>
-        <p>{{ series.description }}</p>
-      </div>
-      <div v-else class="prose">
+      <div v-if="!series.items.length" class="prose">
         <p>No series available for this documentary</p>
       </div>
       <docs-list :items="series.items" />

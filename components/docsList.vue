@@ -41,7 +41,10 @@ const props = defineProps({
 <template>
   <ol class="docs-list | subgrid | stack">
     <slot>
-      <li class="docs-list__item | subgrid" v-for="item in items" :key="item.id">
+      <li class="docs-list__item | subgrid" v-for="(item, index) in items" :key="item.id">
+        <div class="docs-list__item-index">
+          <span>{{ index + 1 }}</span>
+        </div>
         <docs-card thumbnail class="docs-list__item-thumbnail" :video="item" :key="item.id" />
         <div class="docs-list__item-text | stack">
           <h3 class="font-size:-1 font-weight:600">{{ item.title }}</h3>
@@ -70,8 +73,8 @@ ol {
 
 .docs-list__item {
   display: grid;
-  grid-template-columns: 140px 1fr 110px;
-  grid-template-areas: "thumbnail text meta";
+  grid-template-columns: 30px 140px 1fr 110px;
+  grid-template-areas: "index thumbnail text meta";
   align-items: center;
   gap: var(--space-s);
   border-bottom: 1px solid var(--color-border);
@@ -111,6 +114,11 @@ ol {
   grid-area: meta; 
   --_cluster-space: var(--space-2xs);
   justify-content: flex-end;
+}
+
+.docs-list__item-index {
+  grid-area: index;
+  text-align: center;
 }
 
 </style>
