@@ -139,6 +139,10 @@ const activeTab = ref(0)
   display: grid;
   grid-template-columns: subgrid;
   padding-block: var(--space-m);
+
+  @media (max-width: 768px) {
+    display: block;
+  }
 }
 
 :deep(.prose) {

@@ -76,7 +76,7 @@ onUnmounted(() => {
   justify-self: end;
   padding-block-end: var(--space-3xl);
 
-  @media (max-width: 768px) { padding-block-end: unset; }
+  @media (max-width: 768px) { padding-block-end: var(--space-m); }
   @media (min-width: 768px) { grid-column: content-start / col2; }
 
   --_stack-space: var(--space-2xs);
