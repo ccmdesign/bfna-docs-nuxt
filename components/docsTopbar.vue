@@ -1,5 +1,5 @@
 <template>
-  <div class="docs-topbar | subgrid cluster" :style="{ justifyContent: isMobile ? 'space-between' : 'flex-start' }">
+  <div v-if="!isPlaying" class="docs-topbar | subgrid cluster" :style="{ justifyContent: isMobile ? 'space-between' : 'flex-start' }">
       <h1 class="docs-topbar__left"><nuxt-link to="/">
         <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
       </nuxt-link>
@@ -13,10 +13,13 @@
 </template>
 
 <script setup>
+import { useVideoStore } from '~/stores/video';
+import { storeToRefs } from 'pinia';
 
-import { ref, onMounted, onUnmounted } from 'vue';
+const videoStore = useVideoStore();
+const { isPlaying } = storeToRefs(videoStore);
+
 const route = useRoute();
-const router = useRouter();
 const isMobile = ref(false);
 
 function checkMobile() {

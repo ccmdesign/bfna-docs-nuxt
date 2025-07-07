@@ -4,6 +4,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "node contentImporter.js && nuxt dev",
+    "start": "nuxt dev",
     "generate": "node contentImporter.js && nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"

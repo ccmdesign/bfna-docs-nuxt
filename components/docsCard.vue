@@ -81,7 +81,24 @@ const moreInfo = (video) => {
 
 const handleCurrentVideo = (video) => {
   videoStore.setCurrentVideo(video);
+  videoStore.setIsPlaying(true);
+  toTop();
+
 }
+
+const toTop = () => {
+  window.scroll({
+    top: 0, 
+    left: 0, 
+    behavior: 'smooth'
+  });
+}
+
+const handlePlayVideo = () => {
+  videoStore.setIsPlaying(true);
+  toTop();
+}
+
 </script>
 
 <template>
@@ -130,18 +147,16 @@ const handleCurrentVideo = (video) => {
       ></img> -->
     </template>
     <template v-else>
-      <div class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;">
+      <div class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">
         <DocsAwardFlagOnly v-if="video.awards && video.awards.length" />
         <DocsSeriesChip class="chip-pos" v-if="video.series && video.series.length" />
       </div>
     </template>
     <slot name="content" v-if="!thumbnail">
       <div class="card__content-warapper">
-        <nuxt-link @click="moreInfo(video)" style="text-decoration: none;">
-          <span v-if="showIframe" class="material-symbols-outlined" style="font-size: 48px;">play_circle</span>
-        </nuxt-link>
+          <span v-if="showIframe" @click="handlePlayVideo()" class="material-symbols-outlined" style="font-size: 48px;">play_circle</span>
         <div class="card__content | stack">
-          <h2 class="card__title">{{ video.title }}</h2>
+          <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
           <div class="card__meta | cluster">
             <docs-meta>{{ video.video_info.duration }} min</docs-meta>
             <docs-meta>{{ video.video_info.year }}</docs-meta>

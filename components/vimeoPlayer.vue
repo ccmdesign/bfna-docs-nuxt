@@ -26,6 +26,8 @@ onMounted(() => {
       autoplay: true,
       controls: props.controls,
       responsive: true,
+      // width: playerContainer.value.clientWidth,
+      // height: playerContainer.value.clientHeight,
       loop: true,
     })
 
@@ -52,6 +54,14 @@ onMounted(() => {
           console.error('Error during loop:', error);
         }
       }
+    });
+
+    // Detect pause and play events
+    player.value.on('pause', () => {
+      console.log('Video paused');
+    });
+    player.value.on('play', () => {
+      console.log('Video played');
     });
   }
 })

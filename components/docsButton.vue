@@ -11,22 +11,22 @@ defineProps({
   },
   color: {
     type: String,
-    required: true,
+    required: false,
     default: 'white'
   },
   size: {
     type: String,
-    required: true,
+    required: false,
     default: 'm'
   },
   effect: {
     type: String,
-    required: true,
+    required: false,
     default: 'default'
   },
   variant: {
     type: String,
-    required: true,
+    required: false,
     default: 'secondary'
   }
 })

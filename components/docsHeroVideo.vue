@@ -17,21 +17,42 @@ watch(
   { immediate: true }
 );
 
+function youtubeEmbedUrl(url) {
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/)
+  return match
+    ? `https://www.youtube.com/embed/${match[1]}?rel=0&autoplay=1&mute=1&modestbranding=1`
+    : ''
+}
+
 </script>
 
 <template>
-  <Youtube-Player 
+  <!-- <Youtube-Player 
     v-if="isPlaying && currentVideo.source === 'youtube'"
     class="hero__video"
     :video-id="currentVideo.videoId"
     :src="`${currentVideo.videoUrl}?autoplay=1&mute=1`"
+    :autoplay="true"
+    :mute="true"
+    :rel="0"
     :controls="true"
     :modest-branding="false"
     :width="'100%'"
     :height="'100%'"
     allowfullscreen
     ref="youtube"
-  ></Youtube-Player>
+  ></Youtube-Player> -->
+
+  <template v-if="isPlaying && currentVideo.source === 'youtube'">
+    <iframe
+      :key="showIframe + currentVideo.videoId"
+      class="hero__video"
+      :src="youtubeEmbedUrl(currentVideo.videoUrl)"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      allowfullscreen
+    ></iframe>
+  </template>
   
   <vimeoPlayer v-else-if="isPlaying && currentVideo.source === 'vimeo'" :vimeoUrl="currentVideo.videoUrl" class="hero__video" :controls="true" />
   
