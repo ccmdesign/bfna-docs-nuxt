@@ -88,6 +88,14 @@ const activeTab = ref(0)
   border-bottom-color: transparent;
   border-bottom: 1px solid var(--white-color-20-shade);
   --_cluster-space: var(--space-m);
+
+  @media (max-width: 768px) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    gap: 0.5rem;
+  }
 }
 
 .tab-button {
@@ -99,6 +107,10 @@ const activeTab = ref(0)
   font-weight: 300;
   font-size: var(--size-0);
   transition: all 0.2s ease-in-out;
+
+  @media (max-width: 768px) {
+    white-space: nowrap;
+  }
 }
 
 .tab-button__count {
