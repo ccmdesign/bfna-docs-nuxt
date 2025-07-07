@@ -36,6 +36,20 @@ const props = defineProps({
   ]
 }})
 
+const isMobile = ref(false);
+function checkMobile() {
+  isMobile.value = window.innerWidth <= 768;
+}
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
+});
+
 </script>
 
 <template>
@@ -47,10 +61,16 @@ const props = defineProps({
         </div>
         <docs-card thumbnail class="docs-list__item-thumbnail" :video="item" :key="item.id" />
         <div class="docs-list__item-text | stack">
-          <h3 class="font-size:-1 font-weight:600">{{ item.title }}</h3>
+          <div class="item-text-meta">
+            <h3 class="font-size:-1 font-weight:600">{{ item.title }}</h3>
+            <div v-if="isMobile" class="docs-list__item-meta | cluster">
+              <docs-meta>{{ item.video_info.duration }}min</docs-meta>
+              <docs-meta>{{ item.video_info.year }}</docs-meta>
+            </div>
+          </div>
           <p class="font-size:-1">{{ item.description }}</p>
         </div>
-        <div class="docs-list__item-meta | cluster">
+        <div v-if="!isMobile" class="docs-list__item-meta | cluster">
           <docs-meta>{{ item.video_info.duration }}min</docs-meta>
           <docs-meta>{{ item.video_info.year }}</docs-meta>
         </div>
@@ -59,7 +79,7 @@ const props = defineProps({
   </ol>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 
 ol {
   list-style: decimal;
@@ -84,6 +104,17 @@ ol {
   border: 1px solid transparent;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
+
+  @media (max-width: 768px) { 
+    grid-template-columns: 140px 100px 1fr;
+    grid-template-areas:
+      "thumbnail thumbnail index"
+      "text text text"
+      "meta meta meta";
+    grid-auto-rows: min-content;
+    align-items: start;
+    gap: var(--space-2xs);
+  }
 }
 
 .docs-list__item:hover {
@@ -116,9 +147,18 @@ ol {
   justify-content: flex-end;
 }
 
+.item-text-meta {
+  display: flex;
+  justify-content: space-between;
+}
+
 .docs-list__item-index {
   grid-area: index;
   text-align: center;
+
+  @media (max-width: 768px) { 
+    text-align: right;
+  }
 }
 
 </style>
