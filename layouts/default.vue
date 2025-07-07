@@ -1,9 +1,26 @@
+<script setup>
+const isMobile = ref(false);
+function checkMobile() {
+  isMobile.value = window.innerWidth <= 768;
+}
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
+});
+
+</script>
+
 <template>
   <master-grid>
     <docs-topbar id="topbar" />
     <docs-hero-video id="hero-video" />
     <docs-hero-headings id="hero" />
-    <docs-hero-extra id="hero-extra" />
+    <docs-hero-extra id="hero-extra" v-if="!isMobile" />
 
     <slot />
 

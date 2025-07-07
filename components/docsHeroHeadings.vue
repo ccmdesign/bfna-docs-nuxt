@@ -15,6 +15,9 @@
         <docs-button v-if="route.params.slug" effect="pill" variant="secondary" icon-after="arrow_backward" @click="backHome(currentVideo)">Back to list</docs-button>
         <docs-button v-else effect="pill" variant="secondary" icon-after="arrow_forward" @click="moreInfo(currentVideo)">More Info</docs-button>
       </div>
+      <div class="awards-mobile-only" v-if="isMobile">
+        <docs-hero-extra id="hero-extra" />
+      </div>
     </slot>
   </div>
 </template>
@@ -47,9 +50,23 @@ const backHome = () => {
   router.push({ name: 'index' });
 }
 
+const isMobile = ref(false);
+function checkMobile() {
+  isMobile.value = window.innerWidth <= 768;
+}
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
+});
+
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 /* Hero Layout - SubGrid */
 
@@ -58,6 +75,8 @@ const backHome = () => {
   grid-row: 3 / 4;
   justify-self: end;
   padding-block-end: var(--space-3xl);
+
+  @media (max-width: 768px) { padding-block-end: unset; }
   @media (min-width: 768px) { grid-column: content-start / col2; }
 
   --_stack-space: var(--space-2xs);
@@ -66,6 +85,13 @@ const backHome = () => {
     --_stack-space: var(--space-s);
     --_cluster-space: var(--space-s);
   }
+}
+
+.awards-mobile-only {
+  margin: 10px 0;
+  padding: 4px 0;
+  background-color: var(--white-color-10-shade);
+  border-radius: 10px;
 }
 
 </style>
