@@ -27,26 +27,15 @@ function youtubeEmbedUrl(url) {
 </script>
 
 <template>
-  <!-- <Youtube-Player 
-    v-if="isPlaying && currentVideo.source === 'youtube'"
-    class="hero__video"
-    :video-id="currentVideo.videoId"
-    :src="`${currentVideo.videoUrl}?autoplay=1&mute=1`"
-    :autoplay="true"
-    :mute="true"
-    :rel="0"
-    :controls="true"
-    :modest-branding="false"
-    :width="'100%'"
-    :height="'100%'"
-    allowfullscreen
-    ref="youtube"
-  ></Youtube-Player> -->
-
   <template v-if="isPlaying && currentVideo.source === 'youtube'">
-    <iframe
-      :key="showIframe + currentVideo.videoId"
+    
+  <docsHomeButton v-if="isPlaying" />
+    
+  <iframe
+      ref="youtubeIframeRef"
+      :key="currentVideo.videoId"
       class="hero__video"
+      :class="isPlaying ? 'hero__video-playing' : ''"
       :src="youtubeEmbedUrl(currentVideo.videoUrl)"
       frameborder="0"
       allow="autoplay; encrypted-media"
@@ -54,7 +43,11 @@ function youtubeEmbedUrl(url) {
     ></iframe>
   </template>
   
-  <vimeoPlayer v-else-if="isPlaying && currentVideo.source === 'vimeo'" :vimeoUrl="currentVideo.videoUrl" class="hero__video" :controls="true" />
+  <vimeoPlayer v-else-if="isPlaying && currentVideo.source === 'vimeo'"
+    :vimeoUrl="currentVideo.videoUrl" 
+    class="hero__video"
+    :class="isPlaying ? 'hero__video-playing' : ''" 
+    :controls="true" />
   
   <div v-else class="hero__video">
     <!-- <video class="hero__video-media" src="/assets/sample-3.mov" muted loop playsinline></video> -->
@@ -67,7 +60,6 @@ function youtubeEmbedUrl(url) {
   max-width: 100%;
   grid-column: full-start / full-end;
   z-index: 0;
-  // aspect-ratio: 16 / 9;
   aspect-ratio: 17 / 8;
   object-fit: cover;
   position: relative;
@@ -88,6 +80,14 @@ function youtubeEmbedUrl(url) {
   inset: 0;
   background: linear-gradient(to bottom, transparent 25%, rgba(0, 0, 0, 1));
   pointer-events: none;
+}
+
+.hero__video-playing {
+  opacity: 1;
+}
+
+.hero__video-playing::after {
+  display: none;
 }
 
 </style>

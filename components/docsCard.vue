@@ -94,7 +94,8 @@ const toTop = () => {
   });
 }
 
-const handlePlayVideo = () => {
+const handlePlayVideo = (video) => {
+  videoStore.setCurrentVideo(video);
   videoStore.setIsPlaying(true);
   toTop();
 }
@@ -154,7 +155,7 @@ const handlePlayVideo = () => {
     </template>
     <slot name="content" v-if="!thumbnail">
       <div class="card__content-warapper">
-          <span v-if="showIframe" @click="handlePlayVideo()" class="material-symbols-outlined" style="font-size: 48px;">play_circle</span>
+          <span v-if="showIframe" @click="handlePlayVideo(video)" class="material-symbols-outlined" style="font-size: 48px;">play_circle</span>
         <div class="card__content | stack">
           <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
           <div class="card__meta | cluster">

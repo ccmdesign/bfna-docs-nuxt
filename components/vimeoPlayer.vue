@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import Player from '@vimeo/player'
 import utils from '~/composables/utils';
+import { useVideoStore } from '~/stores/video';
 
 const props = defineProps({
   vimeoUrl: {
@@ -13,6 +14,9 @@ const props = defineProps({
     default: false
   }
 })
+
+const videoStore = useVideoStore();
+const { isPlaying } = storeToRefs(videoStore);
 
 const vimeoId = utils.getVideoIdFromVimeoUrl(props.vimeoUrl);
 const playerContainer = ref<HTMLElement | null>(null)
@@ -72,9 +76,10 @@ onUnmounted(() => {
   }
 });
 
-
 </script>
 
 <template>
-  <div ref="playerContainer"></div>
+  <div ref="playerContainer">
+    <docsHomeButton v-if="isPlaying" />
+  </div>
 </template>
