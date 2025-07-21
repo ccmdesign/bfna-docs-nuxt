@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isPlaying" class="docs-topbar | subgrid cluster" :style="{ justifyContent: isMobile ? 'space-between' : 'flex-start' }">
-      <h1 class="docs-topbar__left"><nuxt-link to="/">
-        <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
+      <h1 class="docs-topbar__left"><nuxt-link>
+        <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" @click="handleGoHome" />
       </nuxt-link>
     </h1>
     
@@ -25,6 +25,11 @@ const isMobile = ref(false);
 function checkMobile() {
   isMobile.value = window.innerWidth <= 768;
 }
+
+const handleGoHome = () => {
+  videoStore.resetToHome();
+  navigateTo('/');
+};
 
 onMounted(() => {
   checkMobile();

@@ -67,6 +67,7 @@ export const useVideoStore = defineStore('video', {
   state: () => ({
     videoList: [] as Video[],
     currentVideo: {} as Video,
+    featuredVideo: {} as Video,
     latest: [] as Video[],
     featuredVideosList: [] as Video[],
     homepageVideoEffect: false,
@@ -147,5 +148,16 @@ export const useVideoStore = defineStore('video', {
     setFilterOptions(options: any) {
       this.filterOptions = options
     },
+    setFeaturedVideo(video: Video) {
+      this.featuredVideo = video
+    },
+    resetToHome() {
+      this.currentVideo = this.featuredVideo
+      this.showDetails = false
+      this.isPlaying = false
+      this.menuVisibility = false
+      this.homepageVideoEffect = false
+      this.navigation = true
+    }
   }
 }) 
