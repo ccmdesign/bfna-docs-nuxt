@@ -52,7 +52,7 @@ function youtubeEmbedUrl(url) {
 
 function vimeoEmbedUrl(url) {
   const match = url.match(/vimeo\.com\/(\d+)/)
-  return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=1&muted=1&#t=50s` : ''
+  return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0&muted=1&#t=15s` : ''
 }
 
 const backgroundStyle = computed(() => {
@@ -120,22 +120,22 @@ const handlePlayVideo = (video) => {
       ></iframe>
     </template>
     <template v-else-if="!featured && showIframe && isVimeo(video.videoUrl)">
-      <!-- <iframe
+      <iframe
         :key="showIframe + video.videoUrl"
         class="card__video"
         :src="vimeoEmbedUrl(video.videoUrl)"
         frameborder="0"
         allow="autoplay; fullscreen"
         allowfullscreen
-      ></iframe> -->
-      <vimeoPlayer
+      ></iframe>
+      <!-- <vimeoPlayer
         class="card__video"
         :vimeo-url="video.videoUrl"
         :autoplay="true"
         playsinline
         allowfullscreen
         ref="player"
-      ></vimeoPlayer>
+      ></vimeoPlayer> -->
       <!-- <img 
         ref="videoRef"
         class="card__video" 
