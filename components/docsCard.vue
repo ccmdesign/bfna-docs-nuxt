@@ -28,12 +28,21 @@ const props = defineProps({
 
 const showIframe = ref(false)
 const handleMouseEnter = () => {
-
   showIframe.value = true
 }
 
 const handleMouseLeave = () =>{
   showIframe.value = false
+
+  const iframeElement = document.querySelector('iframe');
+  if (iframeElement) {
+    nextTick(() => {
+      iframeElement.src = ''; // Stop the video from playing
+      iframeElement.removeAttribute('src'); // Remove the src attribute to stop loading
+      iframeElement.setAttribute('style', 'display: none;'); // Hide the iframe
+      iframeElement.remove();
+    });
+  }
 }
 
 // Helper functions for embed URLs
@@ -149,7 +158,7 @@ const handlePlayVideo = (video) => {
     </template>
     <template v-else>
       <div class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">
-        <DocsAwardFlagOnly v-if="video.awards && video.awards.length" />
+        <!-- <DocsAwardFlagOnly v-if="video.awards && video.awards.length" /> -->
         <DocsSeriesChip class="chip-pos" v-if="video.series && video.series.length" />
       </div>
     </template>
