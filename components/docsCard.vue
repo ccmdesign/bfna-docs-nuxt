@@ -7,7 +7,11 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-    featured: {
+  featured: {
+    type: Boolean,
+    default: false
+  },
+  poster: {
     type: Boolean,
     default: false
   },
@@ -114,10 +118,12 @@ const handlePlayVideo = (video) => {
 <template>
   <div
     class="card"
+    :poster="poster"
     :thumbnail="thumbnail"
     @pointerenter="handleMouseEnter"
     @pointerleave="handleMouseLeave"
     @click="handleCurrentVideo(video)">
+        
     <template v-if="!featured && showIframe && isYouTube(video.videoUrl)">
       <iframe
         :key="showIframe + video.videoUrl"
@@ -156,14 +162,17 @@ const handlePlayVideo = (video) => {
         preload="auto"
       ></img> -->
     </template>
+    <template v-else-if="poster">
+      <img class="card__poster" src="/assets/poster-example.jpg" /> <!-- @douglas -->
+    </template>
     <template v-else>
       <div class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">
         <!-- <DocsAwardFlagOnly v-if="video.awards && video.awards.length" /> -->
         <DocsSeriesChip class="chip-pos" v-if="video.series && video.series.length" />
       </div>
     </template>
-    <slot name="content" v-if="!thumbnail">
-      <div class="card__content-warapper">
+    <slot name="content" v-if="!thumbnail && !poster">
+      <div class="card__content-wrapper">
           <span v-if="showIframe" @click="handlePlayVideo(video)" class="material-symbols-outlined" style="font-size: 48px;">play_circle</span>
         <div class="card__content | stack">
           <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
@@ -186,7 +195,7 @@ const handlePlayVideo = (video) => {
   border-radius: var(--border-radius-m);
 }
 
-.card__content-warapper {
+.card__content-wrapper {
   display: flex;
   align-items: center;
   gap: var(--space-3xs);
@@ -232,29 +241,46 @@ const handlePlayVideo = (video) => {
   }
 }
 
+.card[poster="true"] {
+  max-width: calc(50% - (4 * var(--space-xs-m)));
+
+  @media (min-width: 321px) and (max-width: 768px) {
+    max-width: calc(40% - (4 * var(--space-xs-m)));
+  }
+  @media (min-width: 769px) {
+    max-width: calc(20% - var(--base-gutter)*2); /* @NOTE: Magic number */
+  }
+}
+
+.card__poster {
+  width: 100%;
+  object-fit: cover;
+  border-radius: var(--border-radius-m);
+  aspect-ratio: 1/1.42;
+}
+
 
 /* TODO: Add hover effect with transition */
 /* Exploring transitions for hover effect */
 .card {
-  transition: all 1s ease-in-out;
+  transition: all .5s ease-in-out;
   cursor: pointer;
   transform-origin: center;
 
   .card__content {
-    transition: padding 1s ease-in-out, background-color .3s ease-in-out;
+    transition: padding .5s ease-in-out, background-color .3s ease-in-out;
   }
   
   .card__video {
     border-radius: var(--border-radius-m);
     border: 1px solid transparent;
   }
-  
 }
 
 .card:hover {
   position: relative;
   z-index: 10;
-  transform: scale(1.25);
+  transform: scale(1.1);
   background-color: var(--white-color-10-shade);
   border-radius: 0 0 var(--border-radius-m) var(--border-radius-m);
   

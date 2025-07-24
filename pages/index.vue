@@ -1,26 +1,17 @@
 <template>
-  <docs-reel id="featured-reel">
-    <template #reel>
-      <docs-card v-for="i in videoStore.featuredVideosList" :video="i" thumbnail :featured="true" :key="i.id"></docs-card>
-    </template>
-  </docs-reel>
-
   <docs-tools id="latest-heading">
     <div class="cluster">
-      <h2 class="h3" split-right>Latest Releases</h2>
-      <docs-button icon="arrow_back_ios" size="s" @click="slideLeft" />
-      <docs-button icon="arrow_forward_ios" size="s" @click="slideRight"/>
+      <h2 class="h3" split-right>Latest Releases & Featured Films</h2>
     </div>
   </docs-tools>
 
-  <docs-reel id="latest-reel" ref="latestReel">
+  <docs-reel id="featured-reel">
     <template #reel>
-      <docs-card v-for="i in videoStore.latest" :video="i" :key="i.id"></docs-card>
+      <docs-card v-for="i in 5" :key="i" poster="true"></docs-card>
     </template>
   </docs-reel>
 
   <docs-tools id="grid-heading" />
-    
   <docs-grid id="grid" :videos="videos" />
 </template>
 
@@ -72,22 +63,11 @@ const slideRight = () => {
 
 <style scoped>
 
-h2 {
-  font-weight: bold;
-}
+h2 { font-weight: bold; }
 
-#latest-reel {
-  grid-row: 6 / 7;
-  z-index: 1;
-}
-
-#grid-heading {
-  grid-row: 7 / 8;
-  z-index: 1;
-}
-
+#latest-heading
+#grid-heading,
 #grid {
-  grid-row: 8 / 9;
   z-index: 1;
 }
 </style>

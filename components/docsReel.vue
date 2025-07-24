@@ -41,6 +41,10 @@
   gap: var(--base-gutter);
 }
 
+.reel-grid:has([poster="true"]) {
+  padding-block: var(--space-s-m);
+}
+
 .reel-grid::-webkit-scrollbar {
   height: 1px;
   
@@ -69,7 +73,7 @@
 .reel-grid > * {
   block-size: 100%;
   flex-basis: auto;
-  max-width: calc(100% - (4* var(--space-xs-m)));
+  max-width: calc(100% - (4 * var(--space-xs-m)));
 
   @media (min-width: 321px) and (max-width: 768px) {
     max-width: 43.6%
@@ -79,4 +83,5 @@
     max-width: calc(25% - var(--base-gutter)*2.25); /* @NOTE: Magic number */
   }
 }
+
 </style>
