@@ -46,6 +46,7 @@ export default defineContentConfig({
         video_info: z.object({
           title: z.string(),
           teaser_url: z.string().url(),
+          poster: z.string().url().optional(),
           teaser_source: z.string(),
           thumb: z.string().url(),
           column_1_text: z.string(),
@@ -67,7 +68,6 @@ export default defineContentConfig({
         series: z.array(z.unknown()),
         slug: z.string(),
         tags: z.array(z.string()),
-        poster: z.string().url().optional()
       })
     }),
     allvideos: defineCollection({
@@ -90,6 +90,7 @@ export default defineContentConfig({
         video_info: z.object({
           title: z.string(),
           teaser_url: z.string().url(),
+          poster: z.string().url().optional(),
           teaser_source: z.string(),
           thumb: z.string().url(),
           column_1_text: z.string(),
@@ -111,7 +112,6 @@ export default defineContentConfig({
         series: z.array(z.unknown()),
         slug: z.string(),
         tags: z.array(z.string()),
-        poster: z.string().url().optional()
       })
     }),
     fourvideos: defineCollection({
@@ -133,6 +133,7 @@ export default defineContentConfig({
         video_info: z.object({
           title: z.string(),
           teaser_url: z.string().url(),
+          poster: z.string().url().optional(),
           teaser_source: z.string(),
           thumb: z.string().url(),
           column_1_text: z.string(),
@@ -152,7 +153,6 @@ export default defineContentConfig({
         slug: z.string(),
         featuredOrder: z.number(),
         tags: z.array(z.string()),
-        poster: z.string().url().optional()
       })
     }),
     trailer: defineCollection({
@@ -174,6 +174,7 @@ export default defineContentConfig({
         video_info: z.object({
           title: z.string(),
           teaser_url: z.string().url(),
+          poster: z.string().url().optional(),
           teaser_source: z.string(),
           thumb: z.string().url(),
           column_1_text: z.string(),
@@ -192,7 +193,6 @@ export default defineContentConfig({
         series: z.array(z.unknown()),
         slug: z.string(),
         tags: z.array(z.string()),
-        poster: z.string().url().optional()
       })
     }),
     featuredvideo: defineCollection({
@@ -214,6 +214,7 @@ export default defineContentConfig({
         video_info: z.object({
           title: z.string(),
           teaser_url: z.string().url(),
+          poster: z.string().url().optional(),
           teaser_source: z.string(),
           thumb: z.string().url(),
           column_1_text: z.string(),
@@ -232,7 +233,6 @@ export default defineContentConfig({
         series: z.array(z.unknown()),
         slug: z.string(),
         tags: z.array(z.string()),
-        poster: z.string().url().optional()
       })
     })
   }

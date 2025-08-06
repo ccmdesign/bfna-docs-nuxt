@@ -27,9 +27,15 @@
       </docs-grid>
     </template>
 
-    <template #related>
+    <template #posters>
       <docs-grid>
-        <docsRelatedItemsCard :resource="res" v-for="res in currentVideo.resources" :key="res.id" />
+        <docsRelatedItemsCard :resource="res" v-for="res in posters" :key="res.id" />
+      </docs-grid>
+    </template>
+    
+    <template #study>
+      <docs-grid>
+        <docsRelatedItemsCard :resource="res" v-for="res in studies" :key="res.id" />
       </docs-grid>
     </template>
   </docs-tabs>
@@ -74,6 +80,14 @@ const series = computed(() => {
     ...serieInfo,
     items: items.flat()
   }
+});
+
+const posters = computed(() => {
+  return currentVideo.value.resources.filter(resource => resource.type === 'image');
+});
+
+const studies = computed(() => {
+  return currentVideo.value.resources.filter(resource => resource.type === 'pdf');
 });
 
 onUnmounted(() => {

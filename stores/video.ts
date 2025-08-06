@@ -15,6 +15,7 @@ export interface Video {
   tags?: string[]
   video_info?: {
     teaser_url?: string
+    poster?: string
     teaser_source?: 'youtube' | 'vimeo'
     thumb?: string
     screenshot?: string
