@@ -7,6 +7,9 @@
       <div class="hero__meta | cluster">
         <docs-meta>{{ currentVideo.video_info.duration }}min</docs-meta>
         <docs-meta>{{ currentVideo.video_info.year }}</docs-meta>
+        <div class="hero__tags">
+          <docs-chip v-for="tag in currentVideo.tags" :key="tag" :tag="tag" />
+        </div>
       </div>
       <p class="hero__description | font-size:-1">{{ currentVideo.description }}</p>
 

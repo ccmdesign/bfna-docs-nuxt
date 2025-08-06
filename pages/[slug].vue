@@ -93,6 +93,10 @@ const ogDescription = computed(() => {
   return currentVideo.value.description ? currentVideo.value.description : 'Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.';
 });
 
+const keywords = computed(() => {
+  return currentVideo.value.tags ? currentVideo.value.tags.join(', ') : 'Bertelsmann Foundation, documentaries, governance, economics, elections, social issues, digital revolution';
+});
+
 useSeoMeta({
   title: ogTitle,
   ogTitle: ogTitle,
@@ -104,6 +108,7 @@ useSeoMeta({
   twitterImage: ogImage,
   ogImageWidth: 1200,
   ogImageHeight: 720,
+  keywords: keywords,
 });
 
 </script>

@@ -17,42 +17,59 @@ watch(
   { immediate: true }
 );
 
-function youtubeEmbedUrl(url) {
+const youtubeEmbedUrl = (url) => {
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/)
   return match
     ? `https://www.youtube.com/embed/${match[1]}?rel=0&autoplay=1&mute=1&modestbranding=1`
     : ''
 }
 
+const vimeoEmbedUrl = (url) => {
+  const match = url.match(/vimeo\.com\/(\d+)/)
+  return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0&muted=1` : ''
+}
+
 </script>
 
+
 <template>
-  <template v-if="isPlaying && currentVideo.source === 'youtube'">
-    
-  <docsHomeButton v-if="isPlaying" />
-    
-  <iframe
-      ref="youtubeIframeRef"
-      :key="currentVideo.videoId"
+    <template v-if="isPlaying && currentVideo.source === 'youtube'">
+      <docsHomeButton v-if="isPlaying" />
+      <iframe
+        ref="youtubeIframeRef"
+        :key="currentVideo.videoId"
+        class="hero__video"
+        :class="isPlaying ? 'hero__video-playing' : ''"
+        :src="youtubeEmbedUrl(currentVideo.videoUrl)"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+      ></iframe>
+    </template>
+
+    <!-- <vimeoPlayer v-else-if="isPlaying && currentVideo.source === 'vimeo'"
+      :vimeoUrl="currentVideo.videoUrl" 
       class="hero__video"
-      :class="isPlaying ? 'hero__video-playing' : ''"
-      :src="youtubeEmbedUrl(currentVideo.videoUrl)"
-      frameborder="0"
-      allow="autoplay; encrypted-media"
-      allowfullscreen
-    ></iframe>
-  </template>
-  
-  <vimeoPlayer v-else-if="isPlaying && currentVideo.source === 'vimeo'"
-    :vimeoUrl="currentVideo.videoUrl" 
-    class="hero__video"
-    :class="isPlaying ? 'hero__video-playing' : ''" 
-    :controls="true" />
-  
-  <div v-else class="hero__video">
-    <!-- <video class="hero__video-media" src="/assets/sample-3.mov" muted loop playsinline></video> -->
-    <div class="hero__video-media" :style="{ backgroundImage: `url('${currentVideo.backgroundImage}')`, height: '100%' }"></div>
-  </div>
+      :class="isPlaying ? 'hero__video-playing' : ''" 
+      :controls="true" /> -->
+
+    <template v-else-if="isPlaying && currentVideo.source === 'vimeo'">
+      <docsHomeButton v-if="isPlaying" />
+      <iframe
+        :key="currentVideo.videoUrl"
+        class="hero__video"
+        :class="isPlaying ? 'hero__video-playing' : ''"
+        :src="vimeoEmbedUrl(currentVideo.videoUrl)"
+        frameborder="0"
+        allow="autoplay; fullscreen"
+        allowfullscreen
+      ></iframe>
+    </template>
+
+    <div v-else class="hero__video">
+      <!-- <video class="hero__video-media" src="/assets/sample-3.mov" muted loop playsinline></video> -->
+      <div class="hero__video-media" :style="{ backgroundImage: `url('${currentVideo.backgroundImage}')`, height: '100%' }"></div>
+    </div>
 </template>
 
 <style scoped lang="scss">
