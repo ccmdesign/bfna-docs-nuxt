@@ -1,13 +1,8 @@
 <template>
     <docs-reel id="featured-reel">
       <template #reel>
-        <docs-card v-for="i in videoStore.featuredVideosList" :video="i" poster :key="i.id"></docs-card>
-      </template>
-    </docs-reel>
-
-    <docs-reel id="latest-reel" ref="latestReelRef">
-      <template #reel>
-        <docs-card v-for="i in videoStore.latest" :video="i" :key="i.id"></docs-card>
+        <!-- <docs-card v-for="i in videoStore.featuredVideosList" :video="i" poster :key="i.id"></docs-card>-->
+        <docs-card v-for="i in 5" :video="i" poster :key="i.id"></docs-card>
       </template>
     </docs-reel>
 
