@@ -1,73 +1,63 @@
 <template>
-  <docs-tools id="latest-heading">
-    <div class="cluster">
-      <h2 class="h3" split-right>Latest Releases & Featured Films</h2>
-    </div>
-  </docs-tools>
+    <docs-reel id="featured-reel">
+      <template #reel>
+        <docs-card v-for="i in videoStore.featuredVideosList" :video="i" poster :key="i.id"></docs-card>
+      </template>
+    </docs-reel>
 
-  <docs-reel id="featured-reel">
-    <template #reel>
-      <docs-card v-for="i in 5" :key="i" poster="true"></docs-card>
-    </template>
-  </docs-reel>
+    <docs-reel id="latest-reel" ref="latestReelRef">
+      <template #reel>
+        <docs-card v-for="i in videoStore.latest" :video="i" :key="i.id"></docs-card>
+      </template>
+    </docs-reel>
 
-  <docs-tools id="grid-heading" />
-  <docs-grid id="grid" :videos="videos" />
+    <docs-tools id="grid-heading" />
+      
+    <docs-grid id="grid" :videos="videoStore.videoList" />
 </template>
 
 <script setup>
 import { useVideoStore } from '~/stores/video';
-import { storeToRefs } from 'pinia';
+import { ref, onMounted, nextTick } from 'vue';
 
 const videoStore = useVideoStore();
-const { filterOptions } = storeToRefs(videoStore);
 
-const videos = computed(() => {
+const latestReelRef = ref(null);
 
-  return videoStore.videoList.filter(video => {
-    // Filter by duration range
-    if (filterOptions.value.durationRange !== 'all') {
-      const duration = video.video_info.duration;
-      const [min, max] = filterOptions.value.durationRange.split('-').map(Number);
-      if (max) {
-        if (duration < min || duration > max) {
-          return false;
-        }
-      } else {
-        if (duration < min) {
-          return false;
-        }
-      }
-    }
-    return (filterOptions.value.workstream === 'all' || video.workstream === filterOptions.value.workstream);
-  }).sort((a, b) => {
-    return filterOptions.value.sort === 'desc' ? b.video_info.year - a.video_info.year : a.video_info.year - b.video_info.year;
+function scrollLatestReel(direction) {
+  nextTick(() => {
+    const root = latestReelRef.value?.$el || latestReelRef.value;
+    const reel = root?.querySelector ? root.querySelector('.reel-grid') : null;
+    console.log('scrolling', { root, reel });
+    if (!reel) return;
+    // Try to scroll by the width of one card, fallback to 300px
+    const card = reel.querySelector('.card');
+    const scrollAmount = card ? card.offsetWidth + 24 : 300; // 24px is a guess for gap
+    reel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+  });
+}
+
+onMounted(() => {
+  // Ensure ref is properly set after component mount
+  nextTick(() => {
+    console.log('latestReelRef mounted:', latestReelRef.value);
   });
 });
-
-const latestReel = ref(null);
-
-const slideLeft = () => {
-  if (latestReel.value && latestReel.value.$el) {
-    latestReel.value.$el.scrollBy({ left: -500, behavior: 'smooth' });
-  }
-};
-
-const slideRight = () => {
-  if (latestReel.value && latestReel.value.$el) {
-    latestReel.value.$el.scrollBy({ left: 500, behavior: 'smooth' });
-  }
-};
-
 </script>
 
 <style scoped>
+#latest-reel {
+  grid-row: 6 / 7;
+  z-index: 1;
+}
 
-h2 { font-weight: bold; }
+#grid-heading {
+  grid-row: 7 / 8;
+  z-index: 1;
+}
 
-#latest-heading
-#grid-heading,
 #grid {
+  grid-row: 8 / 9;
   z-index: 1;
 }
 </style>

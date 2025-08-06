@@ -124,7 +124,7 @@ const handlePlayVideo = (video) => {
     @pointerleave="handleMouseLeave"
     @click="handleCurrentVideo(video)">
         
-    <template v-if="!featured && showIframe && isYouTube(video.videoUrl)">
+    <template v-if="!featured && showIframe && !poster && isYouTube(video.videoUrl)">
       <iframe
         :key="showIframe + video.videoUrl"
         class="card__video"
@@ -134,7 +134,8 @@ const handlePlayVideo = (video) => {
         allowfullscreen
       ></iframe>
     </template>
-    <template v-else-if="!featured && showIframe && isVimeo(video.videoUrl)">
+
+    <template v-else-if="!featured && showIframe && !poster && isVimeo(video.videoUrl)">
       <iframe
         :key="showIframe + video.videoUrl"
         class="card__video"
@@ -164,6 +165,7 @@ const handlePlayVideo = (video) => {
     </template>
     <template v-else-if="poster">
       <img class="card__poster" src="/assets/poster-example.jpg" /> <!-- @douglas -->
+      
     </template>
     <template v-else>
       <div class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">
@@ -277,7 +279,7 @@ const handlePlayVideo = (video) => {
   }
 }
 
-.card:hover {
+.card[thumbnail="true"]:hover {
   position: relative;
   z-index: 10;
   transform: scale(1.1);
@@ -308,6 +310,10 @@ const handlePlayVideo = (video) => {
     font-size: var(--size--3);
   }
   
+}
+
+.card[poster="true"]:hover {
+  transform: scale(1.1);
 }
 
 .chip-pos {
