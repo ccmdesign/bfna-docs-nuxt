@@ -65,7 +65,9 @@ export default defineContentConfig({
           })
         ),
         series: z.array(z.unknown()),
-        slug: z.string()
+        slug: z.string(),
+        tags: z.array(z.string()),
+        poster: z.string().url().optional()
       })
     }),
     allvideos: defineCollection({
@@ -107,7 +109,9 @@ export default defineContentConfig({
           })
         ),
         series: z.array(z.unknown()),
-        slug: z.string()
+        slug: z.string(),
+        tags: z.array(z.string()),
+        poster: z.string().url().optional()
       })
     }),
     fourvideos: defineCollection({
@@ -146,7 +150,9 @@ export default defineContentConfig({
         ),
         series: z.array(z.unknown()),
         slug: z.string(),
-        featuredOrder: z.number()
+        featuredOrder: z.number(),
+        tags: z.array(z.string()),
+        poster: z.string().url().optional()
       })
     }),
     trailer: defineCollection({
@@ -184,7 +190,9 @@ export default defineContentConfig({
           })
         ),
         series: z.array(z.unknown()),
-        slug: z.string()
+        slug: z.string(),
+        tags: z.array(z.string()),
+        poster: z.string().url().optional()
       })
     }),
     featuredvideo: defineCollection({
@@ -223,6 +231,8 @@ export default defineContentConfig({
         ),
         series: z.array(z.unknown()),
         slug: z.string(),
+        tags: z.array(z.string()),
+        poster: z.string().url().optional()
       })
     })
   }

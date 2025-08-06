@@ -111,6 +111,11 @@ const handleDocumentaries = async (docsItems, series=[]) => {
           })
         })
       }
+
+      if(fields.video_info.fields.poster) {
+        videoInfo.poster = fields.video_info.fields.poster.fields.file.url
+      }
+
     }
     let resourcesList = []
     if (fields.resources) {

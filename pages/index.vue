@@ -1,8 +1,8 @@
 <template>
-    <docs-reel id="featured-reel">
+    <docs-reel id="featured-reel" :style="featuredReelStyle">
       <template #reel>
-        <!-- <docs-card v-for="i in videoStore.featuredVideosList" :video="i" poster :key="i.id"></docs-card>-->
-        <docs-card v-for="i in 5" :video="i" poster :key="i.id"></docs-card>
+        <docs-card v-for="i in videoStore.featuredVideosList" :video="i" poster :key="i.id"></docs-card>
+        <!-- <docs-card v-for="i in 5" :video="i" poster :key="i.id"></docs-card> -->
       </template>
     </docs-reel>
 
@@ -16,6 +16,12 @@ import { useVideoStore } from '~/stores/video';
 import { ref, onMounted, nextTick } from 'vue';
 
 const videoStore = useVideoStore();
+
+const featuredReelStyle = computed(() => {
+  return videoStore.featuredVideosList.length === 4
+    ? { justifyContent: 'space-around' }
+    : {};
+});
 
 const latestReelRef = ref(null);
 

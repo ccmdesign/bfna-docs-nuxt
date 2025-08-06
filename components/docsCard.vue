@@ -113,6 +113,10 @@ const handlePlayVideo = (video) => {
   toTop();
 }
 
+const posterImage = computed(() => {
+  return props.video.video_info && props.video.video_info.poster ? props.video.video_info.poster : props.video.backgroundImage;
+});
+
 </script>
 
 <template>
@@ -168,7 +172,7 @@ const handlePlayVideo = (video) => {
       ></img> -->
     </template>
     <template v-else-if="poster">
-      <img class="card__poster" src="/assets/poster-example.jpg" /> <!-- @douglas -->
+      <img class="card__poster" :src="posterImage" />
       
     </template>
     <template v-else>
