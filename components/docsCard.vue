@@ -35,18 +35,18 @@ const handleMouseEnter = () => {
   showIframe.value = true
 }
 
-const handleMouseLeave = () =>{
+const handleMouseLeave = () => {
   showIframe.value = false
 
-  const iframeElement = document.querySelector('iframe');
+  const iframeElement = document.querySelector('#video-iframe');
+  nextTick(() => {
   if (iframeElement) {
-    nextTick(() => {
       iframeElement.src = ''; // Stop the video from playing
       iframeElement.removeAttribute('src'); // Remove the src attribute to stop loading
       iframeElement.setAttribute('style', 'display: none;'); // Hide the iframe
       iframeElement.remove();
-    });
-  }
+    }
+  });
 }
 
 // Helper functions for embed URLs
@@ -126,6 +126,8 @@ const handlePlayVideo = (video) => {
         
     <template v-if="!featured && showIframe && !poster && isYouTube(video.videoUrl)">
       <iframe
+        ref="youtubeIframeRef"
+        id="video-iframe"
         :key="showIframe + video.videoUrl"
         class="card__video"
         :src="youtubeEmbedUrl(video.videoUrl)"
@@ -137,6 +139,8 @@ const handlePlayVideo = (video) => {
 
     <template v-else-if="!featured && showIframe && !poster && isVimeo(video.videoUrl)">
       <iframe
+        ref="vimeoIframeRef"
+        id="video-iframe"
         :key="showIframe + video.videoUrl"
         class="card__video"
         :src="vimeoEmbedUrl(video.videoUrl)"
