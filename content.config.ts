@@ -68,6 +68,7 @@ export default defineContentConfig({
         series: z.array(z.unknown()),
         slug: z.string(),
         tags: z.array(z.string()),
+        previewStartsAt: z.number().optional()
       })
     }),
     allvideos: defineCollection({
@@ -112,6 +113,7 @@ export default defineContentConfig({
         series: z.array(z.unknown()),
         slug: z.string(),
         tags: z.array(z.string()),
+        previewStartsAt: z.number().optional()
       })
     }),
     fourvideos: defineCollection({
@@ -153,6 +155,7 @@ export default defineContentConfig({
         slug: z.string(),
         featuredOrder: z.number(),
         tags: z.array(z.string()),
+        previewStartsAt: z.number().optional()
       })
     }),
     trailer: defineCollection({
@@ -193,6 +196,7 @@ export default defineContentConfig({
         series: z.array(z.unknown()),
         slug: z.string(),
         tags: z.array(z.string()),
+        previewStartsAt: z.number().optional()
       })
     }),
     featuredvideo: defineCollection({
@@ -233,6 +237,7 @@ export default defineContentConfig({
         series: z.array(z.unknown()),
         slug: z.string(),
         tags: z.array(z.string()),
+        previewStartsAt: z.number().optional()
       })
     })
   }

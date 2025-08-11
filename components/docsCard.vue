@@ -49,6 +49,11 @@ const handleMouseLeave = () => {
   });
 }
 
+
+const previewStartsAt = computed(() => {
+  return props.video.video_info.preview_start_at || 15
+})
+
 // Helper functions for embed URLs
 function isYouTube(url) {
   return /youtube\.com|youtu\.be/.test(url)
@@ -65,7 +70,7 @@ function youtubeEmbedUrl(url) {
 
 function vimeoEmbedUrl(url) {
   const match = url.match(/vimeo\.com\/(\d+)/)
-  return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0&muted=1&#t=15s` : ''
+  return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0&muted=1&#t=${previewStartsAt.value}s` : ''
 }
 
 const backgroundStyle = computed(() => {

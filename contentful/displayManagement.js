@@ -187,6 +187,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
       by: fields.by,
       description: fields.description,
       videoUrl: fields.video_url,
+      previewStartsAt: fields.previewStartsAt,
       workstream: fields.workstream,
       tags: fields.tags,
       backgroundImage: fields.background_image.fields.file.url,

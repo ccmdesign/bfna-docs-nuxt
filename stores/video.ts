@@ -13,6 +13,7 @@ export interface Video {
   backgroundImage?: string
   source: 'youtube' | 'vimeo'
   tags?: string[]
+  previewStartsAt?: number
   video_info?: {
     teaser_url?: string
     poster?: string
