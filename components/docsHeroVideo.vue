@@ -20,13 +20,13 @@ watch(
 const youtubeEmbedUrl = (url) => {
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/)
   return match
-    ? `https://www.youtube.com/embed/${match[1]}?rel=0&autoplay=1&mute=1&modestbranding=1`
+    ? `https://www.youtube.com/embed/${match[1]}?rel=0&autoplay=1&modestbranding=1`
     : ''
 }
 
 const vimeoEmbedUrl = (url) => {
   const match = url.match(/vimeo\.com\/(\d+)/)
-  return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0&muted=1` : ''
+  return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0` : ''
 }
 
 const isHomeBtnVisible = ref(true);
