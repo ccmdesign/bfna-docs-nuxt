@@ -119,7 +119,8 @@ const handlePlayVideo = (video) => {
 }
 
 const posterImage = computed(() => {
-  return props.video.video_info && props.video.video_info.poster ? props.video.video_info.poster : props.video.backgroundImage;
+  const posterFromResources = props.video.resources.find(resource => resource.type === 'image');
+  return props.video.video_info && props.video.video_info.poster ? props.video.video_info.poster : posterFromResources ? posterFromResources.url : props.video.backgroundImage;
 });
 
 </script>

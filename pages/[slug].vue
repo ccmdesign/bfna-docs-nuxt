@@ -7,10 +7,10 @@
         <h2 class="font-size:-1" style="font-weight: bold;">{{ currentVideo.video_info.column_2_title }}</h2>
         <p class="font-size:-1">{{ currentVideo.video_info.column_2_text }}</p>
       </div>
-      <!-- <div class="extras">
-        <docs-card />
-        <docs-card />
-      </div> -->
+      <div class="extras">
+        <docs-card :video="currentVideo" poster style="max-width: fit-content;"></docs-card>
+
+      </div>
     </template>
 
     <template #series>
