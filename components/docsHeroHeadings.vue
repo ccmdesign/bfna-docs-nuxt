@@ -5,7 +5,7 @@
       <h1 class="hero__title | font-size:5">{{ currentVideo.title }}</h1>
       <div class="hero__author | font-size:-1">By {{ currentVideo.by }}</div>
       <div class="hero__meta | cluster">
-        <docs-meta>{{ currentVideo.video_info.duration }}min</docs-meta>
+        <docs-meta white>{{ currentVideo.video_info.duration }}min</docs-meta>
         <docs-meta>{{ currentVideo.video_info.year }}</docs-meta>
         <div class="hero__tags">
           <docs-chip v-for="tag in currentVideo.tags" :key="tag" :tag="tag" />

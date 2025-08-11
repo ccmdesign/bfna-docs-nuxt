@@ -5,6 +5,19 @@
 </template>
 
 <script setup>
+const props = defineProps({
+  white: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const customFontColor = computed(() => {
+  return props.white ? 'var(--black-color)' : 'var(--white-color-60-shade)';
+});
+const customBGColor = computed(() => {
+  return props.white ? 'var(--white-color)' : 'var(--white-color-10-shade)';
+});
 </script>
 
 <style scoped>
@@ -12,10 +25,11 @@
   font-size: var(--size--2);
   font-weight: 400;
   letter-spacing: 0.04em;
-  color: var(--white-color-60-shade);
+  color: v-bind(customFontColor);
   display: inline-block;
   line-height: 1;
   padding: var(--space-3xs) var(--space-2xs);
-  background-color: var(--white-color-10-shade); 
+  background-color: v-bind(customBGColor);
 }
 </style>
+
