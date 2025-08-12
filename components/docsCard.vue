@@ -132,7 +132,7 @@ const posterImage = computed(() => {
     :thumbnail="thumbnail"
     @pointerenter="handleMouseEnter"
     @pointerleave="handleMouseLeave"
-    @click="handleCurrentVideo(video)">
+    @click="moreInfo(video)">
         
     <template v-if="!featured && showIframe && !poster && isYouTube(video.videoUrl)">
       <iframe

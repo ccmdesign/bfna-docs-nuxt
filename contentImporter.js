@@ -1,4 +1,7 @@
-const getManagedDocs = require('./contentful/displayManagement');
+const getFeaturedDocs = require('./contentful/featuredFilms');
+const getAllFilms = require('./contentful/films');
 const getSeries = require('./contentful/series');
-getManagedDocs()
+
+getFeaturedDocs()
 getSeries()
+getAllFilms()
