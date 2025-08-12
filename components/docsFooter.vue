@@ -3,25 +3,25 @@
     <div class="footer__content | subgrid">
       <ul>
         <h4 class="h6">Topics</h4>
-        <li><a href="#">Democracy</a></li>
-        <li><a href="#">Politics & Society</a></li>
-        <li><a href="#">Digital World</a></li>
+        <li><a href="https://www.bfna.org/democracy/" target="_blank">Democracy</a></li>
+        <li><a href="https://www.bfna.org/politics-society/" target="_blank">Politics & Society</a></li>
+        <li><a href="https://www.bfna.org/digital-world/" target="_blank">Digital World</a></li>
       </ul>
       
       <ul>
         <h4 class="h6">The Foundation</h4>
-        <li><a href="#">About the Foundation</a></li>
-        <li><a href="#">Board of Directors | Team</a></li>
-        <li><a href="#">Bertelsmann Stiftung</a></li>
-        <li><a href="#">Contact</a></li>
-        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="https://www.bfna.org/about/" target="_blank">About the Foundation</a></li>
+        <li><a href="https://www.bfna.org/team/#board_of_directors" target="_blank">Board of Directors | Team</a></li>
+        <li><a href="https://www.bfna.org/bertelsmann-stiftung/" target="_blank">Bertelsmann Stiftung</a></li>
+        <li><a href="mailto:info@bfna.org" target="_blank">Contact</a></li>
+        <li><a href="/assets/Privacy-Policy.pdf" rel="noopener" target="_blank">Privacy Policy</a></li>
       </ul>
             
       <ul>
         <h4 class="h6">Updates</h4>
-        <li><a href="#">Publications</a></li>
-        <li><a href="#">Infographics</a></li>
-        <li><a href="#">Videos</a></li>
+        <li><a href="https://www.bfna.org/updates/#infographics" target="_blank">Publications</a></li>
+        <li><a href="https://www.bfna.org/updates/#infographics" target="_blank">Infographics</a></li>
+        <li><a href="https://www.bfna.org/updates/#videos" target="_blank">Videos</a></li>
       </ul>
 
     <div class="stack">
