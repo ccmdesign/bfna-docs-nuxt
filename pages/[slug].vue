@@ -20,16 +20,9 @@
       <docs-list :items="series.items" />
     </template>
 
-
     <template #extras>
       <docs-grid>
         <docs-card v-if="trailer" :video="trailer" :thumbnail="true" :key="trailer.id"></docs-card>
-      </docs-grid>
-    </template>
-
-    <template #posters>
-      <docs-grid>
-        <docsRelatedItemsCard :resource="res" v-for="res in posters" :key="res.id" />
       </docs-grid>
     </template>
     
@@ -80,10 +73,6 @@ const series = computed(() => {
     ...serieInfo,
     items: items.flat()
   }
-});
-
-const posters = computed(() => {
-  return currentVideo.value.resources.filter(resource => resource.type === 'image');
 });
 
 const studies = computed(() => {

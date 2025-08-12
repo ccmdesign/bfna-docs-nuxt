@@ -41,10 +41,6 @@ const informationLength = computed(() => {
   return currentVideo.value.video_info && currentVideo.value.video_info.column_1_title ? currentVideo.value.video_info.column_1_title.length : 0;
 });
 
-const postersLength = computed(() => {
-  return currentVideo.value.resources.filter(resource => resource.type === 'image').length;
-});
-
 const studiesLength = computed(() => {
   return currentVideo.value.resources.filter(resource => resource.type === 'pdf').length;
 });
@@ -52,7 +48,6 @@ const studiesLength = computed(() => {
 const information = { label: 'Information', slot: 'information', count: 1, class: '' };
 const series = { label: seriesTitle.value, slot: 'series', count: seriesLength, class: '' };
 const trailer = { label: 'Trailer', slot: 'extras', count: 1, class: '' };
-const posters = { label: 'Film Posters', slot: 'posters', count: postersLength, class: '' };
 const study = { label: 'Study Guide', slot: 'study', count: studiesLength, class: '' };
 
 const tabs = computed(() => {
@@ -65,9 +60,6 @@ const tabs = computed(() => {
   }
   if(trailerLength.value > 0) {
     tablist.push(trailer);
-  }
-  if(postersLength.value > 0) {
-    tablist.push(posters);
   }
   if(studiesLength.value > 0) {
     tablist.push(study);
