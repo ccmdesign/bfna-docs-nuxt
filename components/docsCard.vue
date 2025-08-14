@@ -29,7 +29,10 @@ const props = defineProps({
     })
   }
 })
-
+const isMobile = computed(() => {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(max-width: 768px)').matches;
+})
 const showIframe = ref(false)
 const handleMouseEnter = () => {
   showIframe.value = true
@@ -114,8 +117,10 @@ const toTop = () => {
 
 const handlePlayVideo = (video) => {
   videoStore.setCurrentVideo(video);
-  videoStore.setIsPlaying(true);
-  toTop();
+  nextTick(() => {
+    videoStore.setIsPlaying(true);
+    toTop();
+  });
 }
 
 const posterImage = computed(() => {
@@ -189,7 +194,7 @@ const posterImage = computed(() => {
     </template>
     <slot name="content" v-if="!thumbnail && !poster">
       <div class="card__content-wrapper">
-          <span v-if="showIframe" @click="handlePlayVideo(video)" class="material-symbols-outlined" style="font-size: 48px;">play_circle</span>
+          <span v-if="showIframe" @click.stop="handlePlayVideo(video)" class="material-symbols-outlined" style="font-size: 48px;">play_circle</span>
         <div class="card__content | stack">
           <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
           <div class="card__meta | cluster">
