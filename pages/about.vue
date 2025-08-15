@@ -37,9 +37,8 @@ videoStore.setNavigation(true);
   <div class="app-window app-page__wrapper subgrid">
     <div class="about-page__header">
       <a href="https://www.bfna.org/" target="_blank" class="router-link-exact-active router-link-active"><img src="/assets/bertelsmann-logo.png" alt="Bertelsman Foundation" class="logo"></a>
-      <img class="hide-on-mobile" src="/assets/samuel-george.webp" alt="Dr. Samuel George picture" />
     </div>
-    <section class="about-us-view__text flex columns">
+    <div class="about-us-view__text flex columns">
       <div class="row">
         <p class="font-size:-1 font-weight:700">About the Foundation</p>
         <p>
@@ -49,7 +48,11 @@ videoStore.setNavigation(true);
           Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect. Bertelsmann Foundation Documentaries have broadcast nationally on PBS, stream on platforms such as Kanopy, and have screened at leading film festivals, universities and institutions across the United States and Europe.
         </p>
       </div>
-      <img class="hide-on-desktop" src="/assets/samuel-george.webp" alt="Dr. Samuel George picture" />
+    </div>
+    <div class="about-page__header">
+      <img src="/assets/samuel-george.webp" alt="Dr. Samuel George picture" />
+    </div>
+    <div class="about-us-view__text flex columns">
       <div class="row">
         <p class="font-size:-1 font-weight:700">Contact</p>
         <div class="row__group">
@@ -61,7 +64,7 @@ videoStore.setNavigation(true);
           <a href="mailto:samuel.george@bfna.org">samuel.george@bfna.org</a>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
@@ -71,9 +74,7 @@ videoStore.setNavigation(true);
   grid-column: content-start / content-end;
   display: grid;
   padding-top: var(--space-xl);
-  @media (max-width: 768px) {
-    gap: var(--space-xl);
-  }
+  row-gap: var(--space-xl);
 }
 
 .logo {
@@ -134,6 +135,9 @@ videoStore.setNavigation(true);
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
+  p:first-child {
+    margin-top: 0;
+  }
 }
 
 .row__group {
