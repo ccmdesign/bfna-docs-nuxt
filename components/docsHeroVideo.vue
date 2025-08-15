@@ -29,38 +29,12 @@ const vimeoEmbedUrl = (url) => {
   return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0` : ''
 }
 
-const isHomeBtnVisible = ref(true);
-const isMobile = () => window.matchMedia('(pointer: coarse)').matches;
-const handleHeroTap = () => {
-  isHomeBtnVisible.value = !isHomeBtnVisible.value;
-};
-
-onMounted(() => {
-  if (isMobile()) {
-    isHomeBtnVisible.value = false;
-    const hero = document.querySelector('.hero__video');
-    if (hero) {
-      hero.addEventListener('touchend', handleHeroTap);
-    }
-  }
-});
-
-onBeforeUnmount(() => {
-  if (isMobile()) {
-    isHomeBtnVisible.value = true;
-    const hero = document.querySelector('.hero__video');
-    if (hero) {
-      hero.removeEventListener('touchend', handleHeroTap);
-    }
-  }
-});
-
 </script>
 
 
 <template>
     <template v-if="isPlaying && currentVideo.source === 'youtube'">
-      <docsHomeButton v-if="isPlaying && isHomeBtnVisible" />
+      <docsHomeButton v-if="isPlaying" />
       <iframe
         ref="youtubeIframeRef"
         :key="currentVideo.videoId"
@@ -73,14 +47,8 @@ onBeforeUnmount(() => {
       ></iframe>
     </template>
 
-    <!-- <vimeoPlayer v-else-if="isPlaying && currentVideo.source === 'vimeo'"
-      :vimeoUrl="currentVideo.videoUrl" 
-      class="hero__video"
-      :class="isPlaying ? 'hero__video-playing' : ''" 
-      :controls="true" /> -->
-
     <template v-else-if="isPlaying && currentVideo.source === 'vimeo'">
-      <docsHomeButton v-if="isPlaying && isHomeBtnVisible" />
+      <docsHomeButton v-if="isPlaying" />
       <iframe
         :key="currentVideo.videoUrl"
         class="hero__video"

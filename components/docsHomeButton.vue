@@ -18,9 +18,9 @@ const handleHome = () => {
 .back-home-btn {
   position: absolute;
   top: 4.5rem;
-  left: 1.5rem;
+  left: 0.5rem;
   z-index: 10;
-  background: var(--white-color-10-shade);
+  background: transparent;
   border: none;
   border-radius: 50%;
   width: 44px;
