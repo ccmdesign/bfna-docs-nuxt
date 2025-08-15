@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isPlaying" class="hero-headings | subgrid stack">
     <slot name="content">
-      <div class="hero__category | font-size:-1">{{ currentVideo.workstream }}</div>
+      <div class="hero__category | font-size:-1" style="text-transform: uppercase;">{{ currentVideo.workstream }}</div>
       <h1 class="hero__title | font-size:5">{{ currentVideo.title }}</h1>
       <div class="hero__author | font-size:-1">By {{ currentVideo.by }}</div>
       <div class="hero__meta | cluster">
