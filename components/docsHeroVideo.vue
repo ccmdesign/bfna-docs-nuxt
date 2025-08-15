@@ -101,6 +101,7 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 .hero__video {
   max-width: 100%;
+  width: 100%;
   grid-column: full-start / full-end;
   z-index: 0;
   aspect-ratio: 17 / 8;
