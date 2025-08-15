@@ -60,7 +60,7 @@ videoStore.setNavigation(true);
           <p class="font-style:italic">Director</p>
         </div>
         <div class="row__group ">
-          <p class="font-style:italic">Bertelmann Foundation Documentaries</p>
+          <p>Bertelsmann Foundation Documentaries</p>
           <a href="mailto:samuel.george@bfna.org">samuel.george@bfna.org</a>
         </div>
       </div>
