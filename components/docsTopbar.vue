@@ -8,7 +8,7 @@
     <span v-if="isMobile && route.path !== '/search'" class="material-symbols-outlined" @click="() => navigateTo('/search')">search</span>
     <docs-search v-else class="docs-topbar__center" split-left split-right />
     
-    <a class="docs-topbar__right | hide-on-mobile" href="#">Visit Bertelsmann Foundation <span class="icon">open_in_new</span></a>
+    <a class="docs-topbar__right | hide-on-mobile" href="https://www.bfna.org/" target="_blank">Visit Bertelsmann Foundation <span class="icon">open_in_new</span></a>
   </div>
 </template>
 
