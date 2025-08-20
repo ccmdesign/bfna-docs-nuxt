@@ -7,7 +7,7 @@
         :class="['tab-button', { active: activeTab === index }]"
         @click="activeTab = index">
           {{ tab.label }} 
-          <span class="tab-button__count">({{ tab.count }})</span>
+          <span v-if="tab.showCounter" class="tab-button__count">({{ tab.count }})</span>
         </button>
     </div>
 
@@ -45,10 +45,10 @@ const studiesLength = computed(() => {
   return currentVideo.value.resources.filter(resource => resource.type === 'pdf').length;
 });
 
-const information = { label: 'Information', slot: 'information', count: 1, class: '' };
-const series = { label: seriesTitle.value, slot: 'series', count: seriesLength, class: '' };
-const trailer = { label: 'Trailer', slot: 'extras', count: 1, class: '' };
-const study = { label: 'Study Guide', slot: 'study', count: studiesLength, class: '' };
+const information = { label: 'Information', slot: 'information', count: 1, class: '', showCounter: false };
+const series = { label: seriesTitle.value, slot: 'series', count: seriesLength, class: '', showCounter: true };
+const trailer = { label: 'Trailer', slot: 'extras', count: 1, class: '', showCounter: true };
+const study = { label: 'Study Guide', slot: 'study', count: studiesLength, class: '', showCounter: true };
 
 const tabs = computed(() => {
   const tablist = []
