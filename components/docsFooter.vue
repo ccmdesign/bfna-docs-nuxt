@@ -10,7 +10,7 @@
       
       <ul>
         <h4 class="h6">The Foundation</h4>
-        <li><a href="https://www.bfna.org/about/" target="_blank">About the Foundation</a></li>
+        <li><a href="/about" target="_blank">About the Foundation</a></li>
         <li><a href="https://www.bfna.org/" target="_blank">Visit the Bertelsmann Foundation</a></li>
         <li><a href="https://www.bfna.org/team/#board_of_directors" target="_blank">Board of Directors | Team</a></li>
         <li><a href="https://www.bfna.org/bertelsmann-stiftung/" target="_blank">Bertelsmann Stiftung</a></li>
