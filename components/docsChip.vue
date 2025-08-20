@@ -16,10 +16,11 @@ defineProps({
   display: inline-block;
   padding: 0.2em 1em;
   margin: 0 0.25em;
-  background-color: var(--primary-color-60-shade);
-  color: var(--black-color);
-  border-radius: 10px;
+  background-color: var(--black-color-95-tint);
+  color: var(--white-color);
+  border-radius: 4px;
   font-size: 0.7em;
+  border: 1px solid var(--white-color);
 
   &:first-child {
     margin-left: 0;

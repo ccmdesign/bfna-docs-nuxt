@@ -30,6 +30,7 @@ const customBGColor = computed(() => {
   line-height: 1;
   padding: var(--space-3xs) var(--space-2xs);
   background-color: v-bind(customBGColor);
+  border-radius: 4px;
 }
 </style>
 
