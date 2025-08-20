@@ -163,6 +163,7 @@ const handleDocumentaries = async (docsItems) => {
     }
     documentaries.push({
       id: doc.sys.id,
+      slug: main.slugify(fields.title),
       videoId: doc.sys.id,
       updated: doc.sys.updatedAt,
       title: fields.title,

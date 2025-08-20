@@ -50,12 +50,16 @@ onUnmounted(() => {
   window.removeEventListener('resize', checkMobile);
 });
 
+const handleSerieItemClick = (item) => {
+  navigateTo(`/${item.slug}`);
+}
+
 </script>
 
 <template>
   <ol class="docs-list | subgrid | stack">
     <slot>
-      <li class="docs-list__item | subgrid" v-for="(item, index) in items" :key="item.id">
+      <li class="docs-list__item | subgrid" v-for="(item, index) in items" :key="item.id" @click="handleSerieItemClick(item)">
         <div class="docs-list__item-index">
           <span>{{ index + 1 }}</span>
         </div>
