@@ -278,8 +278,11 @@ const posterImage = computed(() => {
   object-fit: cover;
   border-radius: var(--border-radius-m);
   aspect-ratio: 1/1.42;
-}
 
+  &:hover {
+    border: solid 2px var(--white-color);
+  }
+}
 
 /* TODO: Add hover effect with transition */
 /* Exploring transitions for hover effect */
