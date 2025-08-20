@@ -6,22 +6,24 @@
       <docs-meta>{{ currentAward.year }}</docs-meta>
       <docs-meta>{{ currentAward.institution }}</docs-meta>
     </div>
-    <span class="doc-awards__counter">{{ current+1 }}/{{ total }}</span>
-
-    <div class="dot-container | cluster">
-      <div
-        v-for="(a, i) in currentVideo.awards"
-        :key="i"
-        class="dot"
-        :class="{ active: i === current }"
-        @click="current = i"
-      ></div>
-    </div>
-
-    <div class="doc-awards__controls">
-      <docs-button icon="arrow_back_ios" size="s" @click="prev" />
-      <docs-button icon="arrow_forward_ios" size="s" @click="next" />
-    </div>
+    <slot v-if="total > 1">
+      <span class="doc-awards__counter">{{ current+1 }}/{{ total }}</span>
+  
+      <div class="dot-container | cluster">
+        <div
+          v-for="(a, i) in currentVideo.awards"
+          :key="i"
+          class="dot"
+          :class="{ active: i === current }"
+          @click="current = i"
+        ></div>
+      </div>
+  
+      <div class="doc-awards__controls">
+        <docs-button icon="arrow_back_ios" size="s" @click="prev" />
+        <docs-button icon="arrow_forward_ios" size="s" @click="next" />
+      </div>
+    </slot>
   </div>
 </template>
 
