@@ -11,7 +11,11 @@
           <docs-chip v-for="tag in currentVideo.tags" :key="tag" :tag="tag" />
         </div>
       </div>
-      <p class="hero__description | font-size:-1">{{ currentVideo.description }}</p>
+      <p
+        :class="['font-size:-1', route.name === 'index' ? 'hero__description' : '']"
+      >
+        {{ currentVideo.description }}
+      </p>
 
       <div class="hero__actions | cluster">
         <docs-button effect="pill" variant="primary" icon="play_arrow" @click="playVideo">Watch Now</docs-button>
@@ -95,6 +99,14 @@ onUnmounted(() => {
   padding: 4px 0;
   background-color: var(--white-color-10-shade);
   border-radius: 10px;
+}
+
+.hero__description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-clamp: 3;
 }
 
 </style>
