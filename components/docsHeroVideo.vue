@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router';
 import { watch } from 'vue';
 
 const videoStore = useVideoStore();
-const { isPlaying, currentVideo } = storeToRefs(videoStore);
+const { isPlaying, currentVideo, isTrailer } = storeToRefs(videoStore);
 const { setIsPlaying } = videoStore;
 const route = useRoute();
 
@@ -29,8 +29,16 @@ const vimeoEmbedUrl = (url) => {
   return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0` : ''
 }
 
-</script>
+const trailerUrl = computed(() => {
+  return currentVideo.value.video_info.teaser_url ? 
+  {
+    id: currentVideo.value.id,
+    videoUrl: currentVideo.value.video_info.teaser_url,
+    video_info: currentVideo.value.video_info,
+  } : null;
+});
 
+</script>
 
 <template>
     <template v-if="isPlaying && currentVideo.source === 'youtube'">
@@ -40,10 +48,11 @@ const vimeoEmbedUrl = (url) => {
         :key="currentVideo.videoId"
         class="hero__video"
         :class="isPlaying ? 'hero__video-playing' : ''"
-        :src="youtubeEmbedUrl(currentVideo.videoUrl)"
+        :src="isTrailer ? youtubeEmbedUrl(trailerUrl.videoUrl) : youtubeEmbedUrl(currentVideo.videoUrl)"
         frameborder="0"
         allow="autoplay; encrypted-media"
         allowfullscreen
+        v-bind="$attrs"
       ></iframe>
     </template>
 
@@ -53,14 +62,15 @@ const vimeoEmbedUrl = (url) => {
         :key="currentVideo.videoUrl"
         class="hero__video"
         :class="isPlaying ? 'hero__video-playing' : ''"
-        :src="vimeoEmbedUrl(currentVideo.videoUrl)"
+        :src="isTrailer ? vimeoEmbedUrl(trailerUrl.videoUrl) : vimeoEmbedUrl(currentVideo.videoUrl)"
         frameborder="0"
         allow="autoplay; fullscreen"
         allowfullscreen
+        v-bind="$attrs"
       ></iframe>
     </template>
 
-    <div v-else class="hero__video">
+    <div v-else class="hero__video" v-bind="$attrs">
       <!-- <video class="hero__video-media" src="/assets/sample-3.mov" muted loop playsinline></video> -->
       <div class="hero__video-media" :style="{ backgroundImage: `url('${currentVideo.backgroundImage}')`, height: '100%' }"></div>
     </div>

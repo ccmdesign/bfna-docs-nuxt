@@ -83,7 +83,8 @@ export const useVideoStore = defineStore('video', {
       workstream: 'all',
       sort: 'desc',
       durationRange: 'all',
-    }
+    },
+    isTrailer: false,
   }),
   
   getters: {
@@ -143,6 +144,9 @@ export const useVideoStore = defineStore('video', {
     },
     setIsPlaying(val: boolean) {
       this.isPlaying = val
+    },
+    setTrailer(val: boolean) {
+      this.isTrailer = val
     },
     setFiltersItems(filters: any) {
       this.filterItems = filters

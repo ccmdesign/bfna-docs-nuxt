@@ -1,6 +1,7 @@
 <template>
   <div v-if="!isPlaying" class="hero-headings | subgrid stack">
     <slot name="content">
+      <docs-button v-if="route.name !== 'index'" class="back-btn" effect="pill" variant="secondary" icon="arrow_back_ios" @click="backHome"><span style="text-transform: uppercase;">Back</span></docs-button>
       <div class="hero__category | font-size:-1" style="text-transform: uppercase;">{{ currentVideo.workstream }}</div>
       <h1 class="hero__title | font-size:5">{{ currentVideo.title }}</h1>
       <div class="hero__author | font-size:-1">By {{ currentVideo.by }}</div>
@@ -19,8 +20,8 @@
 
       <div class="hero__actions | cluster">
         <docs-button effect="pill" variant="primary" icon="play_arrow" @click="playVideo">Watch Now</docs-button>
-        <docs-button v-if="route.params.slug" effect="pill" variant="secondary" icon-after="arrow_backward" @click="backHome(currentVideo)">Back to list</docs-button>
-        <docs-button v-else effect="pill" variant="secondary" icon-after="arrow_forward" @click="moreInfo(currentVideo)">More Info</docs-button>
+        <docs-button v-if="route.params.slug && hasTrailer" class="trailer-btn" effect="pill" variant="secondary" icon="play_arrow" @click="handleWatchTrailer()">Watch Trailer</docs-button>
+        <docs-button v-if="route.name === 'index'" effect="pill" variant="secondary" icon-after="arrow_forward" @click="moreInfo(currentVideo)">More Info</docs-button>
       </div>
       <div class="awards-mobile-only" v-if="isMobile">
         <docs-hero-extra id="hero-extra" />
@@ -38,7 +39,19 @@ const videoStore = useVideoStore();
 const { isPlaying, currentVideo } = storeToRefs(videoStore);
 
 const playVideo = () => {
+  videoStore.setTrailer(false);
   videoStore.setIsPlaying(true);
+}
+
+const hasTrailer = computed(() => {
+  return currentVideo.value.video_info.teaser_url ? 
+  true : false;
+});
+
+const handleWatchTrailer = () => {
+  videoStore.setTrailer(hasTrailer.value);
+  videoStore.setIsPlaying(true);
+
 }
 
 const router = useRouter();
@@ -107,6 +120,16 @@ onUnmounted(() => {
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-clamp: 3;
+}
+
+.back-btn {
+  width: 45px;
+  gap: 1.1rem;
+  background-color: var(--base-color-60-tint);
+}
+
+.trailer-btn {
+  background-color: var(--base-color-60-tint);
 }
 
 </style>
