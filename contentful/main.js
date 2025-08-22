@@ -226,9 +226,47 @@ const extractVideoInfo = async (fields) => {
 
 }
 
+const getAnimatedVimeoThumbnail = async (url) => {
+
+  // Helper to extract Vimeo ID from URL: TODO: this should be generic
+  const extractVimeoId = (url) => {
+    const match = url.match(/vimeo\.com\/(\d+)/);
+    return match ? match[1] : null;
+  };
+
+  const videoId = extractVimeoId(url);
+
+  if (!videoId) {
+    console.error("No video ID provided for animated thumbnail retrieval.");
+    return null;
+  }
+
+  const apiUrl = `https://api.vimeo.com/videos/${videoId}/animated_thumbsets`;
+  const accessToken = process.env.VIMEO_CLIENT_SECRET;
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    if (Array.isArray(data.data) && data.data.length > 0) {
+      const highProfile = data.data[0].sizes.find(item => item.profile_id === "High" || item.profile_id === "Low");
+      return highProfile ? highProfile.link : null;
+    }
+  } catch (error) {
+    console.error("Error fetching animated Vimeo thumbnail:", error);
+    return null;
+  }
+};
 
 module.exports = {
   contentfulClient,
   extractVideoInfo,
   slugify,
+  getAnimatedVimeoThumbnail,
 }

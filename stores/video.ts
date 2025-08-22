@@ -11,6 +11,7 @@ export interface Video {
   videoUrl: string
   workstream?: string
   backgroundImage?: string
+  animatedThumbnail?: string
   source: 'youtube' | 'vimeo'
   tags?: string[]
   previewStartsAt?: number

@@ -153,34 +153,16 @@ const posterImage = computed(() => {
     </template>
 
     <template v-else-if="!featured && showIframe && !poster && isVimeo(video.videoUrl)">
-      <iframe
-        ref="vimeoIframeRef"
-        id="video-iframe"
-        :key="showIframe + video.videoUrl"
-        class="card__video"
-        :src="vimeoEmbedUrl(video.videoUrl)"
-        frameborder="0"
-        allow="autoplay; fullscreen"
-        allowfullscreen
-      ></iframe>
-      <!-- <vimeoPlayer
-        class="card__video"
-        :vimeo-url="video.videoUrl"
-        :autoplay="true"
-        playsinline
-        allowfullscreen
-        ref="player"
-      ></vimeoPlayer> -->
-      <!-- <img 
+      <img 
         ref="videoRef"
         class="card__video" 
-        src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/3c668970-f366-4d08-b7d7-a7e4ed41857e.gif?ClientID=sulu&Date=1749682948&Signature=d6992d6fd2734b57e2f958383092ac7acad5c256" 
+        :src="video.animatedThumbnail" 
         :muted="true"
         loop 
         playsinline
         autoplay 
         preload="auto"
-      ></img> -->
+      ></img>
     </template>
     <template v-else-if="poster">
       <img class="card__poster" :src="posterImage" />
@@ -194,7 +176,6 @@ const posterImage = computed(() => {
     </template>
     <slot name="content" v-if="!thumbnail && !poster">
       <div class="card__content-wrapper">
-          <span v-if="showIframe" @click.stop="handlePlayVideo(video)" class="material-symbols-outlined" style="font-size: 48px;">play_circle</span>
         <div class="card__content | stack">
           <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
           <div class="card__meta | cluster">
