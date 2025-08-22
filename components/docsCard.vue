@@ -297,7 +297,6 @@ const posterImage = computed(() => {
   
   .card__video {
     border-radius: var(--border-radius-m);
-    border: 1px solid transparent;
   }
 }
 
