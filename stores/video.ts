@@ -85,6 +85,7 @@ export const useVideoStore = defineStore('video', {
       durationRange: 'all',
     },
     isTrailer: false,
+    relatedLength: 0
   }),
   
   getters: {
@@ -156,6 +157,9 @@ export const useVideoStore = defineStore('video', {
     },
     setFeaturedVideo(video: Video) {
       this.featuredVideo = video
+    },
+    setRelatedLength(length: number) {
+      this.relatedLength = length
     },
     resetToHome() {
       this.currentVideo = this.featuredVideo

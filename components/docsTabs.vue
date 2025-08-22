@@ -20,7 +20,7 @@
 <script setup>
 import { useVideoStore } from '~/stores/video';
 const videoStore = useVideoStore();
-const { currentVideo } = storeToRefs(videoStore);
+const { currentVideo, relatedLength } = storeToRefs(videoStore);
 
 const seriesLength = computed(() => {
   return currentVideo.value.series.reduce((acc, serie) => acc + serie.items.length + 1, 0);
@@ -49,6 +49,7 @@ const information = { label: 'Information', slot: 'information', count: 1, class
 const series = { label: seriesTitle.value, slot: 'series', count: seriesLength, class: '', showCounter: true };
 const trailer = { label: 'Trailer', slot: 'extras', count: 1, class: '', showCounter: true };
 const study = { label: 'Study Guide', slot: 'study', count: studiesLength, class: '', showCounter: true };
+const related = { label: 'Related', slot: 'related', count: relatedLength, class: '', showCounter: true };
 
 const tabs = computed(() => {
   const tablist = []
@@ -64,6 +65,10 @@ const tabs = computed(() => {
   if(studiesLength.value > 0) {
     tablist.push(study);
   }
+  if(relatedLength.value > 0) {
+    tablist.push(related);
+  }
+
   return tablist;
 });
 

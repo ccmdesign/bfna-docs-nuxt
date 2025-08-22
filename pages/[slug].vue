@@ -31,6 +31,13 @@
         <docsRelatedItemsCard :resource="res" v-for="res in studies" :key="res.id" />
       </docs-grid>
     </template>
+
+    <template #related>
+      <docs-grid>
+        <docs-card v-for="item in relatedItems" :video="item" :thumbnail="true" :key="item.videoId"></docs-card>
+      </docs-grid>
+    </template>
+
   </docs-tabs>
 </template>
 
@@ -44,7 +51,7 @@ definePageMeta({
 const route = useRoute();
 const videoStore = useVideoStore();
 videoStore.setCurrentVideoFromSlug(route.params.slug);
-const { currentVideo } = storeToRefs(videoStore);
+const { currentVideo, videoList } = storeToRefs(videoStore);
 
 const trailer = computed(() => {
   return currentVideo.value.video_info.teaser_url ? 
@@ -78,6 +85,16 @@ const series = computed(() => {
 const studies = computed(() => {
   return currentVideo.value.resources.filter(resource => resource.type === 'pdf');
 });
+
+const relatedItems = computed(() => {
+  if (!currentVideo.value.tags || !Array.isArray(currentVideo.value.tags)) return [];
+  return videoList.value.filter(item => 
+    item.id !== currentVideo.value.id && // Exclude current video
+    item.tags &&
+    item.tags.some(tag => currentVideo.value.tags.includes(tag))
+  );
+});
+videoStore.setRelatedLength(relatedItems.value.length);
 
 onUnmounted(() => {
   videoStore.setShowDetails(false);
