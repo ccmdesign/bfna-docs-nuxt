@@ -59,6 +59,7 @@ const trailer = computed(() => {
     id: currentVideo.value.id,
     videoUrl: currentVideo.value.video_info.teaser_url,
     video_info: currentVideo.value.video_info,
+    animatedThumbnail: currentVideo.value.animatedThumbnail
   } : null;
 });
 
