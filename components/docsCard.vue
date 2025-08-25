@@ -27,12 +27,13 @@ const props = defineProps({
         year: '2025'
       }
     })
+  },
+  hideSeriesChip: {
+    type: Boolean,
+    default: false
   }
 })
-const isMobile = computed(() => {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(max-width: 768px)').matches;
-})
+
 const showIframe = ref(false)
 const handleMouseEnter = () => {
   showIframe.value = true
@@ -171,7 +172,7 @@ const posterImage = computed(() => {
     <template v-else>
       <div class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">
         <!-- <DocsAwardFlagOnly v-if="video.awards && video.awards.length" /> -->
-        <DocsSeriesChip class="chip-pos" v-if="video.series && video.series.length" />
+        <DocsSeriesChip class="chip-pos" v-if="!hideSeriesChip && video.series && video.series.length" />
       </div>
     </template>
     <slot name="content" v-if="!thumbnail && !poster">
