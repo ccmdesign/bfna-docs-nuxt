@@ -23,7 +23,7 @@
         <docs-button v-if="route.params.slug && hasTrailer" class="trailer-btn" effect="pill" variant="secondary" icon="play_arrow" @click="handleWatchTrailer()">Watch Trailer</docs-button>
         <docs-button v-if="route.name === 'index'" effect="pill" variant="secondary" icon-after="arrow_forward" @click="moreInfo(currentVideo)">More Info</docs-button>
       </div>
-      <div class="awards-mobile-only" v-if="isMobile">
+      <div class="awards-mobile-only" v-if="isMobile && currentVideo.awards && currentVideo.awards.length">
         <docs-hero-extra id="hero-extra" />
       </div>
     </slot>

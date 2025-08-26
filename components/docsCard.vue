@@ -140,20 +140,7 @@ const posterImage = computed(() => {
     @pointerleave="handleMouseLeave"
     @click="moreInfo(video)">
         
-    <template v-if="!featured && showIframe && !poster && isYouTube(video.videoUrl)">
-      <iframe
-        ref="youtubeIframeRef"
-        id="video-iframe"
-        :key="showIframe + video.videoUrl"
-        class="card__video"
-        :src="youtubeEmbedUrl(video.videoUrl)"
-        frameborder="0"
-        allow="autoplay; encrypted-media"
-        allowfullscreen
-      ></iframe>
-    </template>
-
-    <template v-else-if="!featured && showIframe && !poster && isVimeo(video.videoUrl)">
+    <template v-if="!featured && showIframe && !poster && isVimeo(video.videoUrl)">
       <img 
         ref="videoRef"
         class="card__video" 

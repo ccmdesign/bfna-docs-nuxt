@@ -1,4 +1,5 @@
 <template>
+    <h2 class="h3 | featured-title" split-right>Featured Videos</h2>
     <docs-reel id="featured-reel" :style="featuredReelStyle">
       <template #reel>
         <docs-card v-for="i in videoStore.featuredVideosList" :video="i" poster :key="i.id"></docs-card>
@@ -61,5 +62,12 @@ const featuredReelStyle = computed(() => {
 #grid {
   grid-row: 8 / 9;
   z-index: 1;
+}
+
+.featured-title {
+  grid-column: content-start / content-end;
+}
+#featured-reel {
+  padding-block: var(--space-xs-l);
 }
 </style>

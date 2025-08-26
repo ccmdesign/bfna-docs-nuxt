@@ -174,6 +174,7 @@ const handleDocumentaries = async (docsItems) => {
       workstream: fields.workstream,
       tags: fields.tags,
       backgroundImage: fields.background_image.fields.file.url,
+      animatedThumbnail: await main.getAnimatedVimeoThumbnail(fields.video_url),
       source: source,
       screenings: screeningsList,
       video_info: { ...videoInfo, ...extraVideoInfo },
