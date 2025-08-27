@@ -29,7 +29,7 @@ const vimeoEmbedUrl = (url) => {
   return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0` : ''
 }
 
-const trailerUrl = computed(() => {
+const trailer = computed(() => {
   return currentVideo.value.video_info.teaser_url ? 
   {
     id: currentVideo.value.id,
@@ -48,7 +48,7 @@ const trailerUrl = computed(() => {
         :key="currentVideo.videoId"
         class="hero__video"
         :class="isPlaying ? 'hero__video-playing' : ''"
-        :src="isTrailer ? youtubeEmbedUrl(trailerUrl.videoUrl) : youtubeEmbedUrl(currentVideo.videoUrl)"
+        :src="isTrailer ? youtubeEmbedUrl(trailer.videoUrl) : youtubeEmbedUrl(currentVideo.videoUrl)"
         frameborder="0"
         allow="autoplay; encrypted-media"
         allowfullscreen
@@ -62,7 +62,7 @@ const trailerUrl = computed(() => {
         :key="currentVideo.videoUrl"
         class="hero__video"
         :class="isPlaying ? 'hero__video-playing' : ''"
-        :src="isTrailer ? vimeoEmbedUrl(trailerUrl.videoUrl) : vimeoEmbedUrl(currentVideo.videoUrl)"
+        :src="isTrailer ? vimeoEmbedUrl(trailer.videoUrl) : vimeoEmbedUrl(currentVideo.videoUrl)"
         frameborder="0"
         allow="autoplay; fullscreen"
         allowfullscreen

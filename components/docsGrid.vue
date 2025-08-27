@@ -9,9 +9,14 @@
       />
     </slot>
     <slot v-else>
-      <docs-card v-for="video in videos" 
-      :key="video.id" 
-      :video="video"/>
+  <docs-card v-for="video in videos" 
+  :key="video.id" 
+  :video="video"
+  :cardId="video.videoId"
+  :hoveredCard="hoveredCardId"
+  @setHoveredCard="(pay) => handleSetHoveredCard(pay)"
+  @clearHoveredCard="handleClearHoveredCard"
+  />
     </slot>
   </section>
 </template>
@@ -27,6 +32,15 @@ const props = defineProps({
     default: () => []
   }
 })
+
+const hoveredCardId = ref(null);
+const handleSetHoveredCard = (id) => {
+  hoveredCardId.value = id;
+}
+
+const handleClearHoveredCard = () => {
+  hoveredCardId.value = null;
+}
 
 const isMobile = computed(() => {
   if (typeof window === 'undefined') return false;

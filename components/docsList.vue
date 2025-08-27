@@ -54,6 +54,15 @@ const handleSerieItemClick = (item) => {
   navigateTo(`/${item.slug}`);
 }
 
+const hoveredCardId = ref(null);
+const handleSetHoveredCard = (id) => {
+  hoveredCardId.value = id;
+}
+
+const handleClearHoveredCard = () => {
+  hoveredCardId.value = null;
+}
+
 </script>
 
 <template>
@@ -63,7 +72,13 @@ const handleSerieItemClick = (item) => {
         <div class="docs-list__item-index">
           <span>{{ index + 1 }}</span>
         </div>
-        <docs-card thumbnail class="docs-list__item-thumbnail" :video="item" :key="item.id" />
+        <docs-card thumbnail class="docs-list__item-thumbnail" 
+        :video="item" 
+        :key="item.id" 
+        :cardId="item.videoId"
+        :hoveredCard="hoveredCardId"
+        @setHoveredCard="(pay) => handleSetHoveredCard(pay)"
+        @clearHoveredCard="handleClearHoveredCard"/>
         <div class="docs-list__item-text | stack">
           <div class="item-text-meta">
             <h3 class="font-size:-1 font-weight:600">{{ item.title }}</h3>

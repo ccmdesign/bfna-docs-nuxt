@@ -28,53 +28,39 @@ const props = defineProps({
       }
     })
   },
+  cardId: {
+    type: String,
+    default: null
+  },
   hideSeriesChip: {
+    type: Boolean,
+    default: false
+  },
+  hoveredCard: {
+    type: String,
+    default: null
+  },
+  isTrailer: {
     type: Boolean,
     default: false
   }
 })
 
-const showIframe = ref(false)
+const emit = defineEmits(['setHoveredCard', 'clearHoveredCard'])
+
 const handleMouseEnter = () => {
-  showIframe.value = true
+  emit('setHoveredCard', props.video.videoId)
 }
 
 const handleMouseLeave = () => {
-  showIframe.value = false
-
-  const iframeElement = document.querySelector('#video-iframe');
-  nextTick(() => {
-  if (iframeElement) {
-      iframeElement.src = ''; // Stop the video from playing
-      iframeElement.removeAttribute('src'); // Remove the src attribute to stop loading
-      iframeElement.setAttribute('style', 'display: none;'); // Hide the iframe
-      iframeElement.remove();
-    }
-  });
+  emit('clearHoveredCard')
 }
 
+// Use computed to determine if this card is hovered:
+const isHovered = computed(() => props.hoveredCard === props.cardId)
 
-const previewStartsAt = computed(() => {
-  return props.video.video_info.preview_start_at || 15
-})
-
-// Helper functions for embed URLs
-function isYouTube(url) {
-  return /youtube\.com|youtu\.be/.test(url)
-}
 function isVimeo(url) {
   return /vimeo\.com/.test(url)
-}
-function youtubeEmbedUrl(url) {
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/)
-  return match
-    ? `https://www.youtube.com/embed/${match[1]}?rel=0&autoplay=1&mute=1&controls=0&modestbranding=1`
-    : ''
-}
-
-function vimeoEmbedUrl(url) {
-  const match = url.match(/vimeo\.com\/(\d+)/)
-  return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0&muted=1&#t=${previewStartsAt.value}s` : ''
 }
 
 const backgroundStyle = computed(() => {
@@ -88,17 +74,25 @@ const backgroundStyle = computed(() => {
 })
 
 const router = useRouter();
+const route = useRoute();
 const videoStore = useVideoStore();
 const moreInfo = (video) => {
   videoStore.setCurrentVideo(video);
   
-  setTimeout(() => {
-    router.push({
-      name: `video-detail`,
-      path: video.slug,
-      params: { slug: video.slug }
+  if (props.isTrailer && route.name !== 'index') {
+    nextTick(() => {
+      videoStore.setTrailer(true);
+      videoStore.setIsPlaying(true);
     });
-  }, 100);
+  } else {
+    setTimeout(() => {
+      router.push({
+        name: `video-detail`,
+        path: video.slug,
+        params: { slug: video.slug }
+      });
+    }, 100);
+  }
 }
 
 const handleCurrentVideo = (video) => {
@@ -113,14 +107,6 @@ const toTop = () => {
     top: 0, 
     left: 0, 
     behavior: 'smooth'
-  });
-}
-
-const handlePlayVideo = (video) => {
-  videoStore.setCurrentVideo(video);
-  nextTick(() => {
-    videoStore.setIsPlaying(true);
-    toTop();
   });
 }
 
@@ -140,7 +126,7 @@ const posterImage = computed(() => {
     @pointerleave="handleMouseLeave"
     @click="moreInfo(video)">
         
-    <template v-if="!featured && showIframe && !poster && isVimeo(video.videoUrl)">
+    <template v-if="!featured && isHovered && !poster && isVimeo(video.videoUrl)">
       <img 
         ref="videoRef"
         class="card__video" 

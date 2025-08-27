@@ -22,7 +22,16 @@
 
     <template #extras>
       <docs-grid>
-        <docs-card v-if="trailer" :video="trailer" :thumbnail="true" :key="trailer.id"></docs-card>
+        <docs-card v-if="trailer" 
+        :video="trailer" 
+        :thumbnail="true" 
+        :key="trailer.id"
+        :cardId="trailer.id"
+        :isTrailer="Boolean(trailer)"
+        :hoveredCard="hoveredCardId"
+        @setHoveredCard="(pay) => handleSetHoveredCard(pay)"
+        @clearHoveredCard="handleClearHoveredCard"
+        ></docs-card>
       </docs-grid>
     </template>
     
@@ -34,7 +43,15 @@
 
     <template #related>
       <docs-grid>
-        <docs-card v-for="item in relatedItems" :video="item" :thumbnail="true" :key="item.videoId"></docs-card>
+        <docs-card v-for="item in relatedItems" 
+        :video="item" 
+        :thumbnail="true" 
+        :key="item.videoId"
+        :cardId="item.videoId"
+        :hoveredCard="hoveredCardId"
+        @setHoveredCard="(pay) => handleSetHoveredCard(pay)"
+        @clearHoveredCard="handleClearHoveredCard"
+        ></docs-card>
       </docs-grid>
     </template>
 
@@ -53,14 +70,18 @@ const videoStore = useVideoStore();
 videoStore.setCurrentVideoFromSlug(route.params.slug);
 const { currentVideo, videoList } = storeToRefs(videoStore);
 
+const hoveredCardId = ref(null);
+const handleSetHoveredCard = (id) => {
+  hoveredCardId.value = id;
+}
+
+const handleClearHoveredCard = () => {
+  hoveredCardId.value = null;
+}
+
 const trailer = computed(() => {
   return currentVideo.value.video_info.teaser_url ? 
-  {
-    id: currentVideo.value.id,
-    videoUrl: currentVideo.value.video_info.teaser_url,
-    video_info: currentVideo.value.video_info,
-    animatedThumbnail: currentVideo.value.animatedThumbnail
-  } : null;
+  { ... currentVideo.value, trailerUrl: currentVideo.value.video_info.teaser_url } : null;
 });
 
 const series = computed(() => {
