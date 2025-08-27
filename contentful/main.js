@@ -230,7 +230,7 @@ const getAnimatedVimeoThumbnail = async (url) => {
 
   // Helper to extract Vimeo ID from URL: TODO: this should be generic
   const extractVimeoId = (url) => {
-    const match = url.match(/vimeo\.com\/(\d+)/);
+    const match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
     return match ? match[1] : null;
   };
 
@@ -254,7 +254,10 @@ const getAnimatedVimeoThumbnail = async (url) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    if (Array.isArray(data.data) && data.data.length > 0) {
+    if (Array.isArray(data.data) && data.data.length > 1) {
+      const highProfile = data.data[1].sizes.find(item => item.profile_id === "High" || item.profile_id === "Low");
+      return highProfile ? highProfile.link : null;
+    } else if(Array.isArray(data.data) && data.data.length > 0) {
       const highProfile = data.data[0].sizes.find(item => item.profile_id === "High" || item.profile_id === "Low");
       return highProfile ? highProfile.link : null;
     }

@@ -80,7 +80,7 @@ function youtubeEmbedUrl(url) {
 }
 
 function vimeoEmbedUrl(url) {
-  const match = url.match(/vimeo\.com\/(\d+)/);
+  const match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0&muted=1&#t=${previewStartsAt.value}s` : '';
 }
 
@@ -198,7 +198,7 @@ onBeforeUnmount(() => {
 
     <!-- Vimeo player -->
     <template v-else-if="isVideoActive && showIframe && isVimeo(video.videoUrl)">
-      <iframe
+      <!-- <iframe
         ref="vimeoIframeRef"
         id="video-iframe"
         :key="showIframe + video.videoUrl"
@@ -207,19 +207,29 @@ onBeforeUnmount(() => {
         frameborder="0"
         allow="autoplay; fullscreen"
         allowfullscreen
-      ></iframe>
+      ></iframe> -->
+      <img 
+        ref="videoRef"
+        class="card__video" 
+        :src="video.animatedThumbnail" 
+        :muted="true"
+        loop 
+        playsinline
+        autoplay 
+        preload="auto"
+      ></img>
     </template>
 
     <!-- Footer - video info -->
     <slot name="content" v-if="!thumbnail">
       <div class="card__content-wrapper">
-        <span 
+        <!-- <span 
           v-if="isVideoActive" 
           @click.stop="handlePlayFromCardMeta" 
           class="material-symbols-outlined" 
           style="font-size: 48px;">
           play_circle
-        </span>
+        </span> -->
         <div class="card__content | stack">
           <h2 class="card__title">
             <nuxt-link @click.stop="moreInfo">{{ video.title }}</nuxt-link>

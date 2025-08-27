@@ -25,7 +25,7 @@ const youtubeEmbedUrl = (url) => {
 }
 
 const vimeoEmbedUrl = (url) => {
-  const match = url.match(/vimeo\.com\/(\d+)/)
+  const match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   return match ? `https://player.vimeo.com/video/${match[1]}?autoplay=1&background=0` : ''
 }
 
