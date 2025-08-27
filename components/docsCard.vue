@@ -152,6 +152,7 @@ const posterImage = computed(() => {
       <div class="card__content-wrapper">
         <div class="card__content | stack">
           <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
+          <h3 class="card__subtitle">{{ video.subtitle }}</h3>
           <div class="card__meta | cluster">
             <docs-meta>{{ video.video_info.duration }} min</docs-meta>
             <docs-meta>{{ video.video_info.year }}</docs-meta>
@@ -200,6 +201,12 @@ const posterImage = computed(() => {
   margin: 0;
   text-decoration: none;
   color: var(--white-color);
+}
+
+.card__subtitle{
+  font-size: var(--size--1);
+  color: var(--white-color-30-shade);
+
 }
 
 .card {
