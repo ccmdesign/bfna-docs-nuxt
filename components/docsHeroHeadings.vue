@@ -123,9 +123,17 @@ onUnmounted(() => {
 }
 
 .back-btn {
-  width: 45px;
-  gap: 1.1rem;
+  width: 42px;
+  height: 40px;
+  gap: 1rem;
   background-color: var(--base-color-60-tint);
+  padding-block: calc(var(--space-xs)) var(--space-xs);
+
+  @media (max-width: 768px) { 
+  width: 35px;
+  height: 35px;
+
+}
 }
 
 .trailer-btn {
