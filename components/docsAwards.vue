@@ -1,29 +1,10 @@
 <template>
-  <div class="doc-awards">
+  <div v-for="(award, index) in awards" :key="index" class="doc-awards">
     <img class="doc-awards__flag" src="/assets/award-ribbon.svg" alt="Award Ribbon" />
-    <h4 class="doc-awards__title">{{ currentAward.title }}</h4>
+    <h4 class="doc-awards__title">{{ award.institution }}</h4>
     <div class="cluster doc-awards__meta">
-      <docs-meta>{{ currentAward.year }}</docs-meta>
-      <docs-meta>{{ currentAward.institution }}</docs-meta>
+      <span>{{ award.year }}</span>
     </div>
-    <slot v-if="total > 1">
-      <span class="doc-awards__counter">{{ current+1 }}/{{ total }}</span>
-  
-      <div class="dot-container | cluster">
-        <div
-          v-for="(a, i) in currentVideo.awards"
-          :key="i"
-          class="dot"
-          :class="{ active: i === current }"
-          @click="current = i"
-        ></div>
-      </div>
-  
-      <div class="doc-awards__controls">
-        <docs-button icon="arrow_back_ios" size="s" @click="prev" />
-        <docs-button icon="arrow_forward_ios" size="s" @click="next" />
-      </div>
-    </slot>
   </div>
 </template>
 
@@ -31,45 +12,19 @@
 import { ref, computed } from 'vue'
 import { useVideoStore } from '~/stores/video';
 
-const { currentVideo } = useVideoStore();
+const videoStore = useVideoStore();
+const { currentVideo } = storeToRefs(videoStore);
 
-const awards = [
-  {
-    year: '2021',
-    festival: 'DC Shorts International Film Festival',
-    title: 'Official Selection',
-  },
-  {
-    year: '2022',
-    festival: 'Another Festival',
-    title: 'Best Documentary',
-  },
-  {
-    year: '2023',
-    festival: 'Yet Another Festival',
-    title: 'Audience Choice',
-  },
-]
+const awards = computed(() => currentVideo.value.awards);
 
-const current = ref(0)
-const total = currentVideo.awards.length
-
-const currentAward = computed(() => currentVideo.awards[current.value])
-
-function prev() {
-  current.value = (current.value - 1 + total) % total
-}
-function next() {
-  current.value = (current.value + 1) % total
-}
 </script>
 
 <style lang="scss" scoped>
 .doc-awards {
+  width: 100%;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto auto auto;
-  gap: var(--space-3xs-2xs);
   grid-template-areas:
     "flag title title"
     "flag meta meta"
@@ -79,7 +34,7 @@ function next() {
 .doc-awards__flag {
   grid-area: flag;
   aspect-ratio: 1/1;
-  width: 32px;
+  width: 25px;
   height: 52px;
   margin-inline-start: 0;
   object-fit: contain;
@@ -111,8 +66,8 @@ function next() {
 
 .doc-awards {
   backdrop-filter: blur(40px);
-  border-radius: var(--radius-l);
-  padding: var(--space-s-m);
+  border-radius: 5px;
+  padding: var(--space-3xs-2xs);
 }
 
 .dot {

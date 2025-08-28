@@ -35,7 +35,7 @@ onUnmounted(() => {
 }
 
 #hero-extra {
-  grid-column: 9/14;
+  grid-column: 10/14;
   grid-row: 3 / 4;
   z-index: 1;
   align-self: center;
