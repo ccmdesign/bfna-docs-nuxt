@@ -72,7 +72,7 @@ const tabs = computed(() => {
   return tablist;
 });
 
-const activeTab = ref(0)
+const activeTab = ref(tabs.value.findIndex(tab => tab.label === 'Information') !== -1 ? tabs.value.findIndex(tab => tab.label === 'Information') : 0);
 </script>
 
 <style scoped>
