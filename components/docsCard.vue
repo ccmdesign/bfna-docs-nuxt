@@ -129,8 +129,9 @@ const posterImage = computed(() => {
     <template v-if="!featured && isHovered && !poster && isVimeo(video.videoUrl)">
       <img 
         ref="videoRef"
-        class="card__video" 
-        :src="video.animatedThumbnail" 
+        class="card__video"
+        :class="{ 'card__video--hovered': isHovered }"
+        :src="video.animatedThumbnail"
         :muted="true"
         loop 
         playsinline
@@ -192,6 +193,16 @@ const posterImage = computed(() => {
   [thumbnail="true"] & {
     border-radius: var(--border-radius-s);
   }
+}
+
+.card__video--hovered {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+  box-shadow: 
+    0 0 20px 0 rgba(255, 255, 255, 0.1),
+    0 0 10px 0 rgba(255, 255, 255, 0.5),
+    0 0 4px 0 rgba(255, 255, 255, 0.5)
+    ;
 }
 
 .card__title a {
@@ -296,7 +307,7 @@ const posterImage = computed(() => {
 }
 
 .card[poster="true"]:hover {
-  transform: scale(1.1);
+  transform: scale(1.05) translateY(1ch);
 }
 
 .chip-pos {
