@@ -49,6 +49,10 @@ const featuredReelStyle = computed(() => {
 </script>
 
 <style scoped>
+h2 {
+  font-weight: bold;
+}
+
 #latest-reel {
   grid-row: 6 / 7;
   z-index: 1;
@@ -67,7 +71,10 @@ const featuredReelStyle = computed(() => {
 .featured-title {
   grid-column: content-start / content-end;
 }
+
 #featured-reel {
-  padding-block: var(--space-xs-l);
+  padding-block: unset;
+  padding-block-end: var(--space-xs-l);
 }
+
 </style>
