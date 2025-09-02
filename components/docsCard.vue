@@ -307,7 +307,7 @@ const posterImage = computed(() => {
 }
 
 .card[poster="true"]:hover {
-  transform: scale(1.05) translateY(1ch);
+  transform: scale(1.05) translateY(2ch);
 }
 
 .chip-pos {
