@@ -17,6 +17,9 @@ const { isPlaying, currentVideo } = storeToRefs(videoStore);
 
 <style lang="scss" scoped>
 .doc-hero-extra {
+  max-height: 340px;
+  overflow-y: scroll;
+  scrollbar-width: none;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
