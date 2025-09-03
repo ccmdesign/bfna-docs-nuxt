@@ -77,7 +77,7 @@ export const useVideoStore = defineStore('video', {
     navigation: true,
     menuVisibility: false,
     showDetails: false,
-    series: {} as Series,
+    series: [] as Series[],
     isPlaying: false,
     filterItems: {},
     filterOptions: {
@@ -106,7 +106,12 @@ export const useVideoStore = defineStore('video', {
       }
       // Find the video by slug
       return state.videoList.find(video => video.slug === slug) || state.currentVideo
-    }
+    },
+    getSerieTitle: (state) => (serieId: string) => {
+      if (!serieId || !state.series) return undefined
+      const serie = state.series.find(serie => serie.serieId === serieId)
+      return serie ? serie.title : undefined
+    },
   },
   
   actions: {
@@ -141,7 +146,7 @@ export const useVideoStore = defineStore('video', {
     setShowDetails(val: boolean) {
       this.showDetails = val
     },
-    setSeries(series: Series) {
+    setSeries(series: Series[]) {
       this.series = series
     },
     setIsPlaying(val: boolean) {

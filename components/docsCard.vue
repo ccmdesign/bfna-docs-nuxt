@@ -115,6 +115,10 @@ const posterImage = computed(() => {
   return props.video.video_info && props.video.video_info.poster ? props.video.video_info.poster : posterFromResources ? posterFromResources.url : props.video.backgroundImage;
 });
 
+const serieTitle = computed(() => {
+  return videoStore.getSerieTitle(props.video.series && props.video.series.length ? props.video.series[0]?.serieId : null)
+})
+
 </script>
 
 <template>
@@ -154,6 +158,7 @@ const posterImage = computed(() => {
         <div class="card__content | stack">
           <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
           <h3 class="card__subtitle">{{ video.subtitle }}</h3>
+          <h3 v-show="serieTitle" class="card__subtitle">Serie: {{ serieTitle }}</h3>
           <div class="card__meta | cluster">
             <docs-meta>{{ video.video_info.duration }} min</docs-meta>
             <docs-meta>{{ video.video_info.year }}</docs-meta>
