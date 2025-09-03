@@ -183,7 +183,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
       videoId: doc.sys.id,
       updated: doc.sys.updatedAt,
       title: fields.title,
-      subtitle: fields.subtitle,
+      subtitle: fields.subtitle ? fields.subtitle.split('(')[0].trim() : '',
       by: fields.by,
       description: fields.description,
       videoUrl: fields.video_url,
@@ -249,9 +249,11 @@ const getFeaturedDocs = async () => {
     const films = fields.films; // all featured videos
     const filmsDocs = await handleDocumentaries(films, seriesDocs);
     filmsDocs.forEach((doc, index) => {
-      doc.slug = main.slugify(doc.title);
-      doc.featuredOrder = index;
-      writeContent(doc, 'featuredvideos', true);
+      if(index > 0) {
+        doc.slug = main.slugify(doc.title);
+        doc.featuredOrder = index;
+        writeContent(doc, 'featuredvideos', true);
+      }
     });
 
   });
