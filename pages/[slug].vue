@@ -127,7 +127,7 @@ const ogTitle = computed(() => currentVideo.value.title ? currentVideo.value.tit
 const ogImage = computed(() => {
   let url = currentVideo.value.video_info?.thumb || currentVideo.value.video_info?.thumbnail;
   if (url && !url.startsWith('https://')) {
-    url = 'https://' + url.replace(/^https?:\/\//, '');
+    url = 'https:' + url.replace(/^https?:\/\//, '');
   }
   return url;
 });
