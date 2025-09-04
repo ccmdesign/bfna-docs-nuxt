@@ -130,29 +130,28 @@ const serieTitle = computed(() => {
     @pointerleave="handleMouseLeave"
     @click="moreInfo(video)">
         
-    <template v-if="!featured && isHovered && !poster && isVimeo(video.videoUrl)">
-      <img 
-        ref="videoRef"
-        class="card__video"
-        :class="{ 'card__video--hovered': isHovered }"
-        :src="video.animatedThumbnail"
-        :muted="true"
-        loop 
-        playsinline
-        autoplay 
-        preload="auto"
-      ></img>
-    </template>
-    <template v-else-if="poster">
-      <img class="card__poster" :src="posterImage" />
-      
-    </template>
-    <template v-else>
-      <div class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">
-        <!-- <DocsAwardFlagOnly v-if="video.awards && video.awards.length" /> -->
-        <DocsSeriesChip class="chip-pos" v-if="!hideSeriesChip && video.series && video.series.length" />
-      </div>
-    </template>
+      <template v-if="poster">
+        <img class="card__poster" :src="posterImage" />
+      </template>
+      <template v-else>
+        <div :class="{ 'card__video--hovered': isHovered }" class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">
+          <Transition name="fade-gif">
+            <img 
+              v-if="!featured && isHovered && !poster && isVimeo(video.videoUrl)"
+              ref="videoRef"
+              class="card__video card__video--fade"
+              :src="video.animatedThumbnail"
+              :muted="true"
+              loop 
+              playsinline
+              autoplay 
+              preload="auto"
+            />
+          </Transition>
+          <!-- <DocsAwardFlagOnly v-if="video.awards && video.awards.length" /> -->
+          <DocsSeriesChip class="chip-pos" v-if="!hideSeriesChip && video.series && video.series.length" />
+        </div>
+      </template>
     <slot name="content" v-if="!thumbnail && !poster">
       <div class="card__content-wrapper">
         <div class="card__content | stack">
@@ -320,6 +319,27 @@ const serieTitle = computed(() => {
   bottom: 8px;
   left: 8px;
   z-index: 2;
+}
+
+/* Fade transition for GIF */
+.fade-gif-enter-active, .fade-gif-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-gif-enter-from, .fade-gif-leave-to {
+  opacity: 0;
+}
+.fade-gif-enter-to, .fade-gif-leave-from {
+  opacity: 1;
+}
+
+.card__video--fade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
 }
 
 </style>
