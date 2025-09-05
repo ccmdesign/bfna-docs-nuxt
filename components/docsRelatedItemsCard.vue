@@ -17,7 +17,7 @@ const props = defineProps({
 const backgroundStyle = computed(() => {
   
   return {
-    backgroundImage: `url('${props.resource.type === 'pdf' ?  '/assets/pdf.jpg': props.resource.url }')`,
+    backgroundImage: `url('${props.resource.type === 'pdf' || props.resource.type === 'link' ?  `/assets/guidecovers/${props.resource.id}.webp` : props.resource.url }')`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }
@@ -33,15 +33,14 @@ const backgroundStyle = computed(() => {
     target="_blank"
     tabindex="0"
   >
-    <div class="card__video card__video--bg" :style="backgroundStyle"></div>
+    <div class="card__video card__video--bg card__poster" :style="backgroundStyle"></div>
     <slot name="content">
       <div class="card__content | stack">
-        <h2 class="card__title">
+        <h4 class="card__title">
           {{ resource.title }}
-        </h2>
+        </h4>
         <div class="card__meta | cluster">
           <docs-meta>{{ resource.type.toUpperCase() }}</docs-meta>
-          <docs-meta>{{ resource.size }}</docs-meta>
         </div>
       </div>
     </slot>
@@ -73,7 +72,7 @@ const backgroundStyle = computed(() => {
 }
 
 .card__title a {
-  font-size: var(--size-0);
+  font-size: medium;
   font-weight: 600;
   letter-spacing: 0.04em;
   margin: 0;
@@ -91,7 +90,7 @@ const backgroundStyle = computed(() => {
   @media (min-width: 321px) and (max-width: 768px) { grid-column: span 6; }
 
   @media (min-width: 769px) {
-    grid-column: span 3;
+    grid-column: span 2;
     transform-origin: top left;
   }
 }
@@ -99,7 +98,7 @@ const backgroundStyle = computed(() => {
 .card:hover {
   position: relative;
   z-index: 10;
-  transform: scale(1.25);
+  transform: scale(1.1);
   background-color: var(--white-color-10-shade);
   border-radius: 0 0 var(--border-radius-m) var(--border-radius-m);
   
@@ -114,15 +113,26 @@ const backgroundStyle = computed(() => {
       ;
   }
   
-  .card__content {
+  /* .card__content {
     padding: var(--space-xs);
     h2 { font-size: var(--size--3); }
   }
 
   .card__meta {
     font-size: var(--size--3);
-  }
+  } */
   
+}
+
+.card__poster {
+  width: 100%;
+  object-fit: cover;
+  border-radius: var(--border-radius-m);
+  aspect-ratio: 1/1.42;
+
+  &:hover {
+    border: solid 2px var(--white-color);
+  }
 }
 
 

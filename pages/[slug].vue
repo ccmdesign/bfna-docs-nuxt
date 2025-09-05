@@ -105,7 +105,7 @@ const series = computed(() => {
 });
 
 const studies = computed(() => {
-  return currentVideo.value.resources.filter(resource => resource.type === 'pdf');
+  return currentVideo.value.resources.filter(resource => resource.type === 'pdf' || resource.type === 'link');
 });
 
 const relatedItems = computed(() => {

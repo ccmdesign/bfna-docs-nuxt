@@ -42,7 +42,7 @@ const informationLength = computed(() => {
 });
 
 const studiesLength = computed(() => {
-  return currentVideo.value.resources.filter(resource => resource.type === 'pdf').length;
+  return currentVideo.value.resources.filter(resource => resource.type === 'pdf' || resource.type === 'link').length;
 });
 
 const information = { label: 'Information', slot: 'information', count: 1, class: '', showCounter: false };
