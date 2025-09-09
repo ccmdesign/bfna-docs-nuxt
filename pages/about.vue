@@ -37,15 +37,13 @@ videoStore.setNavigation(true);
   <div class="app-window app-page__wrapper subgrid">
     <div class="about-page__header">
       <a href="https://www.bfna.org/" target="_blank" class="router-link-exact-active router-link-active"><img src="/assets/bertelsmann-logo.png" alt="Bertelsman Foundation" class="logo"></a>
+      <a href="https://www.bfna.org/" target="_blank" class="router-link-exact-active router-link-active"><img src="/assets/bfna-documentaries-logo.png" alt="Bertelsman Foundation Documentaries" class="logo"></a>
     </div>
     <div class="about-us-view__text flex columns">
       <div class="row">
-        <p class="font-size:-1 font-weight:700">About the Foundation</p>
-        <p>
-          Why documentary films? The Bertelsmann Foundation believes in the power of film to bring the critical stories of our complicated times to life. The potential of the documentary medium extends far beyond offering a convenient replacement for the written word. As a think tank, we try to present research and data in new and innovative ways to a wider audience. In the information age rife with opinion and fake news, our cinematic approach values honesty and insight. Our films do not project a specific agenda, but rather offer candid perspectives that allow the viewer to draw their own conclusions.
-        </p>
-        <p>
-          Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect. Bertelsmann Foundation Documentaries have broadcast nationally on PBS, stream on platforms such as Kanopy, and have screened at leading film festivals, universities and institutions across the United States and Europe.
+        <p class="font-size:-1 font-weight:700">About Bertelsmann Foundation Documentaries</p>
+        <p>The Bertelsmann Foundation believes in the power of film to bring the critical stories of our complicated times to life. The potential of the documentary medium extends far beyond serving as a convenient replacement for the written word. We strive to present research in new and innovative ways to a wider audience. In an information age rife with opinion and fake news, our cinematic approach values honesty and insight. Our films do not project a specific agenda, but rather offer candid perspectives that allow the viewer to draw their own conclusions.</p>
+        <p>Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and—most importantly—where these issues intersect. Our films have broadcast nationally on PBS, streamed on leading online platforms, and screened at leading film festivals, universities, and institutions across the United States and Europe. As a non-profit institution, our films are always free to watch and share.
         </p>
       </div>
     </div>

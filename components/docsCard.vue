@@ -123,7 +123,7 @@ const serieTitle = computed(() => {
 
 <template>
   <div
-    class="card"
+    class="card | stack"
     :poster="poster"
     :thumbnail="thumbnail"
     @pointerenter="handleMouseEnter"
@@ -149,7 +149,7 @@ const serieTitle = computed(() => {
             />
           </Transition>
           <!-- <DocsAwardFlagOnly v-if="video.awards && video.awards.length" /> -->
-          <DocsSeriesChip class="chip-pos" v-if="!hideSeriesChip && video.series && video.series.length" />
+          <!-- <DocsSeriesChip class="chip-pos" v-if="!hideSeriesChip && video.series && video.series.length" /> -->
         </div>
       </template>
     <slot name="content" v-if="!thumbnail && !poster">
@@ -157,7 +157,7 @@ const serieTitle = computed(() => {
         <div class="card__content | stack">
           <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
           <h3 class="card__subtitle">{{ video.subtitle }}</h3>
-          <h3 v-show="serieTitle" class="card__subtitle">Serie: {{ serieTitle }}</h3>
+          <h3 v-show="serieTitle" class="card__subtitle">Series: {{ serieTitle }}</h3>
           <div class="card__meta | cluster">
             <docs-meta>{{ video.video_info.duration }} min</docs-meta>
             <docs-meta>{{ video.video_info.year }}</docs-meta>
@@ -174,7 +174,8 @@ const serieTitle = computed(() => {
 
 .card {
   width: 100%;
-  border-radius: var(--border-radius-m);
+  border-radius: var(--border-radius-s);
+  > * { --_stack-space: var(--space-3xs);}
 }
 
 .card__content-wrapper {
@@ -192,7 +193,7 @@ const serieTitle = computed(() => {
   object-fit: cover;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: var(--border-radius-m);
+  border-radius: var(--border-radius-s);
 
   [thumbnail="true"] & {
     border-radius: var(--border-radius-s);
@@ -253,7 +254,7 @@ const serieTitle = computed(() => {
 .card__poster {
   width: 100%;
   object-fit: cover;
-  border-radius: var(--border-radius-m);
+  border-radius: var(--border-radius-s);
   aspect-ratio: 1/1.42;
 
   &:hover {
@@ -319,6 +320,7 @@ const serieTitle = computed(() => {
   bottom: 8px;
   left: 8px;
   z-index: 2;
+  
 }
 
 /* Fade transition for GIF */

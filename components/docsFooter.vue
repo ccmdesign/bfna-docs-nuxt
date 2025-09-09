@@ -2,19 +2,11 @@
   <footer class="footer | subgrid">
     <div class="footer__content | subgrid">
       <ul>
-        <h4 class="h6">Topics</h4>
-        <li><a href="https://www.bfna.org/democracy/" target="_blank">Democracy</a></li>
-        <li><a href="https://www.bfna.org/politics-society/" target="_blank">Politics & Society</a></li>
-        <li><a href="https://www.bfna.org/digital-world/" target="_blank">Digital World</a></li>
-      </ul>
-      
-      <ul>
-        <h4 class="h6">The Foundation</h4>
-        <li><a href="/about" target="_blank">About the Foundation</a></li>
+        <h4 class="h6">Bertelsmann Foundation Documentaries</h4>
+        <li><a href="/about" target="_blank">About</a></li>
         <li><a href="https://www.bfna.org/" target="_blank">Visit the Bertelsmann Foundation</a></li>
         <li><a href="https://www.bfna.org/team/#board_of_directors" target="_blank">Board of Directors | Team</a></li>
         <li><a href="https://www.bfna.org/bertelsmann-stiftung/" target="_blank">Bertelsmann Stiftung</a></li>
-        <li><a href="mailto:info@bfna.org" target="_blank">Contact</a></li>
         <li><a href="/assets/Privacy-Policy.pdf" rel="noopener" target="_blank">Privacy Policy</a></li>
       </ul>
             
@@ -73,15 +65,15 @@ ul, div {
 }
 
 ul {
-  @media (min-width: 769px) { grid-column: span 2; }
+  @media (min-width: 769px) { grid-column: span 4; }
 }
 
 ul:first-child {
-  @media (min-width: 769px) { grid-column: span 3; }
+  @media (min-width: 769px) { grid-column: span 4 }
 }
 
 div {
-  @media (min-width: 769px) { grid-column: span 5; }
+  @media (min-width: 769px) { grid-column: span 4; }
 }
 
 /* Footer Skin */

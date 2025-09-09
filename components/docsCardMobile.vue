@@ -158,7 +158,7 @@ onBeforeUnmount(() => {
 <template>
   <div
     ref="cardRef"
-    class="card"
+    class="card | stack"
     :thumbnail="thumbnail"
     @pointerenter="handleMouseEnter"
     @pointerleave="handleMouseLeave"
@@ -178,7 +178,7 @@ onBeforeUnmount(() => {
           @click="handleCurrentVideo">
           <span class="card__overlay-text">Tap to Preview</span>
         </div>
-        <DocsSeriesChip class="chip-pos" v-if="video.series && video.series.length" />
+        <!-- <DocsSeriesChip class="chip-pos" v-if="video.series && video.series.length" /> -->
       </div>
     </template>
 
@@ -250,12 +250,15 @@ onBeforeUnmount(() => {
   width: 100%;
   border-radius: var(--border-radius-m);
   position: relative;
+  
+  > * { --_stack-space: var(--space-3xs);}
 }
 
 .card__content-wrapper {
   display: flex;
   align-items: center;
   gap: var(--space-3xs);
+  /* --_stack-space: var(--space-3xs); */
 
   position: relative;
   z-index: 5;
@@ -341,7 +344,7 @@ onBeforeUnmount(() => {
 
   .card__video {
     border-radius: var(--border-radius-m);
-    border: 1px solid transparent;
+    /* border: 1px solid transparent; */
   }
 }
 
