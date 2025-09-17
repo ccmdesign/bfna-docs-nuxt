@@ -127,13 +127,14 @@ onUnmounted(() => {
   height: 40px;
   gap: 1rem;
   background-color: var(--base-color-60-tint);
-  padding-block: calc(var(--space-xs)) var(--space-xs);
+  padding-block: 0 0 !important;
+  align-items: center;
 
   @media (max-width: 768px) { 
-  width: 35px;
-  height: 35px;
-
-}
+    width: 35px;
+    height: 35px;
+    align-items: center;
+  }
 }
 
 .trailer-btn {
