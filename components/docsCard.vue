@@ -131,7 +131,7 @@ const serieTitle = computed(() => {
     @click="moreInfo(video)">
         
       <template v-if="poster">
-        <img class="card__poster" :src="posterImage" />
+        <img class="card__poster" :src="posterImage" :alt="video.title" />
       </template>
       <template v-else>
         <div :class="{ 'card__video--hovered': isHovered }" class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">

@@ -113,7 +113,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
       }
 
       if(fields.video_info.fields.poster) {
-        videoInfo.poster = fields.video_info.fields.poster.fields.file.url
+        videoInfo.poster = `${fields.video_info.fields.poster.fields.file.url}?w=800&fm=webp&q=80&fit=fill`
       }
 
     }
@@ -158,7 +158,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
             id: element.sys.id,
             title: element.fields.title,
             description: element.fields.description,
-            url: fileFields.url,
+            url: fileFields.contentType.includes('image') ? `${fileFields.url}?w=800&fm=webp&q=80&fit=fill` : fileFields.url,
             size: size,
             type: resourceType,
             extension: ext
@@ -191,7 +191,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
       previewStartsAt: fields.previewStartsAt,
       workstream: fields.workstream,
       tags: fields.tags,
-      backgroundImage: fields.background_image.fields.file.url,
+      backgroundImage: `${fields.background_image.fields.file.url}?w=800&fm=webp&q=80&fit=fill`,
       source: source,
       screenings: screeningsList,
       video_info: { ...videoInfo, ...extraVideoInfo },
