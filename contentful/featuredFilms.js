@@ -221,7 +221,7 @@ const getSeries = async () => {
       serieId: sys.id,
       title: fields.title,
       slug: main.slugify(fields.title),
-      description: fields.description.content[0].content[0].value,
+      description: fields.description ? fields.description.content[0].content[0].value : '',
       documentaries: fields.items.map(item => item.sys.id),
       updated: fields.updatedAt
     }   
