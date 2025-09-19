@@ -1,8 +1,14 @@
 <template>
   <div class="by-line | subgrid">
-    <div class="by-line__content | cluster">
-      <span>© 2025 BFNA</span><span>Privacy</span><span>Terms</span>
-      <a href="#" split-left>by ccm.design</a>
+    <div class="by-line__content">
+      <div class="policy-links">
+        <span><a href="/assets/Privacy-Policy.pdf">Privacy</a></span>
+        <span>Terms</span>
+      </div>
+      <div class="logos">
+        <span>© 2025 BFNA</span>
+        <a href="#" split-left>by ccm.design</a>
+      </div>
     </div>
   </div>
 </template>
@@ -17,7 +23,7 @@
 .by-line {
   display: grid;
   grid-template-columns: subgrid;
-  grid-column: full-start / full-end;
+  grid-column: auto;
   font-size: var(--size--2);
   padding-block: var(--space-l) var(--space-s);
   color: var(--white-color-50-shade);
@@ -25,7 +31,21 @@
 }
 
 .by-line__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
   grid-column: content-start / content-end;
   --_cluster-space: var(--space-xs);
+  padding-top: var(--space-m);
+}
+
+.policy-links, .logos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+}
+.logos {
+  gap: unset;
 }
 </style>

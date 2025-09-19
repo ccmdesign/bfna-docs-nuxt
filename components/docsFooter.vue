@@ -1,36 +1,37 @@
 <template>
   <footer class="footer | subgrid">
     <div class="footer__content | subgrid">
+      <div class="stack">
+        <div class="cluster">
+          <a class="footer__logo" href="#">
+            <img src="/assets/bertelsmann-logo.png" alt="Bertelsmann Foundation" />
+          </a>
+          <a class="footer__logo" href="#">
+            <img src="/assets/bfna-documentaries-logo.png" alt="ccm.design" />
+          </a>
+        </div>
+        <p>Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.</p>
+      </div>
       <ul>
         <h4 class="h6">Bertelsmann Foundation Documentaries</h4>
-        <li><a href="/about" target="_blank">About</a></li>
+        <span class="divider"></span>
+        <li><a href="/about" target="_blank">About the Bertelsmann Foundation Documentaries</a></li>
         <li><a href="https://www.bfna.org/" target="_blank">Visit the Bertelsmann Foundation</a></li>
         <li><a href="https://www.bfna.org/team/#board_of_directors" target="_blank">Board of Directors | Team</a></li>
         <li><a href="https://www.bfna.org/bertelsmann-stiftung/" target="_blank">Bertelsmann Stiftung</a></li>
-        <li><a href="/assets/Privacy-Policy.pdf" rel="noopener" target="_blank">Privacy Policy</a></li>
+        <!-- <li><a href="/assets/Privacy-Policy.pdf" rel="noopener" target="_blank">Privacy Policy</a></li> -->
+        <!-- <by-line /> -->
       </ul>
             
-      <ul>
+      <!-- <ul>
         <h4 class="h6">Updates</h4>
         <li><a href="https://www.bfna.org/updates/#infographics" target="_blank">Publications</a></li>
         <li><a href="https://www.bfna.org/updates/#infographics" target="_blank">Infographics</a></li>
         <li><a href="https://www.bfna.org/updates/#videos" target="_blank">Videos</a></li>
-      </ul>
+      </ul> -->
+      <by-line />
+  </div>
 
-    <div class="stack">
-      <p>Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.</p>
-      <div class="cluster">
-        <a class="footer__logo" href="#">
-          <img src="/assets/bertelsmann-logo.png" alt="Bertelsmann Foundation" />
-        </a>
-        <a class="footer__logo" href="#">
-          <img src="/assets/bfna-documentaries-logo.png" alt="ccm.design" />
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <by-line />
   </footer>
 </template>
 
@@ -78,7 +79,7 @@ div {
 
 /* Footer Skin */
 .footer {
-  padding-block: var(--space-l) 0;
+  padding-block: var(--space-l) var(--space-l);
   
   p, li { font-size: var(--size--1); }
   h4 { padding-block-end: var(--space-2xs-xs); }
@@ -106,6 +107,15 @@ ul {
 
 img {
   max-width: 100%;
+}
+
+.divider {
+  border-top: 1px solid var(--black-color-80-tint);
+  margin-bottom: 24px;
+  width: 60vw;
+  height: 0;
+  display: block;
+  position: relative;
 }
 
 
