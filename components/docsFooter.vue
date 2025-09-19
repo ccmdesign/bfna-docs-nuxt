@@ -1,13 +1,13 @@
 <template>
   <footer class="footer | subgrid">
-    <div class="footer__content | subgrid">
+    <div class="footer__content">
       <div class="stack">
         <div class="cluster">
           <a class="footer__logo" href="#">
-            <img src="/assets/bertelsmann-logo.png" alt="Bertelsmann Foundation" />
+            <img src="/assets/bertelsmann-logo.png" alt="Bertelsmann Foundation" class="bfna-logo"/>
           </a>
           <a class="footer__logo" href="#">
-            <img src="/assets/bfna-documentaries-logo.png" alt="ccm.design" />
+            <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" class="bfna-documentaries-logo" />
           </a>
         </div>
         <p>Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.</p>
@@ -22,16 +22,8 @@
         <!-- <li><a href="/assets/Privacy-Policy.pdf" rel="noopener" target="_blank">Privacy Policy</a></li> -->
         <!-- <by-line /> -->
       </ul>
-            
-      <!-- <ul>
-        <h4 class="h6">Updates</h4>
-        <li><a href="https://www.bfna.org/updates/#infographics" target="_blank">Publications</a></li>
-        <li><a href="https://www.bfna.org/updates/#infographics" target="_blank">Infographics</a></li>
-        <li><a href="https://www.bfna.org/updates/#videos" target="_blank">Videos</a></li>
-      </ul> -->
-      <by-line />
-  </div>
-
+    </div>
+    <by-line class="by-line" />
   </footer>
 </template>
 
@@ -56,8 +48,6 @@
 }
 
 ul, div {
-  
-
   @media (max-width: 769px) {
     padding-block-start: var(--space-s);
     grid-template-columns: subgrid;
@@ -66,7 +56,9 @@ ul, div {
 }
 
 ul {
-  @media (min-width: 769px) { grid-column: span 4; }
+  @media (min-width: 769px) { 
+    grid-column: 8 / 14; 
+  }
 }
 
 ul:first-child {
@@ -109,14 +101,22 @@ img {
   max-width: 100%;
 }
 
-.divider {
-  border-top: 1px solid var(--black-color-80-tint);
-  margin-bottom: 24px;
-  width: 60vw;
-  height: 0;
-  display: block;
-  position: relative;
+.bfna-logo { max-width: 110px; }
+.bfna-documentaries-logo {
+  @media (min-width: 769px) {
+    transform: translateY(10px);
+  }
 }
 
+.divider {
+  border-top: 1px solid var(--black-color-80-tint);
+  margin-bottom: var(--space-s);
+  display: block;
+}
 
+.by-line {
+  grid-column: content-start / content-end;
+  grid-row: 10 / 11;
+  z-index: 1;
+}
 </style>

@@ -1,14 +1,10 @@
 <template>
-  <div class="by-line | subgrid">
-    <div class="by-line__content">
-      <div class="policy-links">
-        <span><a href="/assets/Privacy-Policy.pdf">Privacy</a></span>
-        <span>Terms</span>
-      </div>
-      <div class="logos">
-        <span>© 2025 BFNA</span>
-        <a href="#" split-left>by ccm.design</a>
-      </div>
+  <div class="by-line">
+    <div class="by-line__content | cluster">
+      <a href="/assets/Privacy-Policy.pdf">Privacy</a>
+      <!--<a href="">Terms</a>-->
+      <span split-left>© 2025 BFNA</span>
+      <a href="https://www.ccmdesign.ca/" target="_blank">by ccm.design</a>
     </div>
   </div>
 </template>
@@ -21,9 +17,9 @@
 /* By Line Layout - SubGrid */
 
 .by-line {
-  display: grid;
+  /* display: grid;
   grid-template-columns: subgrid;
-  grid-column: auto;
+  grid-column: auto; */
   font-size: var(--size--2);
   padding-block: var(--space-l) var(--space-s);
   color: var(--white-color-50-shade);
@@ -31,8 +27,8 @@
 }
 
 .by-line__content {
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
   gap: var(--space-s);
   grid-column: content-start / content-end;
   --_cluster-space: var(--space-xs);
@@ -40,12 +36,12 @@
 }
 
 .policy-links, .logos {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-xs);
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* align-items: flex-start; */
+  /* gap: var(--space-xs); */
 }
 .logos {
-  gap: unset;
+  /* gap: unset; */
 }
 </style>
