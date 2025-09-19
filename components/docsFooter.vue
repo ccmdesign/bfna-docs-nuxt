@@ -15,7 +15,7 @@
       <ul>
         <h4 class="h6">Bertelsmann Foundation Documentaries</h4>
         <span class="divider"></span>
-        <li><a href="/about" target="_blank">About the Bertelsmann Foundation Documentaries</a></li>
+        <li><a href="/about" target="_blank">About</a></li>
         <li><a href="https://www.bfna.org/" target="_blank">Visit the Bertelsmann Foundation</a></li>
         <li><a href="https://www.bfna.org/team/#board_of_directors" target="_blank">Board of Directors | Team</a></li>
         <li><a href="https://www.bfna.org/bertelsmann-stiftung/" target="_blank">Bertelsmann Stiftung</a></li>
