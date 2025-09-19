@@ -69,11 +69,12 @@ h2 {
 }
 
 .featured-title {
+  transform: translateY(1rem);
   grid-column: content-start / content-end;
 }
 
 #featured-reel {
-  padding-block: unset;
+  padding-block: 1rem;
   padding-block-end: var(--space-xs-l);
 }
 

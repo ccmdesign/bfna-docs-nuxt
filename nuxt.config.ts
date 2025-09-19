@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-const title = 'Bertelsmann Foundation documentaries';
+const title = 'BFNA Documentaries';
 const description = 'Documentaries produced by the Bertelsmann Foundation, showcasing various social and cultural topics.';
 const OG = '/assets/og_img_bfna.jpg';
 
@@ -33,6 +33,8 @@ export default defineNuxtConfig({
 },
   app: {
     head: {
+      title,
+      titleTemplate: '%s',
       meta: [
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         { property: 'og:site_name',  content: title},

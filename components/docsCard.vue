@@ -312,7 +312,7 @@ const serieTitle = computed(() => {
 }
 
 .card[poster="true"]:hover {
-  transform: scale(1.05) translateY(2ch);
+  transform: scale(1.05);
 }
 
 .chip-pos {
