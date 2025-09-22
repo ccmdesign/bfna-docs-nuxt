@@ -191,6 +191,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
       previewStartsAt: fields.previewStartsAt,
       workstream: fields.workstream,
       tags: fields.tags,
+      keywords: fields.keywords,
       backgroundImage: `${fields.background_image.fields.file.url}?w=800&fm=webp&q=80&fit=fill`,
       source: source,
       screenings: screeningsList,

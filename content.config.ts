@@ -114,6 +114,7 @@ export default defineContentConfig({
         series: z.array(z.unknown()),
         slug: z.string(),
         tags: z.array(z.string()),
+        keywords: z.array(z.string()),
         previewStartsAt: z.number().optional()
       })
     }),
@@ -197,6 +198,7 @@ export default defineContentConfig({
         series: z.array(z.unknown()),
         slug: z.string(),
         tags: z.array(z.string()),
+        keywords: z.array(z.string()),
         previewStartsAt: z.number().optional()
       })
     }),
@@ -239,6 +241,7 @@ export default defineContentConfig({
         slug: z.string(),
         featuredOrder: z.number(),
         tags: z.array(z.string()),
+        keywords: z.array(z.string()),
         previewStartsAt: z.number().optional()
       })
     }),

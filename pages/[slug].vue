@@ -136,7 +136,7 @@ const ogDescription = computed(() => {
 });
 
 const keywords = computed(() => {
-  return currentVideo.value.tags ? currentVideo.value.tags.join(', ') : 'Bertelsmann Foundation, documentaries, governance, economics, elections, social issues, digital revolution';
+  return currentVideo.value.keywords ? currentVideo.value.keywords.join(', ') : 'Bertelsmann Foundation, documentaries, governance, economics, elections, social issues, digital revolution';
 });
 
 useSeoMeta({
