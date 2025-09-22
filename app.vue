@@ -16,7 +16,7 @@ videoStore.setFeaturedVideo(featured.value);
 const { data: featuredvideos } = await useAsyncData('featuredvideos', () => queryCollection('featuredvideos').order('featuredOrder', 'ASC').all())
 videoStore.setFeaturedList(featuredvideos.value);
 
-const { data: allvideos } = await useAsyncData('allvideos', () => queryCollection('allvideos').order('order', 'ASC').all())
+const { data: allvideos } = await useAsyncData('allvideos', () => queryCollection('allvideos').order('docYear', 'ASC').order('order', 'ASC').all())
 videoStore.setVideos(allvideos.value);
 
 const { data: latest } = await useAsyncData('latest', () => queryCollection('latest').order('order', 'ASC').all())

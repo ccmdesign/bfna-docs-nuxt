@@ -180,6 +180,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
     }
     documentaries.push({
       id: doc.sys.id,
+      docYear: fields.date ? new Date(fields.date).getFullYear() : extraVideoInfo.year,
       videoId: doc.sys.id,
       updated: doc.sys.updatedAt,
       title: fields.title,

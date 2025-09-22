@@ -79,6 +79,7 @@ export default defineContentConfig({
         id: z.string(),
         videoId: z.string(),
         order: z.number(),
+        docYear: z.number(),
         title: z.string(),
         subtitle: z.string(),
         by: z.string(),
