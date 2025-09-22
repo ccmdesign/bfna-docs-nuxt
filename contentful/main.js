@@ -1,5 +1,6 @@
 require('dotenv').config();
 const contentful = require("contentful");
+const axios = require('axios');
 
 const contentfulClient = contentful.createClient({
   space: process.env.CONTENTFUL_SPACE_ID,
@@ -254,18 +255,69 @@ const getAnimatedVimeoThumbnail = async (url) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
+
+    if(videoId === '1119430814') {
+      console.log(33, videoId)
+      console.log(45, data)
+    }
+
     if (Array.isArray(data.data) && data.data.length > 1) {
       const highProfile = data.data[1].sizes.find(item => item.profile_id === "High" || item.profile_id === "Low");
       return highProfile ? highProfile.link : null;
     } else if(Array.isArray(data.data) && data.data.length > 0) {
       const highProfile = data.data[0].sizes.find(item => item.profile_id === "High" || item.profile_id === "Low");
       return highProfile ? highProfile.link : null;
+    } else if(Array.isArray(data.data) && data.data.length === 0) {
+      console.log(`Thumbnail creation process initiated for the url: ${ url }`);
+      await __createAnimatedThumbnails(accessToken, videoId);
+      // Wait a bit for Vimeo to process (optional: increase if needed)
+      await new Promise(res => setTimeout(res, 50000));
+      return await getAnimatedVimeoThumbnail(url);
     }
   } catch (error) {
     console.error("Error fetching animated Vimeo thumbnail:", error);
     return null;
   }
 };
+
+/**
+ * Create animated thumbnails for a Vimeo video
+ * @param {string} accessToken - Your Vimeo API access token
+ * @param {string} videoId - The ID of the video to create thumbnails for
+ * @param {number} duration - Duration of each thumbnail in seconds (default: 2)
+ * @param {number} quantity - Number of thumbnails to create (default: 4)
+ */
+async function __createAnimatedThumbnails(accessToken, videoId, duration = 6, quantity = 4) {
+  try {
+    // API endpoint for creating animated thumbnails
+    const endpoint = `https://api.vimeo.com/videos/${videoId}/animated_thumbsets`;
+    
+    // Request headers
+    const headers = {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/vnd.vimeo.*+json;version=3.4'
+    };
+    
+    // Request body
+    const requestBody = {
+      duration: duration,
+      quantity: quantity,
+      start_time: 15
+    };
+    
+    // Make the POST request to create animated thumbnails
+    const response = await axios.post(endpoint, requestBody, { headers });
+    
+    console.log('Animated thumbnails created successfully:');
+    console.log(response.data);
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error creating animated thumbnails:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+}
 
 module.exports = {
   contentfulClient,
