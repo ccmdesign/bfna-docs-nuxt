@@ -119,11 +119,6 @@ const serieTitle = computed(() => {
   return videoStore.getSerieTitle(props.video.series && props.video.series.length ? props.video.series[0]?.serieId : null)
 })
 
-const isMobile = computed(() => {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(max-width: 768px)').matches;
-})
-
 </script>
 
 <template>
@@ -157,7 +152,7 @@ const isMobile = computed(() => {
           <!-- <DocsSeriesChip class="chip-pos" v-if="!hideSeriesChip && video.series && video.series.length" /> -->
         </div>
       </template>
-    <slot name="content" v-if="isMobile && !thumbnail && !poster">
+    <slot name="content" v-if="!thumbnail && !poster">
       <div class="card__content-wrapper">
         <div class="card__content | stack">
           <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
