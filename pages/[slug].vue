@@ -109,6 +109,12 @@ const studies = computed(() => {
 });
 
 const relatedItems = computed(() => {
+  if (currentVideo.value.relatedDocumentaries.length) {
+    return videoList.value.filter(item => 
+      currentVideo.value.relatedDocumentaries.includes(item.videoId)
+    );
+  }
+
   if (!currentVideo.value.tags || !Array.isArray(currentVideo.value.tags)) return [];
   return videoList.value.filter(item => 
     item.id !== currentVideo.value.id && // Exclude current video
