@@ -35,31 +35,35 @@ videoStore.setNavigation(true);
 
 <template>
   <div class="app-window app-page__wrapper subgrid">
-    <div class="about-page__header">
-      <a href="https://www.bfna.org/" target="_blank" class="router-link-exact-active router-link-active"><img src="/assets/bertelsmann-logo.png" alt="Bertelsman Foundation" class="logo"></a>
-      <a href="https://www.bfna.org/" target="_blank" class="router-link-exact-active router-link-active"><img src="/assets/bfna-documentaries-logo.png" alt="Bertelsman Foundation Documentaries" class="logo"></a>
-    </div>
     <div class="about-us-view__text flex columns">
       <div class="row">
-        <p class="font-size:-1 font-weight:700">About Bertelsmann Foundation Documentaries</p>
+        <h2 class="font-size:2 font-weight:700">About Bertelsmann Foundation Documentaries</h2>
         <p>The Bertelsmann Foundation believes in the power of film to bring the critical stories of our complicated times to life. The potential of the documentary medium extends far beyond serving as a convenient replacement for the written word. We strive to present research in new and innovative ways to a wider audience. In an information age rife with opinion and fake news, our cinematic approach values honesty and insight. Our films do not project a specific agenda, but rather offer candid perspectives that allow the viewer to draw their own conclusions.</p>
         <p>Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and—most importantly—where these issues intersect. Our films have broadcast nationally on PBS, streamed on leading online platforms, and screened at leading film festivals, universities, and institutions across the United States and Europe. As a non-profit institution, our films are always free to watch and share.
         </p>
       </div>
+
+      <div class="about-page__header">
+        <a href="https://www.bfna.org/" target="_blank" class="router-link-exact-active router-link-active"><img src="/assets/bertelsmann-logo.png" alt="Bertelsman Foundation" class="logo"></a>
+        <a href="https://www.bfna.org/" target="_blank" class="router-link-exact-active router-link-active"><img src="/assets/bfna-documentaries-logo.png" alt="Bertelsman Foundation Documentaries" class="logo"></a>
+      </div>
     </div>
-    <div class="about-page__header">
-      <img src="/assets/samuel-george.webp" alt="Dr. Samuel George picture" />
-    </div>
-    <div class="about-us-view__text flex columns">
-      <div class="row">
-        <p class="font-size:-1 font-weight:700">Contact</p>
-        <div class="row__group">
-          <p class="font-size:2">Dr. Samuel George</p>
-          <p class="font-style:italic">Director</p>
-        </div>
-        <div class="row__group ">
-          <p>Bertelsmann Foundation Documentaries</p>
-          <a href="mailto:samuel.george@bfna.org">samuel.george@bfna.org</a>
+
+    <div class="about-page__profile">
+      <div class="about-page__profile-image">
+        <img src="/assets/samuel-george.webp" alt="Dr. Samuel George picture" />
+      </div>
+      <div class="about-us-view__text_contact flex columns">
+        <div class="row">
+          <p class="font-size:-1 font-weight:700">Contact</p>
+          <div class="row__group">
+            <p class="font-size:2">Dr. Samuel George</p>
+            <p class="font-style:italic">Director</p>
+          </div>
+          <div class="row__group ">
+            <p>Bertelsmann Foundation Documentaries</p>
+            <a href="mailto:samuel.george@bfna.org">samuel.george@bfna.org</a>
+          </div>
         </div>
       </div>
     </div>
@@ -75,6 +79,31 @@ videoStore.setNavigation(true);
   row-gap: var(--space-xl);
 }
 
+.about-page__profile {
+  grid-column: 5 / content-end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xl);
+
+  &-image {
+    width: 100%;
+    max-width: 340px;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    grid-column: content-start / content-end;
+    align-items: center;
+    text-align: center;
+  }
+}
+
 .logo {
   max-width: 350px;
   @media (max-width: 768px) {
@@ -83,10 +112,9 @@ videoStore.setNavigation(true);
 }
 
 .about-page__header {
-  grid-column: 1 / 4;
+  grid-column: 5 / content-end;
   display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
+  gap: 4rem;
   @media (max-width: 768px) {
     grid-column: content-start / content-end;
   }
@@ -110,13 +138,29 @@ videoStore.setNavigation(true);
   &__text {
     font-weight: 500;
     line-height: 30px;
-    grid-column: 5 / content-end;
+    grid-column: content-start;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
     gap: var(--space-xl);
     @media (max-width: 768px) {
       grid-column: content-start / content-end;
+    }
+  }
+
+  &__text_contact {
+    font-weight: 500;
+    line-height: 30px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-xl);
+    width: 100%;
+    max-width: 340px;
+    @media (max-width: 768px) {
+      align-items: center;
+      text-align: center;
     }
   }
 
