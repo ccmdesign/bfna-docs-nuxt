@@ -76,9 +76,11 @@ const backgroundStyle = computed(() => {
 const router = useRouter();
 const route = useRoute();
 const videoStore = useVideoStore();
+const landingStore = useLandingStore();
+
 const moreInfo = (video) => {
   videoStore.setCurrentVideo(video);
-  
+  landingStore.setLanding(false);
   if (props.isTrailer && route.name !== 'index') {
     nextTick(() => {
       videoStore.setTrailer(true);

@@ -14,6 +14,7 @@
 
 <script setup>
 import { useVideoStore } from '~/stores/video';
+import { useLandingStore } from '~/stores/landing';
 import { storeToRefs } from 'pinia';
 
 const videoStore = useVideoStore();
@@ -26,7 +27,9 @@ function checkMobile() {
   isMobile.value = window.innerWidth <= 768;
 }
 
+const landingStore = useLandingStore();
 const handleGoHome = () => {
+  landingStore.setLanding(true);
   videoStore.resetToHome();
   navigateTo('/');
 };
