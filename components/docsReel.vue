@@ -1,5 +1,5 @@
 <template>
-  <div class="reel-grid | subgrid">
+  <div ref="root" class="reel-grid | subgrid">
     <slot name="reel">
       <docs-card v-for="i in 5" :key="i"></docs-card>
     </slot>
@@ -7,6 +7,9 @@
 </template>
 
 <script setup>
+const root = ref(null);
+
+defineExpose({ root });
 
 </script>
 
@@ -36,7 +39,7 @@
   display: flex;
   padding-block: var(--space-xs-s);
   block-size: auto;
-  /* overflow-x: hidden; */
+  overflow-x: auto;
   overflow-y: hidden;
   gap: var(--base-gutter);
 }
