@@ -43,6 +43,10 @@ const props = defineProps({
   isTrailer: {
     type: Boolean,
     default: false
+  },
+  border: {
+    type: Boolean,
+    defalt: false
   }
 })
 
@@ -133,7 +137,7 @@ const serieTitle = computed(() => {
     @click="moreInfo(video)">
         
       <template v-if="poster">
-        <img class="card__poster" :src="posterImage" :alt="video.title" />
+        <img class="card__poster" :class="{'card__poster-border' : border }" :src="posterImage" :alt="video.title" />
       </template>
       <template v-else>
         <div :class="{ 'card__video--hovered': isHovered }" class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">
@@ -263,6 +267,11 @@ const serieTitle = computed(() => {
     border: solid 2px var(--white-color);
   }
 }
+
+.card__poster-border {
+  border: solid 2px var(--white-color);
+}
+
 
 /* TODO: Add hover effect with transition */
 /* Exploring transitions for hover effect */

@@ -8,7 +8,7 @@
         <p class="font-size:-1">{{ currentVideo.video_info.column_2_text }}</p>
       </div>
       <div class="extras">
-        <docs-card :video="currentVideo" poster style="max-width: fit-content;"></docs-card>
+        <docs-card :video="currentVideo" poster :border=true style="max-width: fit-content;"></docs-card>
 
       </div>
     </template>
