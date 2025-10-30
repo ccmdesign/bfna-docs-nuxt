@@ -2,8 +2,8 @@
   <div v-if="!isPlaying" class="hero-headings | subgrid stack" :class="{'hero-landing' : isLanding}">
     <slot v-if="isLanding" name="content">
       <docs-button v-if="route.name !== 'index'" class="back-btn" effect="pill" variant="secondary" icon="arrow_back_ios" @click="backHome"><span style="text-transform: uppercase;">Back</span></docs-button>
-      <h1 class="hero__title" style="font-size: 5rem;">Critial Stories for Our Complex World</h1>
-      <div class="hero__author | font-size:3" style="letter-spacing: 5px;">Bertelsmann Foundation Documentaries</div>
+      <h1 class="hero__title" style="font-size: 3.6rem;">Critical Stories for Our Complex World</h1>
+      <div class="hero__author | font-size:3" style="letter-spacing: 1px;">Bertelsmann Foundation Documentaries</div>
     </slot>
     <slot v-else name="content">
       <docs-button v-if="route.name !== 'index'" class="back-btn" effect="pill" variant="secondary" icon="arrow_back_ios" @click="backHome"><span style="text-transform: uppercase;">Back</span></docs-button>
