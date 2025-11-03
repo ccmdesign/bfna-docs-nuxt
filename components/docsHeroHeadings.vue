@@ -104,6 +104,7 @@ onUnmounted(() => {
   grid-row: 3 / 4;
   justify-self: end;
   padding-block-end: var(--space-3xl);
+  align-self: center;
 
   @media (max-width: 768px) { padding-block-end: var(--space-m); }
   @media (min-width: 768px) { grid-column: content-start / col2; }
