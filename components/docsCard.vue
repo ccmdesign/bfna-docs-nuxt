@@ -85,6 +85,9 @@ const landingStore = useLandingStore();
 const moreInfo = (video) => {
   videoStore.setCurrentVideo(video);
   landingStore.setLanding(false);
+  if (props.poster) {
+    toTop();
+  }
   if (props.isTrailer && route.name !== 'index') {
     nextTick(() => {
       videoStore.setTrailer(true);
