@@ -131,10 +131,20 @@ const scrollFeatured = (direction) => {
     return;
   }
 
-  const maxScrollLeft = Math.max(reel.scrollWidth - reel.clientWidth, 0);
-  const target = direction === 'right' ? maxScrollLeft : 0;
+  // const maxScrollLeft = Math.max(reel.scrollWidth - reel.clientWidth, 0);
+  // const target = direction === 'right' ? maxScrollLeft : 0;
 
-  reel.scrollTo({ left: target, behavior: 'smooth' });
+  // reel.scrollTo({ left: target, behavior: 'smooth' });
+  const firstCard = reel.querySelector('.card');
+  const styles = getComputedStyle(reel);
+  const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
+  const cardWidth = firstCard ? firstCard.getBoundingClientRect().width : reel.clientWidth / 4;
+  const distance = 3 * (cardWidth + gap);
+  const maxScrollLeft = Math.max(reel.scrollWidth - reel.clientWidth, 0);
+  const step = direction === 'right' ? distance : -distance;
+  const target = reel.scrollLeft + step;
+  const nextLeft = direction === 'right' ? Math.min(target, maxScrollLeft) : Math.max(target, 0);
+  reel.scrollTo({ left: nextLeft, behavior: 'smooth' });
   requestAnimationFrame(() => updateNavigationVisibility());
   setTimeout(() => updateNavigationVisibility(), 350);
 };
