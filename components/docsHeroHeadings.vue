@@ -75,7 +75,6 @@ const landingStore = useLandingStore();
 const { isLanding, } = storeToRefs(landingStore);
 
 const backHome = () => {
-  landingStore.setLanding(true);
   router.push({ name: 'index' });
 }
 

@@ -90,7 +90,7 @@ const moreInfo = (video) => {
       videoStore.setTrailer(true);
       videoStore.setIsPlaying(true);
     });
-  } else {
+  } else if (!props.poster) {
     setTimeout(() => {
       router.push({
         name: `video-detail`,
