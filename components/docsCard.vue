@@ -80,11 +80,9 @@ const backgroundStyle = computed(() => {
 const router = useRouter();
 const route = useRoute();
 const videoStore = useVideoStore();
-const landingStore = useLandingStore();
 
 const moreInfo = (video) => {
   videoStore.setCurrentVideo(video);
-  landingStore.setLanding(false);
   if (props.poster) {
     toTop();
   }

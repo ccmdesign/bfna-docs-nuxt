@@ -1,12 +1,8 @@
 <template>
-  <div v-if="!isPlaying" class="hero-headings | subgrid stack" :class="{'hero-landing' : isLanding}">
-    <slot v-if="isLanding" name="content">
+  <div v-if="!isPlaying" class="hero-headings | subgrid stack">
+    <slot name="content">
       <docs-button v-if="route.name !== 'index'" class="back-btn" effect="pill" variant="secondary" icon="arrow_back_ios" @click="backHome"><span style="text-transform: uppercase;">Back</span></docs-button>
-      <h1 class="hero__title" style="font-size: 3.6rem;">Critical Stories for Our Complex World</h1>
-      <div class="hero__author | font-size:3" style="letter-spacing: 1px;">Bertelsmann Foundation Documentaries</div>
-    </slot>
-    <slot v-else name="content">
-      <docs-button v-if="route.name !== 'index'" class="back-btn" effect="pill" variant="secondary" icon="arrow_back_ios" @click="backHome"><span style="text-transform: uppercase;">Back</span></docs-button>
+      <span v-if="route.name === 'index'" style="padding-bottom: var(--size--2);">Critical Stories for Our Complex World</span>
       <h1 class="hero__title | font-size:5">{{ currentVideo.title }}</h1>
       <div class="hero__author | font-size:-1">By {{ currentVideo.by }}</div>
       <div class="hero__meta | cluster">
@@ -36,7 +32,6 @@
 
 <script setup>
 import { useVideoStore } from '~/stores/video';
-import { useLandingStore } from '~/stores/landing';
 import { storeToRefs } from 'pinia';
 
 const route = useRoute();
@@ -71,11 +66,7 @@ const moreInfo = (video) => {
   }, 100);
 }
 
-const landingStore = useLandingStore();
-const { isLanding, } = storeToRefs(landingStore);
-
 const backHome = () => {
-  landingStore.setLanding(true);
   router.push({ name: 'index' });
 }
 
@@ -115,11 +106,6 @@ onUnmounted(() => {
     --_stack-space: var(--space-s);
     --_cluster-space: var(--space-s);
   }
-}
-
-.hero-landing {
-  grid-row: 4 / 2 !important;
-  @media (min-width: 768px) { grid-column: content-start / col2; }
 }
 
 .awards-mobile-only {
