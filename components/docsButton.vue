@@ -59,6 +59,7 @@ defineProps({
   font-family: var(--font-family-icon);
   font-weight: 200;
   font-size: var(--size-0);
+  transform: translate(1px, 1px);
 }
 
 .docs-button[size="s"],
@@ -73,7 +74,7 @@ defineProps({
 
 .docs-button[effect="pill"] {
   border-radius: 100px;
-  padding-block: calc(var(--space-2xs) + 2px) var(--space-xs);
+  padding-block: calc(var(--space-xs) - 4px) var(--space-xs);
 }
 
 .docs-button[variant="primary"] {
@@ -96,5 +97,15 @@ defineProps({
 .docs-button[icon-after]:after {
   font-size: var(--size-0);
   content: attr(icon-after);
+}
+
+.docs-button:hover {
+  background-color: var(--white-color-05-shade);
+  border-color: var(--white-color-30-shade);
+}
+
+.docs-button[variant="primary"]:hover {
+  background-color: var(--white-color-90-shade);
+  border-color: var(--white-color-90-shade);
 }
 </style>

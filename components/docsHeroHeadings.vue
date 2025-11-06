@@ -1,18 +1,17 @@
 <template>
-  <div v-if="!isPlaying" class="hero-headings | subgrid stack">
+  <div v-if="!isPlaying" class="hero-headings | subgrid stack" :class="{ '| hero-headings--index': route.name === 'index' }">
     <slot name="content">
       <docs-button v-if="route.name !== 'index'" class="back-btn" effect="pill" variant="secondary" icon="arrow_back_ios" @click="backHome"><span style="text-transform: uppercase;">Back</span></docs-button>
-      <span v-if="route.name === 'index'" style="padding-bottom: var(--size--2);">Critical Stories for Our Complex World</span>
-      <h1 class="hero__title | font-size:5">{{ currentVideo.title }}</h1>
-      <div class="hero__author | font-size:-1">By {{ currentVideo.by }}</div>
-      <div class="hero__meta | cluster">
+      <h1 class="hero__title">{{ currentVideo.title }}</h1>
+      <div v-if="route.name !== 'index'" class="hero__author | font-size:-1">By {{ currentVideo.by }}</div>
+      <div v-if="route.name !== 'index'" class="hero__meta | cluster">
         <docs-meta white>{{ currentVideo.video_info.duration }}min</docs-meta>
         <docs-meta>{{ currentVideo.video_info.year }}</docs-meta>
         <div class="hero__tags">
           <docs-chip v-for="tag in currentVideo.tags" :key="tag" :tag="tag" />
         </div>
       </div>
-      <p
+      <p v-if="route.name !== 'index'"
         :class="['font-size:-1', route.name === 'index' ? 'hero__description' : '']"
       >
         {{ currentVideo.description }}
@@ -108,6 +107,8 @@ onUnmounted(() => {
   }
 }
 
+.hero__title { font-size: var(--size-5); }
+
 .awards-mobile-only {
   margin: 10px 0;
   padding: 4px 0;
@@ -141,5 +142,4 @@ onUnmounted(() => {
 .trailer-btn {
   background-color: var(--base-color-60-tint);
 }
-
 </style>

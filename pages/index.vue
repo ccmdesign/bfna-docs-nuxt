@@ -1,4 +1,12 @@
 <template>
+  <NuxtLayout name="default">
+    <template #hero>
+      <hgroup class="site-title">
+        <h1 class="site-title__title">Critical Stories for Our Complex World</h1>
+      </hgroup>
+      <docs-hero-headings id="hero" />
+    </template>
+
     <h2 class="h3 | featured-title" split-right>Featured Videos</h2>
     <div class="featured-reel-wrapper">
       <button
@@ -38,10 +46,15 @@
     <docs-tools id="grid-heading" />
       
     <docs-grid id="grid" :videos="videos" />
+  </NuxtLayout>
 </template>
 
 <script setup>
 import { useVideoStore } from '~/stores/video';
+
+definePageMeta({
+  layout: false
+});
 
 const videoStore = useVideoStore();
 const { filterOptions } = storeToRefs(videoStore);
@@ -49,6 +62,11 @@ const featuredReelComponent = ref(null);
 const featuredReelElement = ref(null);
 const showLeftArrow = ref(false);
 const showRightArrow = ref(false);
+const isMobile = ref(false);
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768;
+};
 
 const videos = computed(() => {
   return videoStore.videoList.filter(video => {
@@ -153,11 +171,14 @@ onMounted(() => {
   nextTick(() => {
     attachFeaturedReelElement();
   });
+  checkMobile();
   window.addEventListener('resize', updateNavigationVisibility);
+  window.addEventListener('resize', checkMobile);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', updateNavigationVisibility);
+  window.removeEventListener('resize', checkMobile);
   detachFeaturedReelListener();
 });
 
@@ -173,6 +194,31 @@ watch(
 </script>
 
 <style scoped>
+/* Custom Styles for Hero at Homepage */
+.site-title {
+  grid-column: content-start / 10;
+  grid-row: 2 / 3;
+  align-self: center;
+  z-index: 1;
+}
+
+.site-title__title {
+  font-size: calc(var(--size-5) * 1.5);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+.hero-headings--index {
+  grid-column: 8 / 14;
+  grid-row: 2 / 3;
+  justify-self: end;
+  align-self: end;
+  text-align: right;
+  padding-bottom: var(--space-l);
+}
+
+:deep(.hero-headings--index .hero__title) { font-size: var(--size-3); }
+
 h2 {
   font-weight: bold;
 }

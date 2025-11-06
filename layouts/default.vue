@@ -19,8 +19,10 @@ onUnmounted(() => {
   <master-grid>
     <docs-topbar id="topbar" />
     <docs-hero-video id="hero-video" />
-    <docs-hero-headings id="hero" />
-    <docs-hero-extra id="hero-extra" v-if="!isMobile" />
+    <slot name="hero">
+      <docs-hero-headings id="hero" />
+      <docs-hero-extra id="hero-extra" v-if="!isMobile" />
+    </slot>
 
     <slot />
 
