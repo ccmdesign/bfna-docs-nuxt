@@ -196,14 +196,8 @@ watch(
 <style scoped>
 /* Custom Styles for Hero at Homepage */
 
-:root {
-  --logo-offset: 10svw;
-}
-
 :deep(.site-logo) {
-  top: var(--logo-offset);
-  transform: scale(1.5);
-  transform-origin: top left;
+  
 }
 
 .site-title {
@@ -221,6 +215,7 @@ watch(
   font-size: calc(var(--size-5) * 1.5);
   font-weight: 700;
   text-wrap: balance;
+  
 }
 
 .hero-headings--index {

@@ -111,13 +111,18 @@ onUnmounted(() => {
   .hero__actions {
     --_stack-space: var(--space-s);
     --_cluster-space: var(--space-s);
+
+    justify-content: flex-end;
+    @media (max-width: 768px) {
+      justify-content: flex-start;
+    }
   }
 }
 
 .hero__title { font-size: var(--size-5); }
 
 .hero-headings--index .hero__title {
-  font-size: var(--size-2);
+  font-size: var(--size-3);
 }
 
 .awards-mobile-only {
