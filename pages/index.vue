@@ -2,7 +2,7 @@
   <NuxtLayout name="default">
     <template #hero>
       <hgroup class="site-title">
-        <h1 class="site-title__title">Critical Stories for Our Complex World</h1>
+        <h1 v-if="!isPlaying" class="site-title__title">Critical Stories for Our Complex World</h1>
       </hgroup>
       <docs-hero-headings id="hero" :is-index="true" />
     </template>
@@ -57,7 +57,7 @@ definePageMeta({
 });
 
 const videoStore = useVideoStore();
-const { filterOptions } = storeToRefs(videoStore);
+const { filterOptions, isPlaying } = storeToRefs(videoStore);
 const featuredReelComponent = ref(null);
 const featuredReelElement = ref(null);
 const showLeftArrow = ref(false);
