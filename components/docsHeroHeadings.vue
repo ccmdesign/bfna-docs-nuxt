@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isPlaying" class="hero-headings | subgrid stack" :class="{ '| hero-headings--index': route.name === 'index' }">
+  <div v-if="!isPlaying" class="hero-headings | subgrid stack" :class="{ '| hero-headings--index': isIndex || route.name === 'index' }">
     <slot name="content">
       <docs-button v-if="route.name !== 'index'" class="back-btn" effect="pill" variant="secondary" icon="arrow_back_ios" @click="backHome"><span style="text-transform: uppercase;">Back</span></docs-button>
       <h1 class="hero__title">{{ currentVideo.title }}</h1>
@@ -32,6 +32,13 @@
 <script setup>
 import { useVideoStore } from '~/stores/video';
 import { storeToRefs } from 'pinia';
+
+const props = defineProps({
+  isIndex: {
+    type: Boolean,
+    default: false
+  }
+});
 
 const route = useRoute();
 const videoStore = useVideoStore();
@@ -108,6 +115,10 @@ onUnmounted(() => {
 }
 
 .hero__title { font-size: var(--size-5); }
+
+.hero-headings--index .hero__title {
+  font-size: var(--size-2);
+}
 
 .awards-mobile-only {
   margin: 10px 0;

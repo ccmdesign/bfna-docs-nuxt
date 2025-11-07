@@ -4,7 +4,7 @@
       <hgroup class="site-title">
         <h1 class="site-title__title">Critical Stories for Our Complex World</h1>
       </hgroup>
-      <docs-hero-headings id="hero" />
+      <docs-hero-headings id="hero" :is-index="true" />
     </template>
 
     <h2 class="h3 | featured-title" split-right>Featured Videos</h2>
@@ -195,11 +195,26 @@ watch(
 
 <style scoped>
 /* Custom Styles for Hero at Homepage */
+
+:root {
+  --logo-offset: 10svw;
+}
+
+:deep(.site-logo) {
+  top: var(--logo-offset);
+  transform: scale(1.5);
+  transform-origin: top left;
+}
+
 .site-title {
   grid-column: content-start / 10;
   grid-row: 2 / 3;
   align-self: center;
   z-index: 1;
+
+  @media (max-width: 768px) {
+    grid-column: content-start / content-end;
+  }
 }
 
 .site-title__title {
@@ -215,9 +230,13 @@ watch(
   align-self: end;
   text-align: right;
   padding-bottom: var(--space-l);
-}
 
-:deep(.hero-headings--index .hero__title) { font-size: var(--size-3); }
+  @media (max-width: 768px) {
+    grid-column: content-start / content-end;
+    justify-self: start;
+    text-align: left;
+  }
+}
 
 h2 {
   font-weight: bold;

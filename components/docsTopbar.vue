@@ -1,6 +1,6 @@
 <template>
   <div v-if="!isPlaying" class="docs-topbar | subgrid cluster" :style="{ justifyContent: isMobile ? 'space-between' : 'flex-start' }">
-      <h1 class="docs-topbar__left"><nuxt-link>
+      <h1 class="docs-topbar__left | site-logo"><nuxt-link>
         <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" @click="handleGoHome" />
       </nuxt-link>
     </h1>
