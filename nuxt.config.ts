@@ -38,6 +38,7 @@ export default defineNuxtConfig({
       titleTemplate: '%s',
       meta: [
         { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: 'description', content: description },
         { property: 'og:site_name',  content: title},
         { property: 'og:title',  content: title},
         { property: 'og:description',  content: description},

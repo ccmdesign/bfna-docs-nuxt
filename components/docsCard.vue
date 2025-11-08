@@ -81,6 +81,13 @@ const router = useRouter();
 const route = useRoute();
 const videoStore = useVideoStore();
 
+const videoDetailLink = computed(() => {
+  if (props.video?.slug) {
+    return { name: 'video-detail', params: { slug: props.video.slug } }
+  }
+  return '/'
+})
+
 const moreInfo = (video) => {
   videoStore.setCurrentVideo(video);
   if (props.poster) {
@@ -162,7 +169,14 @@ const serieTitle = computed(() => {
     <slot name="content" v-if="!thumbnail && !poster">
       <div class="card__content-wrapper">
         <div class="card__content | stack">
-          <h2 class="card__title"><nuxt-link @click="moreInfo(video)">{{ video.title }}</nuxt-link></h2>
+          <h2 class="card__title">
+            <nuxt-link
+              :to="videoDetailLink"
+              @click.prevent="moreInfo(video)"
+            >
+              {{ video.title }}
+            </nuxt-link>
+          </h2>
           <h3 class="card__subtitle">{{ video.subtitle }}</h3>
           <h3 v-show="serieTitle" class="card__subtitle">Series: {{ serieTitle }}</h3>
           <div class="card__meta | cluster">
