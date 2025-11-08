@@ -69,6 +69,7 @@ export default defineNuxtConfig({
   },
   plugins: [
     { src: '~/plugins/youtubePlayer.client.ts', mode: 'client' },
+    { src: '~/plugins/clarity.client.ts', mode: 'client' },
   ],
   ssr: true,
   experimental: {
