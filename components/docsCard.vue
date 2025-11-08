@@ -228,8 +228,7 @@ const serieTitle = computed(() => {
 
 .card__subtitle{
   font-size: var(--size--1);
-  color: var(--white-color-30-shade);
-
+  color: var(--white-color-70-shade);
 }
 
 .card {

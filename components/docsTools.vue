@@ -108,7 +108,11 @@ const handleDisplayMobileFilters = () => {
 
         <div v-if="isMobile !== showMobileFilters" :class="isMobile ? 'filter-menu' : 'cluster'">
 
-          <docs-select size="xs" @change="handleWorkstreamFilter">
+          <docs-select
+            size="xs"
+            label="Filter documentaries by topic"
+            @change="handleWorkstreamFilter"
+          >
             <option class="select-options" value="all">All Topics</option>
             <option class="select-options" v-for="key in filterItems.workstreams" :value="key" :key="key">{{ getWorkspaceNameFromKey(key) }}</option>
             <!-- <option value="documentary">Documentary</option>
@@ -116,7 +120,12 @@ const handleDisplayMobileFilters = () => {
             <option value="animation">Animation</option> -->
           </docs-select>
   
-          <docs-select size="xs" icon="schedule" @change="handleDurationRangeFilter">
+          <docs-select
+            size="xs"
+            icon="schedule"
+            label="Filter documentaries by duration"
+            @change="handleDurationRangeFilter"
+          >
             <option class="select-options" value="all"> All Duration Range</option>
             <option class="select-options" v-for="item in durationRangeOptions" :value="item.value" :key="item.value">{{ item.label }}</option>
           </docs-select>

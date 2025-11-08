@@ -12,16 +12,18 @@
         </div>
         <p>Bertelsmann Foundation documentaries focus on governance, economics, elections, social issues, the digital revolution, and most importantly, where these issues intersect.</p>
       </div>
-      <ul>
+      <div class="footer__links">
         <h4 class="h6">Bertelsmann Foundation Documentaries</h4>
-        <span class="divider"></span>
-        <li><a href="/about" target="_blank">About</a></li>
-        <li><a href="https://www.bfna.org/" target="_blank">Visit the Bertelsmann Foundation</a></li>
-        <li><a href="https://www.bfna.org/team/#board_of_directors" target="_blank">Board of Directors | Team</a></li>
-        <li><a href="https://www.bfna.org/bertelsmann-stiftung/" target="_blank">Bertelsmann Stiftung</a></li>
-        <!-- <li><a href="/assets/Privacy-Policy.pdf" rel="noopener" target="_blank">Privacy Policy</a></li> -->
-        <!-- <by-line /> -->
-      </ul>
+        <span class="divider" aria-hidden="true"></span>
+        <ul>
+          <li><a href="/about" target="_blank">About</a></li>
+          <li><a href="https://www.bfna.org/" target="_blank">Visit the Bertelsmann Foundation</a></li>
+          <li><a href="https://www.bfna.org/team/#board_of_directors" target="_blank">Board of Directors | Team</a></li>
+          <li><a href="https://www.bfna.org/bertelsmann-stiftung/" target="_blank">Bertelsmann Stiftung</a></li>
+          <!-- <li><a href="/assets/Privacy-Policy.pdf" rel="noopener" target="_blank">Privacy Policy</a></li> -->
+          <!-- <by-line /> -->
+        </ul>
+      </div>
     </div>
     <by-line class="by-line" />
   </footer>
@@ -47,7 +49,7 @@
   grid-template-columns: subgrid;
 }
 
-ul, div {
+.footer__content > * {
   @media (max-width: 769px) {
     padding-block-start: var(--space-s);
     grid-template-columns: subgrid;
@@ -55,18 +57,16 @@ ul, div {
   }
 }
 
-ul {
+.footer__content > .stack {
   @media (min-width: 769px) { 
-    grid-column: 8 / 14; 
+    grid-column: span 4;
   }
 }
 
-ul:first-child {
-  @media (min-width: 769px) { grid-column: span 4 }
-}
-
-div {
-  @media (min-width: 769px) { grid-column: span 4; }
+.footer__links {
+  @media (min-width: 769px) { 
+    grid-column: 8 / 14; 
+  }
 }
 
 /* Footer Skin */
@@ -77,10 +77,15 @@ div {
   h4 { padding-block-end: var(--space-2xs-xs); }
 }
 
-ul {
+.footer__links ul {
   list-style: none;
   padding-inline: 0;
   margin: 0;
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
 }
 
 

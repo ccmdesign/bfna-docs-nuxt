@@ -1,6 +1,6 @@
 <template>
   <div class="docs-select" :size="size" :icon="icon" :color="color">
-    <select  >
+    <select :aria-label="label" :title="label">
       <slot></slot>
     </select>
   </div>
@@ -8,6 +8,10 @@
 
 <script setup>
 defineProps({
+  label: {
+    type: String,
+    required: true
+  },
   icon: {
     type: String,
   },
