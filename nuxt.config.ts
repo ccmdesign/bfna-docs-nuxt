@@ -23,7 +23,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       contentfulSpace: process.env.CONTENTFUL_SPACE_ID || '',
-      contentfulToken: process.env.CONTENTFUL_ACCESS_TOKEN || ''
+      contentfulToken: process.env.CONTENTFUL_ACCESS_TOKEN || '',
+      gaMeasurementId: process.env.NUXT_PUBLIC_GA_MEASUREMENT_ID || 'G-L3GWV0YT4W'
     }
   },
   nitro: {
