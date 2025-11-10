@@ -112,7 +112,7 @@ onUnmounted(() => {
     --_stack-space: var(--space-s);
     --_cluster-space: var(--space-s);
 
-    justify-content: flex-end;
+    // justify-content: flex-end;
     @media (max-width: 768px) {
       justify-content: flex-start;
     }
