@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isPlaying" class="doc-hero-extra">
+  <div v-if="!isPlaying && !isMobile" class="doc-hero-extra">
     <slot>
       <docs-awards v-if="currentVideo.awards.length" />
     </slot>
@@ -12,6 +12,11 @@ import { storeToRefs } from 'pinia';
 
 const videoStore = useVideoStore();
 const { isPlaying, currentVideo } = storeToRefs(videoStore);
+
+const isMobile = computed(() => {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(max-width: 768px)').matches;
+})
 
 </script>
 
