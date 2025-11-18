@@ -255,12 +255,6 @@ const getAnimatedVimeoThumbnail = async (url) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-
-    if(videoId === '1119430814') {
-      console.log(33, videoId)
-      console.log(45, data)
-    }
-
     if (Array.isArray(data.data) && data.data.length > 1) {
       const highProfile = data.data[1].sizes.find(item => item.profile_id === "High" || item.profile_id === "Low");
       return highProfile ? highProfile.link : null;

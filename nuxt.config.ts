@@ -4,6 +4,7 @@ import path from 'path';
 const title = 'BFNA Documentaries';
 const description = 'Documentaries produced by the Bertelsmann Foundation, showcasing various social and cultural topics.';
 const OG = '/assets/og_img_bfna.jpg';
+const claritySnippet = `!function(c,l,a,r,i,t,y){function sync(){(new Image).src="https://c.clarity.ms/c.gif"}"complete"==document.readyState?sync():window.addEventListener("load",sync);a[c]("metadata",(function(){a[c]("set","C_IS","0")}),!1,!0);if(a[c].v||a[c].t)return a[c]("event",c,"dup."+i.projectId);a[c].t=!0,(t=l.createElement(r)).async=!0,t.src="https://scripts.clarity.ms/0.8.41/clarity.js",(y=l.getElementsByTagName(r)[0]).parentNode.insertBefore(t,y),a[c]("start",i),a[c].q.unshift(a[c].q.pop()),a[c]("set","C_IS","0")}("clarity",document,window,"script",{"projectId":"u2x19jqghw","upload":"https://i.clarity.ms/collect","expire":365,"cookies":["_uetmsclkid","_uetvid"],"track":true,"content":true,"report":"https://report.clarity.ms/eus2-tag","keep":["msclkid"],"dob":2148});`
 
 const contentDir = path.resolve(__dirname, 'content/videos-slugs');
 let videoRoutes: string[] = [];
@@ -19,7 +20,7 @@ try {
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/test-utils', '@pinia/nuxt', '@nuxtjs/seo', 'nuxt-og-image'],
+  modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/test-utils', '@pinia/nuxt', '@nuxtjs/seo', 'nuxt-og-image', '@weareheavy/nuxt-cookie-consent'],
   runtimeConfig: {
     public: {
       contentfulSpace: process.env.CONTENTFUL_SPACE_ID || '',
@@ -28,10 +29,10 @@ export default defineNuxtConfig({
     }
   },
   nitro: {
-  prerender: {
-    routes: videoRoutes
-  }
-},
+    prerender: {
+      routes: videoRoutes
+    }
+  },
   app: {
     head: {
       title,
@@ -69,9 +70,21 @@ export default defineNuxtConfig({
     // removed scss preprocessorOptions
   },
   plugins: [
-    { src: '~/plugins/youtubePlayer.client.ts', mode: 'client' },
-    { src: '~/plugins/clarity.client.js', mode: 'client' },
+    { src: '~/plugins/youtubePlayer.client.ts', mode: 'client' }
   ],
+  cookieConsent: {
+    provider: 'cookieinformation',
+    init: false,
+    dev: true,
+    scripts: {
+      statistic: [
+        {
+          children: claritySnippet,
+          type: 'text/javascript'
+        }
+      ]
+    }
+  },
   ssr: true,
   experimental: {
     clientFallback: true

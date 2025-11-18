@@ -28,6 +28,7 @@ onUnmounted(() => {
 
     <docs-footer id="footer" />
   </master-grid>
+  <nc-cookie-consent />
 </template>
 
 <style>
