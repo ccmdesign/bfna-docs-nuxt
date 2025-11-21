@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="visible"
+    v-if="isCookieModalVisible"
     class="cookie-consent"
     role="dialog"
     aria-live="polite"
@@ -12,25 +12,7 @@
           This site uses cookies to keep features working smoothly and provide tailored experiences.
           Help us balance what’s required for basic navigation and what can be stored for insights and personalization.
         </p>
-        <!-- <p class="cookie-consent__detail">
-          Toggle the optional categories below while necessary cookies remain active for core functionality.
-        </p> -->
       </div>
-      <!--
-      <div class="cookie-consent__grid">
-        <label
-          v-for="category in categories"
-          :key="category.key"
-          class="cookie-consent__category"
-        >
-          <input type="checkbox" v-model="pending[category.key]" :aria-label="category.title" />
-          <div>
-            <span class="cookie-consent__category-title">{{ category.title }}</span>
-            <span class="cookie-consent__category-description">{{ category.description }}</span>
-          </div>
-        </label>
-      </div>
-      -->
       <div class="cookie-consent__actions">
         <button type="button" class="cookie-consent__secondary" @click="handleReject">
           Necessary cookies
@@ -46,21 +28,11 @@
       </div>
     </div>
   </div>
-  <div v-else-if="hasSavedConsent" class="cookie-consent__manage">
-    <button
-      type="button"
-      class="cookie-consent__manage-button"
-      @click="openPreferences"
-      aria-label="Manage cookies"
-    >
-      <span aria-hidden="true" class="material-symbols-outlined">cookie</span>
-    </button>
-  </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
-import { useCookie, useCookieConsent } from '#imports';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { useCookie, useCookieConsent, useCookieControl } from '#imports';
 
 type ConsentCategoryKey = 'functional' | 'statistic' | 'marketing';
 
@@ -68,6 +40,12 @@ interface ConsentCategory {
   key: ConsentCategoryKey;
   title: string;
   description: string;
+}
+
+declare global {
+  interface Window {
+    clarity?: (...args: unknown[]) => void;
+  }
 }
 
 const categories: ConsentCategory[] = [
@@ -89,6 +67,15 @@ const categories: ConsentCategory[] = [
 ];
 
 const { state } = useCookieConsent();
+const { isCookieModalVisible, closeCookieModal, openCookieModal } = useCookieControl();
+
+const normalizeConsent = (value: Partial<Record<ConsentCategoryKey, boolean>>) => {
+  const normalized = {} as Record<ConsentCategoryKey, boolean>;
+  categories.forEach(({ key }) => {
+    normalized[key] = Boolean(value?.[key]);
+  });
+  return normalized;
+};
 
 const consentCookie = useCookie('nc_cookie_consent', {
   sameSite: 'lax',
@@ -112,23 +99,11 @@ const consentCookie = useCookie('nc_cookie_consent', {
   }
 });
 
-const pending = reactive<Record<ConsentCategoryKey, boolean>>(
-  categories.reduce((acc, category) => {
-    acc[category.key] = Boolean(state.value[category.key]);
-    return acc;
-  }, {} as Record<ConsentCategoryKey, boolean>)
-);
-
-const visible = ref(false);
-const normalizedConsent = (value: Partial<Record<ConsentCategoryKey, boolean>>) => ({
-  functional: Boolean(value.functional),
-  statistic: Boolean(value.statistic),
-  marketing: Boolean(value.marketing)
-});
+const pending = reactive<Record<ConsentCategoryKey, boolean>>(normalizeConsent(state.value));
 
 const hasSavedConsent = computed(() => Boolean(consentCookie.value?.acknowledged));
 
-let clarityTimeoutId: ReturnType<typeof window.setTimeout> | null = null;
+let clarityTimeoutId: ReturnType<typeof setTimeout> | null = null;
 const sendClarityConsent = (payload: Record<ConsentCategoryKey, boolean>) => {
   if (!import.meta.client) return;
   const signal = {
@@ -173,10 +148,10 @@ const persistConsent = (payload: Record<ConsentCategoryKey, boolean>) => {
 };
 
 const setConsent = (payload: Partial<Record<ConsentCategoryKey, boolean>>) => {
-  const normalized = normalizedConsent(payload);
+  const normalized = normalizeConsent(payload);
   applyConsentState(normalized);
   persistConsent(normalized);
-  visible.value = false;
+  closeCookieModal();
 };
 
 const handleAcceptAll = () =>
@@ -193,30 +168,26 @@ const handleReject = () =>
     marketing: false
   });
 
-const handleSavePreferences = () => setConsent(normalizedConsent(pending));
+const handleSavePreferences = () => setConsent(normalizeConsent(pending));
 
-const openPreferences = () => {
-  Object.assign(pending, normalizedConsent(state.value));
-  visible.value = true;
-};
-
-onMounted(() => {
-  const saved = consentCookie.value;
-  const normalized = normalizedConsent(saved ?? {});
-  Object.assign(pending, normalized);
-  if (saved?.acknowledged) {
-    applyConsentState(normalized);
-    visible.value = false;
-  } else {
-    visible.value = true;
+// Watch for modal opening to sync pending state
+watch(isCookieModalVisible, (newValue) => {
+  if (newValue) {
+    Object.assign(pending, normalizeConsent(state.value));
   }
 });
 
-declare global {
-  interface Window {
-    clarity?: (...args: any[]) => void;
+onMounted(() => {
+  const saved = consentCookie.value;
+  const normalized = normalizeConsent(saved ?? {});
+  Object.assign(pending, normalized);
+  if (saved?.acknowledged) {
+    applyConsentState(normalized);
+    closeCookieModal();
+  } else {
+    openCookieModal();
   }
-}
+});
 </script>
 
 <style scoped>
