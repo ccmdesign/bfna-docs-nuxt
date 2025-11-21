@@ -180,6 +180,8 @@ const handleDocumentaries = async (docsItems, series=[]) => {
     }
     documentaries.push({
       id: doc.sys.id,
+      order: fields.order,
+      created: doc.sys.createdAt,
       docYear: fields.date ? new Date(fields.date).getFullYear() : extraVideoInfo.year,
       videoId: doc.sys.id,
       updated: doc.sys.updatedAt,
@@ -239,35 +241,72 @@ const getAllFilms = async () => {
 
   const seriesDocs = await getSeries();  
   const videosSlugs = {slug: 'slugs',slugs: []};
-  const allVideosDocs = [...await handleDocumentaries(data.items, seriesDocs)];
-  allVideosDocs.forEach((doc, index) => {
-    doc.slug = main.slugify(doc.title);
-    doc.order = index;
-    writeContent(doc, 'allvideos', true);
 
-    videosSlugs.slugs.push(doc.slug);
+  const sortOrderValue = (entry) => {
+    const orderValue = entry?.fields?.order;
+    if (typeof orderValue === 'number') return orderValue;
+    return Number.MAX_SAFE_INTEGER;
+  };
 
+  const getCreatedTimestamp = (entry) => {
+    const createdAt = entry?.sys?.createdAt;
+    return createdAt ? new Date(createdAt).getTime() : 0;
+  };
+
+  const getDocReleaseTimestamp = (doc) => {
+    const releaseDateValue = doc?.created || doc?.updated;
+    return releaseDateValue ? new Date(releaseDateValue).getTime() : 0;
+  };
+
+  const sortedDocumentaries = [...(data.items || [])].sort((a, b) => {
+    const orderA = sortOrderValue(a);
+    const orderB = sortOrderValue(b);
+    if (orderA !== orderB) return orderA - orderB;
+    return getCreatedTimestamp(a) - getCreatedTimestamp(b);
   });
+
+  const allVideosDocs = [...await handleDocumentaries(sortedDocumentaries, seriesDocs)];
+  const normalizedVideos = allVideosDocs.map((doc, index) => {
+    if (typeof doc.order !== 'number') {
+      doc.order = index;
+    }
+    return doc;
+  });
+
+  const orderedVideos = [...normalizedVideos].sort((a, b) => {
+    const orderA = typeof a.order === 'number' ? a.order : Number.MAX_SAFE_INTEGER;
+    const orderB = typeof b.order === 'number' ? b.order : Number.MAX_SAFE_INTEGER;
+    if (orderA !== orderB) return orderA - orderB;
+    const titleA = a.title ?? '';
+    const titleB = b.title ?? '';
+    return titleA.localeCompare(titleB);
+  });
+
+  orderedVideos.forEach((doc) => {
+    doc.slug = main.slugify(doc.title);
+    writeContent(doc, 'allvideos', true);
+    videosSlugs.slugs.push(doc.slug);
+  });
+
   writeContent(videosSlugs, 'videos-slugs');
 
-  // Filter latest releases from allVideosDocs
-  const latestReleasesFiltered = allVideosDocs.filter(doc => {
-    // Try to get the release date from screenings or a known date field
-    let releaseDate = new Date(doc.updated);
+  // Filter latest releases from normalizedVideos using creation date
+  const nowTimestamp = Date.now();
+  const currentYear = new Date(nowTimestamp).getFullYear();
+  const previousYear = currentYear - 1;
 
-    // If no date found, exclude
-    if (!releaseDate || isNaN(releaseDate)) return false;
+  const latestReleasesFiltered = normalizedVideos
+    .filter(doc => {
+      const releaseTimestamp = getDocReleaseTimestamp(doc);
+      if (!releaseTimestamp) return false;
 
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const previousYear = currentYear - 1;
-
-    // Check if releaseDate is in the current or previous year and not in the future
-    return (
-      (releaseDate.getFullYear() === currentYear || releaseDate.getFullYear() === previousYear) &&
-      releaseDate <= now
-    );
-  });
+      const releaseYear = new Date(releaseTimestamp).getFullYear();
+      return (
+        (releaseYear === currentYear || releaseYear === previousYear) &&
+        releaseTimestamp <= nowTimestamp
+      );
+    })
+    .sort((a, b) => getDocReleaseTimestamp(b) - getDocReleaseTimestamp(a));
 
   latestReleasesFiltered.forEach((doc, index) => {
     doc.slug = main.slugify(doc.title);
