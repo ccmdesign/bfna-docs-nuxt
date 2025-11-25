@@ -3,6 +3,7 @@
     <slot name="content">
       <docs-button v-if="route.name !== 'index'" class="back-btn" effect="pill" variant="secondary" icon="arrow_back_ios" @click="backHome"><span style="text-transform: uppercase;">Back</span></docs-button>
       <h1 class="hero__title">{{ currentVideo.title }}</h1>
+      <p class="hero__subtitle" v-if="currentVideo.subtitle">{{ currentVideo.subtitle }}</p>
       <div v-if="route.name !== 'index'" class="hero__author | font-size:-1">By {{ currentVideo.by }}</div>
       <div v-if="route.name !== 'index'" class="hero__meta | cluster">
         <docs-meta white>{{ currentVideo.video_info.duration }}min</docs-meta>
@@ -120,6 +121,12 @@ onUnmounted(() => {
 }
 
 .hero__title { font-size: var(--size-5); }
+
+.hero__subtitle {
+  font-size: var(--size-2);
+  font-weight: 300;
+  color: var(--white-color-85-alpha);
+}
 
 .hero-headings--index .hero__title {
   font-size: var(--size-3);
