@@ -122,7 +122,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
       fields.resources.forEach(element => {
         let resource = {}
         let resourceType
-        if (element.sys.contentType.sys.id === 'resource_link') {
+        if (element.sys.contentType && element.sys.contentType.sys.id === 'resource_link') {
           resourceType = 'link'
           resource = {
             id: element.sys.id,
@@ -132,37 +132,39 @@ const handleDocumentaries = async (docsItems, series=[]) => {
             type: resourceType
           }
         } else {
-          let fileFields = element.fields.file.fields.file
-          if (fileFields.contentType.includes('pdf')) {
-            resourceType = 'pdf'
-          } else if (fileFields.contentType.includes('word')) {
-            resourceType = 'doc'
-          } else if (fileFields.contentType.includes('video')) {
-            resourceType = 'video'
-          } else if (fileFields.contentType.includes('zip')) {
-            resourceType = 'zip'
-          } else if (fileFields.contentType.includes('image')) {
-            resourceType = 'image'
-          } else {
-            resourceType = 'file'
-          }
-          let size = (fileFields.details.size / 1000).toFixed(2)
-          if (size >= 1000) {
-            size = (size / 1000).toFixed(2) + 'mb'
-          } else {
-            size += 'kb'
-          }
-          let ext = fileFields.url.split('.').pop()
-          
+          let fileFields = element.fields ? element.fields.file.fields.file : null
+                    
+          if(fileFields !== null) {
 
-          resource = {
-            id: element.sys.id,
-            title: element.fields.title,
-            description: element.fields.description,
-            url: fileFields.contentType.includes('image') ? `${fileFields.url}?w=800&fm=webp&q=80&fit=fill` : fileFields.url,
-            size: size,
-            type: resourceType,
-            extension: ext
+            if (fileFields.contentType.includes('pdf')) {
+              resourceType = 'pdf'
+            } else if (fileFields.contentType.includes('word')) {
+              resourceType = 'doc'
+            } else if (fileFields.contentType.includes('video')) {
+              resourceType = 'video'
+            } else if (fileFields.contentType.includes('zip')) {
+              resourceType = 'zip'
+            } else if (fileFields.contentType.includes('image')) {
+              resourceType = 'image'
+            } else {
+              resourceType = 'file'
+            }
+            let size = (fileFields.details.size / 1000).toFixed(2)
+            if (size >= 1000) {
+              size = (size / 1000).toFixed(2) + 'mb'
+            } else {
+              size += 'kb'
+            }
+            let ext = fileFields.url.split('.').pop()
+            resource = {
+              id: element.sys.id,
+              title: element.fields.title,
+              description: element.fields.description,
+              url: fileFields.contentType.includes('image') ? `${fileFields.url}?w=800&fm=webp&q=80&fit=fill` : fileFields.url,
+              size: size,
+              type: resourceType,
+              extension: ext
+            }
           }
         }
         resourcesList.push(resource)
