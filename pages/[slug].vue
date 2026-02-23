@@ -2,10 +2,7 @@
   <docs-tabs id="tabs">
     <template #information>
       <div class="prose">
-        <h2 class="font-size:-1" style="font-weight: bold;">{{currentVideo.video_info.column_1_title }}</h2>
-        <p class="font-size:-1">{{ currentVideo.video_info.column_1_text }}</p>
-        <h2 class="font-size:-1" style="font-weight: bold;">{{ currentVideo.video_info.column_2_title }}</h2>
-        <p class="font-size:-1">{{ currentVideo.video_info.column_2_text }}</p>
+        <div class="font-size:-1" v-html="currentVideo?.video_info?.description ?? ''"></div>
       </div>
       <div class="extras">
         <docs-card :video="currentVideo" poster :border=true style="max-width: fit-content;"></docs-card>
@@ -85,43 +82,42 @@ const trailer = computed(() => {
 });
 
 const series = computed(() => {
-  let serieInfo = {}
-  const items = currentVideo.value.series.map(s => {
-    const serie = videoStore.series.find(item => item.serieId === s.serieId);
-
-    serieInfo = {
-      title: serie.title,
-      description: serie.description,
-      videoId: serie.videoId
-    };
-    
-    return serie.documentaries
-  });
-
-  return {
-    ...serieInfo,
-    items: items.flat()
-  }
-});
+  const seriesList = currentVideo.value?.series || []
+  let serieInfo = { title: '', description: '', videoId: null }
+  const items = seriesList.map((s) => {
+    const serie = videoStore.series.find((item) => item.serieId === s?.serieId)
+    if (serie) {
+      serieInfo = { title: serie.title, description: serie.description, videoId: serie.videoId }
+      return serie.documentaries || []
+    }
+    return []
+  })
+  return { ...serieInfo, items: items.flat() }
+})
 
 const studies = computed(() => {
-  return currentVideo.value.resources.filter(resource => resource.type === 'pdf' || resource.type === 'link');
-});
+  const resources = currentVideo.value?.resources || []
+  return resources.filter((r) => {
+    const t = (r?.type || '').toLowerCase()
+    const isPdf = t === 'application/pdf' || t === 'pdf' || (t === 'file' && (r?.extension || '').toLowerCase() === 'pdf')
+    const hasLinks = Array.isArray(r?.links) && r.links.length > 0
+    return isPdf || hasLinks
+  })
+})
 
 const relatedItems = computed(() => {
-  if (currentVideo.value.relatedDocumentaries.length) {
-    return videoList.value.filter(item => 
-      currentVideo.value.relatedDocumentaries.includes(item.videoId)
-    );
+  const relatedIds = currentVideo.value?.relatedDocumentaries || []
+  if (relatedIds.length) {
+    return videoList.value.filter((item) => relatedIds.includes(Number(item?.videoId)))
   }
-
-  if (!currentVideo.value.tags || !Array.isArray(currentVideo.value.tags)) return [];
-  return videoList.value.filter(item => 
-    item.id !== currentVideo.value.id && // Exclude current video
-    item.tags &&
-    item.tags.some(tag => currentVideo.value.tags.includes(tag))
-  );
-});
+  const tags = currentVideo.value?.tags || []
+  if (!Array.isArray(tags)) return []
+  return videoList.value.filter(
+    (item) =>
+      item?.id !== currentVideo.value?.id &&
+      item?.tags?.some((tag) => tags.includes(tag))
+  )
+})
 videoStore.setRelatedLength(relatedItems.value.length);
 
 onUnmounted(() => {

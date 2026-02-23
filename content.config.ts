@@ -207,9 +207,8 @@ export default defineContentConfig({
     featuredvideos: defineCollection({
       source: 'featuredvideos/*.json',
       type: 'data',
-      // Define custom schema for docs collection
       schema: z.object({
-        id: z.string(),
+        id: z.union([z.string(), z.number()]),
         order: z.number(),
         title: z.string(),
         slug: z.string()

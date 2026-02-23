@@ -21,9 +21,15 @@ export const getDirectusData = async (collectionName, junctionFields=undefined) 
   return { data: content };
 }
 
-// getImageUrl
-export const getImage = (imageId) => {
-  return `${ process.env.BASE_URL }/assets/${ imageId }`;
+// getImageUrl - skips transform for webp (Directus re-encoding can degrade quality)
+export const getImage = (imageId, compressed = false, extension = null) => {
+  if (!imageId) return ''
+  const base = `${process.env.BASE_URL}/assets/${imageId}`
+  if (compressed) return base
+  const ext = (extension || '').toLowerCase()
+  const isWebp = ext === 'webp' || (typeof imageId === 'string' && /\.webp$/i.test(imageId))
+  if (isWebp) return base
+  return `${base}?width=800&format=webp&quality=80`
 }
 
 // slugify

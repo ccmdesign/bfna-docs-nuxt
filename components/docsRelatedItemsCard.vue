@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 
+const { slugify } = useSlugify();
+
 const props = defineProps({
   resource: {
     type: Object,
@@ -14,37 +16,81 @@ const props = defineProps({
   }
 })
 
-const backgroundStyle = computed(() => {
-  
+const isPdf = computed(() => {
+  const t = props.resource?.type || ''
+  return t === 'application/pdf' || t === 'pdf' || (t === 'file' && (props.resource?.extension || '').toLowerCase() === 'pdf')
+})
+const pdfBackgroundStyle = computed(() => {
+  let url = props.resource?.url || ''
+  if (isPdf.value) {
+    url = `/assets/guidecovers/${slugify(props.resource.title || '')}.webp`
+    if (!url || url === '/assets/guidecovers/.webp') url = '/assets/pdf.jpg'
+  }
   return {
-    backgroundImage: `url('${props.resource.type === 'pdf' || props.resource.type === 'link' ?  `/assets/guidecovers/${props.resource.id}.webp` : props.resource.url }')`,
+    backgroundImage: `url('${url || '/assets/pdf.jpg'}')`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }
 })
 
+const getLinkBackgroundImage = (item) => {
+  return {
+    backgroundImage: `url('${item.title.length > 0 ? `/assets/guidecovers/${slugify(item.title)}.webp` : item.url }')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }
+}
+
+const hasLinks = computed(() => Array.isArray(props.resource?.links) && props.resource.links.length > 0)
+const fileType = computed(() => {
+  if (hasLinks.value) return 'LINK'
+  const t = (props.resource?.type || 'file').toUpperCase()
+  return t.replace('APPLICATION/', '')
+})
+
 </script>
 
 <template>
-  <nuxt-link
+  <nuxt-link v-if="!hasLinks"
     class="card"
     :to="resource.url"
     external
     target="_blank"
     tabindex="0"
   >
-    <div class="card__video card__video--bg card__poster" :style="backgroundStyle"></div>
+    <div class="card__video card__video--bg card__poster" :style="pdfBackgroundStyle"></div>
     <slot name="content">
       <div class="card__content | stack">
         <h4 class="card__title">
           {{ resource.title }}
         </h4>
         <div class="card__meta | cluster">
-          <docs-meta>{{ resource.type.toUpperCase() }}</docs-meta>
+          <docs-meta>{{ fileType }}</docs-meta>
         </div>
       </div>
     </slot>
   </nuxt-link>
+  <template v-else>
+    <nuxt-link v-for="link in (resource.links || [])" :key="link.id"
+      class="card"
+      :to="link.link"
+      external
+      target="_blank"
+      tabindex="0"
+    >
+      <div class="card__video card__video--bg card__poster" :style="getLinkBackgroundImage(link)"></div>
+      <slot name="content">
+        <div class="card__content | stack">
+          <h4 class="card__title">
+            {{ link.title }}
+          </h4>
+          <div class="card__meta | cluster">
+            <docs-meta>{{ fileType }}</docs-meta>
+          </div>
+        </div>
+      </slot>
+    </nuxt-link>
+  </template>
 </template>
 
 <style scoped>

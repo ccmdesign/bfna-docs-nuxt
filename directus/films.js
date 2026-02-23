@@ -70,29 +70,43 @@ const mapVideoInfo = (vi) => {
         : '',
     description: vi.description || '',
     screenshots: __getScreenshots(vi.screenshotsSource),
-    thumb: common.getImage(vi.thumbnail) || common.getImage(vi.teaser_thumbnail) || '',
+    thumb:  vi.teaser_thumbnail ? common.getImage(vi.teaser_thumbnail) : '',
     trailer_url: vi.trailer_url || '',
     trailer_thumbnail: vi.trailer_thumbnail ? common.getImage(vi.trailer_thumbnail) : '',
-    poster: vi.poster ? common.getImage(vi.poster) : '',
+    poster: vi.image_compressed ? common.getImage(vi.image_compressed, true) : common.getImage(vi.poster),
     year: vi.year ?? null,
     duration: vi.duration ?? null,
   };
 };
 
 /** Map Directus resources (junction) to Contentful-style */
-const mapResources = (items) => {
+const mapResources = (items, p_resources = []) => {
   if (!Array.isArray(items)) return [];
+  const resources = Array.isArray(p_resources) ? p_resources : [];
   return items.map((r) => {
-    const res = r.docs_resources_id || r;
-    const fileId = typeof res.file === 'string' ? res.file : res.file?.id;
+    const junction = r?.docs_resources_id || r;
+    const targetFileId = typeof junction?.file === 'string'
+      ? junction.file
+      : junction?.file?.id;
+    const res = targetFileId
+      ? resources.find((p) => {
+          const pFileId = typeof p?.file === 'string' ? p.file : p?.file?.id;
+          return pFileId === targetFileId;
+        })
+      : null;
+
+    const fileId = typeof res?.file === 'string' ? res.file : res?.file?.id ?? targetFileId;
+    const bytes = res?.file?.filesize ?? (typeof junction?.size === 'number' ? junction.size : null);
+    const formatSize = (b) => (b != null && !isNaN(b) ? `${(b / (1024 * 1024)).toFixed(1)}MB` : junction?.size ?? '');
     return {
-      id: res.id,
-      title: res.title || '',
-      url: fileId ? common.getImage(fileId) : res.url || '',
-      description: res.description || '',
-      size: res.size || '',
-      type: res.type || 'file',
-      extension: res.extension || '',
+      id: res?.id ?? junction?.id ?? '',
+      title: res?.title ?? junction?.title ?? '',
+      url: fileId ? common.getImage(fileId) : res?.url ?? junction?.url ?? '',
+      description: res?.description ?? junction?.description ?? '',
+      size: formatSize(bytes),
+      type: res?.file.type ?? junction?.type,
+      extension: res?.extension ?? junction?.extension ?? '',
+      links: res?.links ?? junction?.links ?? '',
     };
   });
 };
@@ -112,12 +126,13 @@ const mapAwards = (items) => {
 };
 
 /** Map Directus documentary to Contentful-style structure (matches after-michael.json) */
-const mapDocumentary = async (item, seriesDocs = [], screenshots = [], index = 0) => {
+const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resources = [], index = 0) => {
   const videoUrl = item.video_url || '';
   const source = videoUrl.includes('youtu') ? 'youtube' : videoUrl.includes('vimeo') ? 'vimeo' : '';
-  const backgroundImage = item.background_image
-    ? common.getImage(item.background_image)
-    : '';
+  const bg = item.background_image
+  const bgId = typeof bg === 'string' ? bg : bg?.id
+  const bgExt = bg?.type?.split('/')[1] ?? bg?.filename_download?.split('.').pop() ?? ''
+  const backgroundImage = bgId ? common.getImage(bgId, false, bgExt) : ''
 
   const docId = item.id;
   const seriesInDoc = seriesDocs
@@ -139,7 +154,7 @@ const mapDocumentary = async (item, seriesDocs = [], screenshots = [], index = 0
     order: index ?? item.sort ?? 0,
     created: item.date_created || null,
     docYear: item.date ? new Date(item.date).getFullYear() : extraVideoInfo.year,
-    videoId: String(item.id),
+    videoId: item.id,
     updated: item.date_updated || null,
     title: item.title || '',
     subtitle: item.subtitle ? item.subtitle.split('(')[0].trim() : '',
@@ -150,15 +165,13 @@ const mapDocumentary = async (item, seriesDocs = [], screenshots = [], index = 0
     previewStartsAt: item.preview_starts_at ?? null,
     workstream: item.workstream || '',
     tags: Array.isArray(item.tags) ? item.tags : [],
-    relatedDocumentaries: (item.related_documentaries || []).map((x) =>
-      typeof x === 'object' ? String(x.id ?? x.related_docs_documentaries_id?.id ?? x) : String(x)
-    ),
+    relatedDocumentaries: item.related_documentaries.map((x) => x.related_docs_documentaries_id),
     keywords: Array.isArray(item.keywords) ? item.keywords : [],
     backgroundImage,
     source,
     screenings: Array.isArray(item.screenings) ? item.screenings : [],
     video_info: {...mapVideoInfo({ ...item.documentary_tabs, screenshotsSource: screenshots }), ...extraVideoInfo},
-    resources: mapResources(item.resources || []),
+    resources: mapResources(item.resources || [], p_resources),
     awards: mapAwards(item.awards || []),
     series: seriesInDoc,
     slug: common.slugify(item.title || ''),
@@ -172,12 +185,14 @@ const objectContructor = async (dir, fs) => {
       'awards.docs_awards_id.*',
       'docs_video_info_id.*',
       'documentary_tabs.*',
+      'background_image.*',
     ];
 
-    const [docsRes, seriesRes, screenshotsRes] = await Promise.all([
+    const [docsRes, seriesRes, screenshotsRes, resourcesRes] = await Promise.all([
       common.getDirectusData('docs_documentaries', junctionFields),
       common.getDirectusData('docs_series', ['films.docs_documentaries_id']),
       common.getDirectusData('docs_screenshots'),
+      common.getDirectusData('docs_resources', ['files.*'])        
     ]);
 
     const videosSlugs = {slug: 'slugs',slugs: []};
@@ -196,7 +211,7 @@ const objectContructor = async (dir, fs) => {
     });
 
     for (const [index, item] of sorted.entries()) {
-      const output = await mapDocumentary(item, seriesDocs, screenshotsRes.data, index);
+      const output = await mapDocumentary(item, seriesDocs, screenshotsRes.data, resourcesRes.data, index);
       videosSlugs.slugs.push(output.slug);
       const filepath = dir + '/' + output.slug + '.json';
       await fs.promises.writeFile(filepath, JSON.stringify(output));

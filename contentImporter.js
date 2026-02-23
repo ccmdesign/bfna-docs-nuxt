@@ -10,6 +10,6 @@ import { getSeries } from './directus/series.js';
 import { getDocumentaries } from './directus/films.js';
 import { getFeaturedFilms } from './directus/featuredFilms.js';
 
-getFeaturedFilms();
-getSeries();
+// getFeaturedFilms();
+// getSeries();
 getDocumentaries();

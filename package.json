@@ -33,6 +33,9 @@
     "vue2-perfect-scrollbar": "^1.5.56",
     "vue3-youtube": "^0.1.9"
   },
+  "overrides": {
+    "@vue/devtools-kit": ">=8.0.3"
+  },
   "devDependencies": {
     "@nuxt/vite-builder": "^3.16.2",
     "@types/vimeo__player": "^2.18.3",

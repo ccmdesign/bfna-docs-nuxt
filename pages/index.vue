@@ -70,25 +70,22 @@ const checkMobile = () => {
 
 const videos = computed(() => {
   return videoStore.videoList.filter(video => {
-    // Filter by duration range
     if (filterOptions.value.durationRange !== 'all') {
-      const duration = video.video_info.duration;
-      const [min, max] = filterOptions.value.durationRange.split('-').map(Number);
+      const duration = video?.video_info?.duration ?? 0
+      const [min, max] = filterOptions.value.durationRange.split('-').map(Number)
       if (max) {
-        if (duration < min || duration > max) {
-          return false;
-        }
-      } else {
-        if (duration < min) {
-          return false;
-        }
+        if (duration < min || duration > max) return false
+      } else if (duration < min) {
+        return false
       }
     }
-    return (filterOptions.value.workstream === 'all' || video.workstream === filterOptions.value.workstream);
+    return filterOptions.value.workstream === 'all' || video.workstream === filterOptions.value.workstream
   }).sort((a, b) => {
-    return filterOptions.value.sort === 'desc' ? b.video_info.year - a.video_info.year : a.video_info.year - b.video_info.year;
-  });
-});
+    const yearA = a?.video_info?.year ?? 0
+    const yearB = b?.video_info?.year ?? 0
+    return filterOptions.value.sort === 'desc' ? yearB - yearA : yearA - yearB
+  })
+})
 
 const featuredReelStyle = computed(() => {
   return videoStore.featuredVideosList.length < 4
