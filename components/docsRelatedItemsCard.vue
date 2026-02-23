@@ -53,10 +53,11 @@ const fileType = computed(() => {
 <template>
   <nuxt-link v-if="!hasLinks"
     class="card"
-    :to="resource.url"
+    :to="resource.url || '#'"
     external
     target="_blank"
     tabindex="0"
+    :aria-label="resource.title || 'View resource'"
   >
     <div class="card__video card__video--bg card__poster" :style="pdfBackgroundStyle"></div>
     <slot name="content">
@@ -73,10 +74,11 @@ const fileType = computed(() => {
   <template v-else>
     <nuxt-link v-for="link in (resource.links || [])" :key="link.id"
       class="card"
-      :to="link.link"
+      :to="link.link || '#'"
       external
       target="_blank"
       tabindex="0"
+      :aria-label="link.title || 'View link'"
     >
       <div class="card__video card__video--bg card__poster" :style="getLinkBackgroundImage(link)"></div>
       <slot name="content">

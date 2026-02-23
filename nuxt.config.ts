@@ -20,6 +20,10 @@ try {
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
+  site: {
+    url: process.env.NUXT_PUBLIC_SITE_URL || 'https://bfna.simplyas.com',
+    name: title,
+  },
   modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/test-utils', '@pinia/nuxt', '@nuxtjs/seo', 'nuxt-og-image', '@weareheavy/nuxt-cookie-consent'],
   runtimeConfig: {
     public: {

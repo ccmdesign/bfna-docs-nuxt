@@ -104,10 +104,10 @@ onUnmounted(() => {
   padding-block-end: var(--space-3xl);
   align-self: center;
 
+  & { --_stack-space: var(--space-2xs); }
+
   @media (max-width: 768px) { padding-block-end: var(--space-m); }
   @media (min-width: 768px) { grid-column: content-start / col2; }
-
-  --_stack-space: var(--space-2xs);
 
   .hero__actions {
     --_stack-space: var(--space-s);
