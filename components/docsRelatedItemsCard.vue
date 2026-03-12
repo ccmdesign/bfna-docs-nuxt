@@ -23,8 +23,8 @@ const isPdf = computed(() => {
 const pdfBackgroundStyle = computed(() => {
   let url = props.resource?.url || ''
   if (isPdf.value) {
-    url = `/assets/guidecovers/${slugify(props.resource.title || '')}.webp`
-    if (!url || url === '/assets/guidecovers/.webp') url = '/assets/pdf.jpg'
+    url = props.resource?.guideCover || ''
+    if (!url || url === '/assets/guidecovers/.webp') url = '/assets/cicle_link.png'
   }
   return {
     backgroundImage: `url('${url || '/assets/pdf.jpg'}')`,
@@ -35,7 +35,7 @@ const pdfBackgroundStyle = computed(() => {
 
 const getLinkBackgroundImage = (item) => {
   return {
-    backgroundImage: `url('${item.title.length > 0 ? `/assets/guidecovers/${slugify(item.title)}.webp` : item.url }')`,
+    backgroundImage: `url('${item.title.length > 0 ? item.cover : '/assets/pdf.jpg' }')`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }

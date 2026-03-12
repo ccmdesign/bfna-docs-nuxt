@@ -98,15 +98,25 @@ const mapResources = (items, p_resources = []) => {
     const fileId = typeof res?.file === 'string' ? res.file : res?.file?.id ?? targetFileId;
     const bytes = res?.file?.filesize ?? (typeof junction?.size === 'number' ? junction.size : null);
     const formatSize = (b) => (b != null && !isNaN(b) ? `${(b / (1024 * 1024)).toFixed(1)}MB` : junction?.size ?? '');
+
+
+    const links = res?.links?.length > 0 ? res.links : junction?.links ?? [];
+    const guideCover = res?.guide_cover ? res.guide_cover : junction?.guide_cover ?? '';
+    
     return {
       id: res?.id ?? junction?.id ?? '',
       title: res?.title ?? junction?.title ?? '',
       url: fileId ? common.getImage(fileId) : res?.url ?? junction?.url ?? '',
+      guideCover: guideCover ? common.getImage(guideCover.id) : '',
       description: res?.description ?? junction?.description ?? '',
       size: formatSize(bytes),
       type: res?.file.type ?? junction?.type,
       extension: res?.extension ?? junction?.extension ?? '',
-      links: res?.links ?? junction?.links ?? '',
+      links: links.map((l) => ({
+        title: l.title,
+        link: l.link,
+        cover: common.getImage(l.cover),
+      })),
     };
   });
 };
