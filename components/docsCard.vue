@@ -71,7 +71,7 @@ const backgroundStyle = computed(() => {
   const vi = props.video?.video_info
   const imageUrl = vi?.thumbnail ?? vi?.thumb ?? ''
   return {
-    backgroundImage: `url('${props.thumbnail ? imageUrl : props.video?.backgroundImage ?? ''}')`,
+    backgroundImage: `url('${props.thumbnail & imageUrl ? imageUrl : props.video.backgroundImage}')`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }
