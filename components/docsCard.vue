@@ -181,7 +181,7 @@ const serieTitle = computed(() => {
           <h3 v-show="serieTitle" class="card__subtitle">Series: {{ serieTitle }}</h3>
           <div class="card__meta | cluster">
             <docs-meta>{{ video.video_info.duration }} min</docs-meta>
-            <docs-meta>{{ video.video_info.year }}</docs-meta>
+            <docs-meta>{{ video.docYear }}</docs-meta>
           </div>
         </div>
       </div>

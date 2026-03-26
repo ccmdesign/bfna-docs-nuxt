@@ -81,9 +81,9 @@ const videos = computed(() => {
     }
     return filterOptions.value.workstream === 'all' || video.workstream === filterOptions.value.workstream
   }).sort((a, b) => {
-    const yearA = a?.video_info?.year ?? 0
-    const yearB = b?.video_info?.year ?? 0
-    return filterOptions.value.sort === 'desc' ? yearB - yearA : yearA - yearB
+    const dateA = a?.date ?? ''
+    const dateB = b?.date ?? ''
+    return filterOptions.value.sort === 'desc' ? dateB.localeCompare(dateA) : dateA.localeCompare(dateB)
   })
 })
 

@@ -8,7 +8,7 @@ let displayFilters = {
   durations: [],
 }
 
-const __writeContent = async (item, folder, log=false) => {
+const __writeContent = async (item, folder, log = false) => {
   const dir = `./content/${folder}`;
 
   function checkFolder(dirName) {
@@ -23,11 +23,11 @@ const __writeContent = async (item, folder, log=false) => {
       });
     });
   }
-  
+
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
-  while(!(await checkFolder(dir))) {
+  while (!(await checkFolder(dir))) {
     console.log('waiting for folder to be created');
   }
 
@@ -39,7 +39,7 @@ const __writeContent = async (item, folder, log=false) => {
     }
   );
 
-  if(log) console.log(`WRITING ${folder}: `, item.slug + ".json");
+  if (log) console.log(`WRITING ${folder}: `, item.slug + ".json");
 
 }
 
@@ -48,7 +48,7 @@ const mapVideoInfo = (vi) => {
   if (!vi) return {};
 
   // console.log(555, vi);
-  
+
   const __getScreenshots = (ssSource) => {
     if (!vi.screenshots) return [];
     return vi.screenshots.map((s) => {
@@ -70,7 +70,7 @@ const mapVideoInfo = (vi) => {
         : '',
     description: vi.description || '',
     screenshots: __getScreenshots(vi.screenshotsSource),
-    thumb:  vi.teaser_thumbnail ? common.getImage(vi.teaser_thumbnail) : '',
+    thumb: vi.teaser_thumbnail ? common.getImage(vi.teaser_thumbnail) : '',
     trailer_url: vi.trailer_url || '',
     trailer_thumbnail: vi.trailer_thumbnail ? common.getImage(vi.trailer_thumbnail) : '',
     poster: vi.image_compressed ? common.getImage(vi.image_compressed, true) : common.getImage(vi.poster),
@@ -90,9 +90,9 @@ const mapResources = (items, p_resources = []) => {
       : junction?.file?.id;
     const res = targetFileId
       ? resources.find((p) => {
-          const pFileId = typeof p?.file === 'string' ? p.file : p?.file?.id;
-          return pFileId === targetFileId;
-        })
+        const pFileId = typeof p?.file === 'string' ? p.file : p?.file?.id;
+        return pFileId === targetFileId;
+      })
       : null;
 
     const fileId = typeof res?.file === 'string' ? res.file : res?.file?.id ?? targetFileId;
@@ -102,7 +102,7 @@ const mapResources = (items, p_resources = []) => {
 
     const links = res?.links?.length > 0 ? res.links : junction?.links ?? [];
     const guideCover = res?.guide_cover ? res.guide_cover : junction?.guide_cover ?? '';
-    
+
     return {
       id: res?.id ?? junction?.id ?? '',
       title: res?.title ?? junction?.title ?? '',
@@ -153,12 +153,12 @@ const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resourc
     }));
 
   const extraVideoInfo = await common.extractVideoInfo(item)
-  
+
   // Available fields for filtering
   displayFilters.years.push(extraVideoInfo.year);
   displayFilters.durations.push(extraVideoInfo.duration);
   displayFilters.workstreams.push(item.workstream || '');
-  
+
   return {
     id: String(item.id),
     order: index ?? item.sort ?? 0,
@@ -167,6 +167,7 @@ const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resourc
     videoId: item.id,
     updated: item.date_updated || null,
     title: item.title || '',
+    date: item.date || null,
     subtitle: item.subtitle ? item.subtitle.split('(')[0].trim() : '',
     by: item.by || '',
     description: item.description || '',
@@ -180,7 +181,7 @@ const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resourc
     backgroundImage,
     source,
     screenings: Array.isArray(item.screenings) ? item.screenings : [],
-    video_info: {...mapVideoInfo({ ...item.documentary_tabs, screenshotsSource: screenshots }), ...extraVideoInfo},
+    video_info: { ...mapVideoInfo({ ...item.documentary_tabs, screenshotsSource: screenshots }), ...extraVideoInfo },
     resources: mapResources(item.resources || [], p_resources),
     awards: mapAwards(item.awards || []),
     series: seriesInDoc,
@@ -202,10 +203,10 @@ const objectContructor = async (dir, fs) => {
       common.getDirectusData('docs_documentaries', junctionFields),
       common.getDirectusData('docs_series', ['films.docs_documentaries_id']),
       common.getDirectusData('docs_screenshots'),
-      common.getDirectusData('docs_resources', ['files.*'])        
+      common.getDirectusData('docs_resources', ['files.*'])
     ]);
 
-    const videosSlugs = {slug: 'slugs',slugs: []};
+    const videosSlugs = { slug: 'slugs', slugs: [] };
     const seriesDocs = (seriesRes.data || []).map((s) => ({
       id: s.id,
       documentaries: (s.films || []).map((f) => f.docs_documentaries_id?.id).filter(Boolean),

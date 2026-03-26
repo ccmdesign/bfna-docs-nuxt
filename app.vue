@@ -10,7 +10,7 @@ import { useVideoStore } from '~/stores/video'
 const videoStore = useVideoStore();
 
 const { data: allvideos } = await useAsyncData('allvideos', () =>
-  queryCollection('allvideos').order('docYear', 'ASC').order('order', 'ASC').all()
+  queryCollection('allvideos').order('date', 'DESC').all()
 )
 const videoList = Array.isArray(allvideos.value) ? allvideos.value : []
 videoStore.setVideos(videoList)
