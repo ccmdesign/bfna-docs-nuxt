@@ -2,7 +2,7 @@
   <docs-tabs id="tabs">
     <template #information>
       <div class="prose">
-        <div class="font-size:-1" v-html="currentVideo?.video_info?.description ?? ''"></div>
+        <div class="font-size:-1 prose" v-html="currentVideo?.video_info?.description ?? ''"></div>
       </div>
       <div class="extras">
         <docs-card :video="currentVideo" poster :border=true style="max-width: fit-content;"></docs-card>
@@ -168,5 +168,9 @@ useSeoMeta({
 .downloadable-docs {
   display: flex;
   justify-content: center;
+}
+
+.prose * {
+  font-size: 1em;
 }
 </style>
