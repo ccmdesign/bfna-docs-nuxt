@@ -12,11 +12,10 @@
           <docs-chip v-for="tag in currentVideo.tags" :key="tag" :tag="tag" />
         </div>
       </div>
-      <p v-if="route.name !== 'index'"
+      <div v-if="route.name !== 'index'"
         :class="['font-size:-1', route.name === 'index' ? 'hero__description' : '']"
-      >
-        {{ currentVideo.description }}
-      </p>
+      v-html="currentVideo.description">
+    </div>
 
       <div class="hero__actions | cluster">
         <docs-button effect="pill" variant="primary" icon="play_arrow" @click="playVideo">Watch Now</docs-button>
