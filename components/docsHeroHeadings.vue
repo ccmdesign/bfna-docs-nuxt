@@ -13,7 +13,7 @@
         </div>
       </div>
       <div v-if="route.name !== 'index'"
-        :class="['font-size:-1', route.name === 'index' ? 'hero__description' : '']"
+        :class="['font-size:-1', route.name === 'index' ? 'hero__description' : '']" class="prose"
       v-html="currentVideo.description">
     </div>
 
@@ -163,5 +163,9 @@ onUnmounted(() => {
 
 .trailer-btn {
   background-color: var(--base-color-60-tint);
+}
+
+.prose * {
+  font-size: 1em;
 }
 </style>
