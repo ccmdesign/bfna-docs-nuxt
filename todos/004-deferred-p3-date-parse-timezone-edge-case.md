@@ -1,10 +1,25 @@
 ---
-status: ready
+status: deferred
 priority: p3
 issue_id: "004"
 tags: [contentful, timezone, edge-case, CCM-272, follow-up]
 dependencies: []
 ---
+
+## Resolution (2026-04-14)
+
+**Decision:** Deferred to a follow-up (non-hotfix) PR.
+
+**Rationale:** This is P3 observational and not a regression introduced by
+CCM-272. The todo itself recommends not changing this as part of the hotfix —
+it needs a broader review of what Contentful editors actually enter
+(`YYYY-MM-DDTHH:mm` vs `YYYY-MM-DD`) and whether `getUTCFullYear()` or a regex
+extract is preferable, plus a test against a year-boundary entry. Out of scope
+for a tight hotfix.
+
+**Next step:** File a follow-up issue to decide between Option 2 (regex-
+extract year) and Option 1 (`getUTCFullYear()`), with a test case for a
+`2026-01-01T00:00` entry in a non-UTC timezone.
 
 # fields.date parsing uses local-time getFullYear — year-boundary edge case
 

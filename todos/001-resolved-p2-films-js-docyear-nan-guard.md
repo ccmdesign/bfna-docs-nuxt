@@ -1,10 +1,26 @@
 ---
-status: ready
+status: resolved
 priority: p2
 issue_id: "001"
 tags: [contentful, schema, correctness, CCM-272]
 dependencies: []
 ---
+
+## Resolution (2026-04-14)
+
+**Decision:** Fixed in this hotfix PR via Option 1 (inline NaN guard with
+`extraVideoInfo.year` fallback).
+
+**Change:** `contentful/films.js` now parses `fields.date` into `docYear` via a
+guarded `let docYear = extraVideoInfo.year; if (fields.date) { const parsedYear
+= new Date(fields.date).getFullYear(); if (!Number.isNaN(parsedYear)) docYear =
+parsedYear; }` block before the `documentaries.push(...)` call. This mirrors
+the exact shape used in `contentful/main.js` `extractVideoInfo` so both code
+paths degrade identically for malformed dates, preventing a Zod ingest crash
+on `docYear: z.number()`.
+
+**Verification:** `npm run generate` completes cleanly; `the-open-veins-of-potosi`
+still reports 2026.
 
 # Guard docYear against NaN from malformed fields.date in films.js
 

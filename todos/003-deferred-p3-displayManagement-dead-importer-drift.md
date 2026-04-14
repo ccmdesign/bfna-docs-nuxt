@@ -1,10 +1,23 @@
 ---
-status: ready
+status: deferred
 priority: p3
 issue_id: "003"
 tags: [contentful, dead-code, CCM-272, follow-up]
 dependencies: []
 ---
+
+## Resolution (2026-04-14)
+
+**Decision:** Deferred to a follow-up (non-hotfix) PR.
+
+**Rationale:** This is P3 observational, explicitly out of CCM-272 hotfix scope.
+`contentful/displayManagement.js` has no importers today, so the drift causes
+no runtime impact on this hotfix. Deleting or syncing it is a codebase-hygiene
+task that belongs in a dedicated cleanup PR where a fuller audit of "is anyone
+planning to revive this?" can happen without bloating the hotfix diff.
+
+**Next step:** File a follow-up issue to delete `contentful/displayManagement.js`
+(Option 1) unless the team flags a revival plan.
 
 # Audit or delete unused contentful/displayManagement.js (drifted from CCM-272 fix)
 

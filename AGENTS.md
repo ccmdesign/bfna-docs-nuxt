@@ -17,3 +17,13 @@ Keep commits concise, imperative, and scoped, mirroring the existing history (`d
 
 ## Content & Environment Notes
 `contentImporter.js` relies on Contentful and YouTube credentials. Ensure `.env` contains `CONTENTFUL_SPACE_ID`, `CONTENTFUL_ACCESS_TOKEN`, and `YOUTUBE_API_KEY` before running dev or generate commands. When offline you may commit temporary JSON in `content/`, but drop stubs before merging so automated imports remain the source of truth.
+
+### Troubleshooting: stale content cache after schema changes
+If you pull a branch that changes `content.config.ts` (e.g. CCM-272 migrated `video_info.year` and `video_info.duration` from `z.string()` to `z.number()`) and see a Zod error like `Expected number, received string` during `npm run dev` or `npm run generate`, your local Nuxt Content SQLite cache is stale. Clean it and re-import:
+
+```sh
+rm -rf content/ .nuxt/ .output/ .data/ .content.cache.json
+npm run generate
+```
+
+Netlify cold builds are unaffected (fresh checkout, no pre-existing cache).

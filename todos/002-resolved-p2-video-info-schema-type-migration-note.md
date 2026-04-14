@@ -1,10 +1,20 @@
 ---
-status: ready
+status: resolved
 priority: p2
 issue_id: "002"
 tags: [schema, nuxt-content, docs, CCM-272]
 dependencies: []
 ---
+
+## Resolution (2026-04-14)
+
+**Decision:** Fixed in this hotfix PR via Option 1 (documentation only).
+
+**Change:** Added a "Troubleshooting: stale content cache after schema changes"
+subsection under "Content & Environment Notes" in `AGENTS.md`. Calls out the
+specific `Expected number, received string` Zod error and the cache-clear
+command (`rm -rf content/ .nuxt/ .output/ .data/ .content.cache.json` then
+`npm run generate`). Also notes Netlify cold builds are unaffected.
 
 # Document video_info.year/duration type change for local dev cache
 

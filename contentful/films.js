@@ -181,12 +181,23 @@ const handleDocumentaries = async (docsItems, series=[]) => {
         })
       })
     }
+    // Parse year from fields.date, guarding against malformed dates (NaN).
+    // Mirrors the hardening in contentful/main.js extractVideoInfo so both
+    // code paths degrade gracefully to extraVideoInfo.year. Zod's z.number()
+    // rejects NaN by default, so an unguarded parse would crash ingest.
+    let docYear = extraVideoInfo.year;
+    if (fields.date) {
+      const parsedYear = new Date(fields.date).getFullYear();
+      if (!Number.isNaN(parsedYear)) {
+        docYear = parsedYear;
+      }
+    }
     documentaries.push({
       id: doc.sys.id,
       order: fields.order,
       created: doc.sys.createdAt,
       date: fields.date || null,
-      docYear: fields.date ? new Date(fields.date).getFullYear() : extraVideoInfo.year,
+      docYear,
       videoId: doc.sys.id,
       updated: doc.sys.updatedAt,
       title: fields.title,
