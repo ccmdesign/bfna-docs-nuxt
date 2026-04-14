@@ -184,6 +184,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
     documentaries.push({
       id: doc.sys.id,
       order: fields.order,
+      date: fields.date || null,
       created: doc.sys.createdAt,
       docYear: fields.date ? new Date(fields.date).getFullYear() : extraVideoInfo.year,
       videoId: doc.sys.id,
@@ -251,13 +252,13 @@ const getAllFilms = async () => {
     return Number.MAX_SAFE_INTEGER;
   };
 
-  const getCreatedTimestamp = (entry) => {
-    const createdAt = entry?.sys?.createdAt;
-    return createdAt ? new Date(createdAt).getTime() : 0;
+  const getEntryReleaseTimestamp = (entry) => {
+    const dateValue = entry?.fields?.date || entry?.sys?.createdAt;
+    return dateValue ? new Date(dateValue).getTime() : 0;
   };
 
   const getDocReleaseTimestamp = (doc) => {
-    const releaseDateValue = doc?.created || doc?.updated;
+    const releaseDateValue = doc?.date || doc?.created || doc?.updated;
     return releaseDateValue ? new Date(releaseDateValue).getTime() : 0;
   };
 
@@ -265,7 +266,7 @@ const getAllFilms = async () => {
     const orderA = sortOrderValue(a);
     const orderB = sortOrderValue(b);
     if (orderA !== orderB) return orderA - orderB;
-    return getCreatedTimestamp(a) - getCreatedTimestamp(b);
+    return getEntryReleaseTimestamp(a) - getEntryReleaseTimestamp(b);
   });
 
   const allVideosDocs = [...await handleDocumentaries(sortedDocumentaries, seriesDocs)];
