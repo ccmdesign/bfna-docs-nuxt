@@ -208,11 +208,15 @@ const extractVideoInfo = async (fields) => {
     videoInfo.thumbnail  = await getVimeoThumbnail(fields.video_url)
   }
 
+  if (fields.date) {
+    videoInfo.year = new Date(fields.date).getFullYear();
+  }
+
   if (fields.subtitle) {
     // Extract all digit groups separated by comma (e.g., "2024, 22")
     const digitMatch = fields.subtitle.match(/\((\d+)\s*,\s*(\d+)\s*.*\)/);
     if (digitMatch) {
-      videoInfo.year = parseInt(digitMatch[1], 10);
+      if (videoInfo.year == null) videoInfo.year = parseInt(digitMatch[1], 10);
       videoInfo.duration = parseInt(digitMatch[2], 10);
     } else {
       if (fields.video_url.includes('youtu')) {
