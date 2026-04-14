@@ -34,6 +34,7 @@ export default defineContentConfig({
         id: z.string(),
         videoId: z.string(),
         order: z.number(),
+        date: z.string().nullable().optional(),
         title: z.string(),
         subtitle: z.string(),
         by: z.string(),
@@ -52,8 +53,8 @@ export default defineContentConfig({
           column_1_text: z.string(),
           column_1_title: z.string(),
           screenshot_extras: z.array(z.unknown()),
-          duration: z.string().optional(),
-          year: z.string().optional(),
+          duration: z.number().optional(),
+          year: z.number().optional(),
           thumbnail: z.string().url().optional()
         }),
         resources: z.array(z.unknown()),
@@ -80,6 +81,7 @@ export default defineContentConfig({
         videoId: z.string(),
         order: z.number(),
         docYear: z.number(),
+        date: z.string().nullable().optional(),
         title: z.string(),
         subtitle: z.string(),
         by: z.string(),
@@ -99,8 +101,8 @@ export default defineContentConfig({
           column_1_text: z.string(),
           column_1_title: z.string(),
           screenshot_extras: z.array(z.unknown()),
-          duration: z.string().optional(),
-          year: z.string().optional(),
+          duration: z.number().optional(),
+          year: z.number().optional(),
           thumbnail: z.string().url().optional()
         }),
         resources: z.array(z.unknown()),
@@ -168,6 +170,7 @@ export default defineContentConfig({
       schema: z.object({
         id: z.string(),
         videoId: z.string(),
+        date: z.string().nullable().optional(),
         title: z.string(),
         subtitle: z.string(),
         by: z.string(),
@@ -186,7 +189,10 @@ export default defineContentConfig({
           thumb: z.string().url(),
           column_1_text: z.string(),
           column_1_title: z.string(),
-          screenshot_extras: z.array(z.unknown())
+          screenshot_extras: z.array(z.unknown()),
+          duration: z.number().optional(),
+          year: z.number().optional(),
+          thumbnail: z.string().url().optional()
         }),
         resources: z.array(z.unknown()),
         awards: z.array(
@@ -211,6 +217,7 @@ export default defineContentConfig({
       schema: z.object({
         id: z.string(),
         videoId: z.string(),
+        date: z.string().nullable().optional(),
         title: z.string(),
         subtitle: z.string(),
         by: z.string(),
@@ -228,7 +235,10 @@ export default defineContentConfig({
           thumb: z.string().url(),
           column_1_text: z.string(),
           column_1_title: z.string(),
-          screenshot_extras: z.array(z.unknown())
+          screenshot_extras: z.array(z.unknown()),
+          duration: z.number().optional(),
+          year: z.number().optional(),
+          thumbnail: z.string().url().optional()
         }),
         resources: z.array(z.unknown()),
         awards: z.array(

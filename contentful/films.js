@@ -185,6 +185,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
       id: doc.sys.id,
       order: fields.order,
       created: doc.sys.createdAt,
+      date: fields.date || null,
       docYear: fields.date ? new Date(fields.date).getFullYear() : extraVideoInfo.year,
       videoId: doc.sys.id,
       updated: doc.sys.updatedAt,
@@ -251,13 +252,18 @@ const getAllFilms = async () => {
     return Number.MAX_SAFE_INTEGER;
   };
 
-  const getCreatedTimestamp = (entry) => {
-    const createdAt = entry?.sys?.createdAt;
-    return createdAt ? new Date(createdAt).getTime() : 0;
+  const getEntryReleaseTimestamp = (entry) => {
+    // Prefer Contentful `fields.date` (authoritative release date) and only
+    // fall back to `sys.createdAt` when date is missing. Mirrors the same
+    // priority as `getDocReleaseTimestamp` below for consistency.
+    const releaseDateValue = entry?.fields?.date || entry?.sys?.createdAt;
+    return releaseDateValue ? new Date(releaseDateValue).getTime() : 0;
   };
 
   const getDocReleaseTimestamp = (doc) => {
-    const releaseDateValue = doc?.created || doc?.updated;
+    // Prefer the explicit Contentful `date` field so the Latest Releases
+    // filter/sort reflects actual release date, not CMS timestamps.
+    const releaseDateValue = doc?.date || doc?.created || doc?.updated;
     return releaseDateValue ? new Date(releaseDateValue).getTime() : 0;
   };
 
@@ -265,7 +271,7 @@ const getAllFilms = async () => {
     const orderA = sortOrderValue(a);
     const orderB = sortOrderValue(b);
     if (orderA !== orderB) return orderA - orderB;
-    return getCreatedTimestamp(a) - getCreatedTimestamp(b);
+    return getEntryReleaseTimestamp(a) - getEntryReleaseTimestamp(b);
   });
 
   const allVideosDocs = [...await handleDocumentaries(sortedDocumentaries, seriesDocs)];

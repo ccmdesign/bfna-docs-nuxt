@@ -185,6 +185,7 @@ const handleDocumentaries = async (docsItems, series=[]) => {
       id: doc.sys.id,
       videoId: doc.sys.id,
       updated: doc.sys.updatedAt,
+      date: fields.date || null,
       title: fields.title,
       subtitle: fields.subtitle ? fields.subtitle.split('(')[0].trim() : '',
       by: fields.by,
