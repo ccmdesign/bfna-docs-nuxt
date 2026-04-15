@@ -152,6 +152,17 @@ const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resourc
       items: (s.documentaries || []).filter((id) => id !== docId),
     }));
 
+  // The video info now is part of the documentary item, so we need to extract it from the item.
+  const rawVideoInfo = {
+    description: item.vi_description,
+    teaser_url: item.vi_teaser_url,
+    teaser_source: item.vi_teaser_source,
+    trailer_url: item.vi_trailer_url,
+    trailer_thumbnail: item.vi_trailer_thumbnail,
+    poster: item.vi_poster,
+    screenshots: item.vi_screenshots,
+    compressed_image: item.vi_compressed_image,
+  }
   const extraVideoInfo = await common.extractVideoInfo(item)
 
   // Available fields for filtering
@@ -181,7 +192,7 @@ const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resourc
     backgroundImage,
     source,
     screenings: Array.isArray(item.screenings) ? item.screenings : [],
-    video_info: { ...mapVideoInfo({ ...item.documentary_tabs, screenshotsSource: screenshots }), ...extraVideoInfo },
+    video_info: { ...mapVideoInfo({ ...rawVideoInfo, screenshotsSource: screenshots }), ...extraVideoInfo },
     resources: mapResources(item.resources || [], p_resources),
     awards: mapAwards(item.awards || []),
     series: seriesInDoc,
