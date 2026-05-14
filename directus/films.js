@@ -196,7 +196,7 @@ const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resourc
     by: item.by || '',
     description: item.description || '',
     videoUrl,
-    animatedThumbnail: item.animated_thumbnail || common.getAnimatedVimeoThumbnail(videoUrl),
+    animatedThumbnail: item.animated_thumbnail || (await common.getAnimatedVimeoThumbnail(videoUrl, item.id)) || '',
     previewStartsAt: item.preview_starts_at ?? null,
     workstream: item.workstream || '',
     tags: Array.isArray(item.tags) ? item.tags : [],

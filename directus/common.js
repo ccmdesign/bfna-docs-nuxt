@@ -1,10 +1,38 @@
 import dotenv from 'dotenv';
-import { createDirectus, rest, readItems } from '@directus/sdk';
+import { createDirectus, rest, readItems, staticToken, updateItem } from '@directus/sdk';
 
 dotenv.config();
 
 const CONTENT_STATUS = process.env.DEV ? JSON.parse(process.env.DEV) : ["published"]
 const client = createDirectus(process.env.BASE_URL).with(rest());
+
+// Lazy-initialised write client. Built on first use; warns once when token is absent.
+let __writeClient = undefined; // undefined = uninitialised, null = warned-and-disabled
+const __getWriteClient = () => {
+  if (__writeClient !== undefined) return __writeClient;
+  const token = process.env.DIRECTUS_TOKEN;
+  if (!token) {
+    console.warn('[animated-thumbnail writeback] DIRECTUS_TOKEN not set; skipping CMS cache writes for this run.');
+    __writeClient = null;
+    return __writeClient;
+  }
+  __writeClient = createDirectus(process.env.BASE_URL).with(staticToken(token)).with(rest());
+  return __writeClient;
+};
+
+// Persist a resolved animated-thumbnail URL back to docs_documentaries.
+// Fails closed: any error is logged and swallowed so the importer continues.
+export const updateDocumentaryAnimatedThumbnail = async (documentaryId, url) => {
+  if (!documentaryId || !url) return;
+  const wc = __getWriteClient();
+  if (!wc) return;
+  try {
+    await wc.request(updateItem('docs_documentaries', documentaryId, { animated_thumbnail: url }));
+  } catch (error) {
+    const msg = error?.errors?.[0]?.message ?? error?.message ?? String(error);
+    console.warn(`[animated-thumbnail writeback] failed for ${documentaryId}: ${msg}`);
+  }
+};
 
 // get content from directus
 export const getDirectusData = async (collectionName, junctionFields=undefined) => {
@@ -81,7 +109,33 @@ export const formatTime = (date) => {
   );
 }
 
-export const getAnimatedVimeoThumbnail = async (url) => {
+// Ask Vimeo to generate animated thumbnails for a video that doesn't have any yet.
+// Returns true on success, false on failure. Errors are logged, not thrown.
+const __createAnimatedThumbnails = async (accessToken, videoId, duration = 6, quantity = 4) => {
+  try {
+    const response = await fetch(`https://api.vimeo.com/videos/${videoId}/animated_thumbsets`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/vnd.vimeo.*+json;version=3.4',
+      },
+      body: JSON.stringify({ duration, quantity, start_time: 15 }),
+    });
+    if (!response.ok) {
+      const body = await response.text();
+      console.error(`Error creating animated thumbnails for video ${videoId}: ${response.status} ${body}`);
+      return false;
+    }
+    console.log(`Animated thumbnail creation initiated for video ${videoId}`);
+    return true;
+  } catch (error) {
+    console.error(`Error creating animated thumbnails for video ${videoId}:`, error.message);
+    return false;
+  }
+};
+
+export const getAnimatedVimeoThumbnail = async (url, documentaryId = null, attempt = 0) => {
 
   // Helper to extract Vimeo ID from URL: TODO: this should be generic
   const extractVimeoId = (url) => {
@@ -96,32 +150,51 @@ export const getAnimatedVimeoThumbnail = async (url) => {
     return null;
   }
 
-  const apiUrl = `https://api.vimeo.com/videos/${videoId}/animated_thumbsets`;
   const accessToken = process.env.VIMEO_CLIENT_SECRET;
+  if (!accessToken) {
+    console.error("VIMEO_CLIENT_SECRET not set; cannot fetch animated thumbnails.");
+    return null;
+  }
+
+  const apiUrl = `https://api.vimeo.com/videos/${videoId}/animated_thumbsets`;
+
+  // Resolve a URL via the Vimeo API, then persist it back to Directus.
+  const resolveAndCache = async (resolvedUrl) => {
+    if (!resolvedUrl) return null;
+    await updateDocumentaryAnimatedThumbnail(documentaryId, resolvedUrl);
+    return resolvedUrl;
+  };
 
   try {
     const response = await fetch(apiUrl, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
+    const pickLink = (entry) => {
+      const sz = (entry?.sizes || []).find(item => item.profile_id === "High" || item.profile_id === "Low");
+      return sz ? sz.link : null;
+    };
     if (Array.isArray(data.data) && data.data.length > 1) {
-      const highProfile = data.data[1].sizes.find(item => item.profile_id === "High" || item.profile_id === "Low");
-      return highProfile ? highProfile.link : null;
-    } else if(Array.isArray(data.data) && data.data.length > 0) {
-      const highProfile = data.data[0].sizes.find(item => item.profile_id === "High" || item.profile_id === "Low");
-      return highProfile ? highProfile.link : null;
-    } else if(Array.isArray(data.data) && data.data.length === 0) {
-      console.log(`Thumbnail creation process initiated for the url: ${ url }`);
-      await __createAnimatedThumbnails(accessToken, videoId);
-      // Wait a bit for Vimeo to process (optional: increase if needed)
-      await new Promise(res => setTimeout(res, 50000));
-      return await getAnimatedVimeoThumbnail(url);
+      return await resolveAndCache(pickLink(data.data[1]));
     }
+    if (Array.isArray(data.data) && data.data.length > 0) {
+      return await resolveAndCache(pickLink(data.data[0]));
+    }
+    if (Array.isArray(data.data) && data.data.length === 0) {
+      if (attempt > 0) {
+        console.warn(`Vimeo did not return animated thumbnails for ${url} after creation; giving up.`);
+        return null;
+      }
+      console.log(`Thumbnail creation process initiated for the url: ${url}`);
+      const ok = await __createAnimatedThumbnails(accessToken, videoId);
+      if (!ok) return null;
+      await new Promise(res => setTimeout(res, 50000));
+      return await getAnimatedVimeoThumbnail(url, documentaryId, attempt + 1);
+    }
+    return null;
   } catch (error) {
     console.error("Error fetching animated Vimeo thumbnail:", error);
     return null;

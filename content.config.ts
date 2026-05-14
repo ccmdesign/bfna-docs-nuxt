@@ -214,7 +214,7 @@ export default defineContentConfig({
       source: 'featuredvideos/*.json',
       type: 'data',
       schema: z.object({
-        id: z.string(),
+        id: z.union([z.string(), z.number()]),
         videoId: z.string(),
         date: z.string().nullable().optional(),
         title: z.string(),
@@ -254,11 +254,8 @@ export default defineContentConfig({
         tags: z.array(z.string()),
         relatedDocumentaries: z.array(z.string()).optional(),
         keywords: z.array(z.string()),
-        previewStartsAt: z.number().optional()
-        id: z.union([z.string(), z.number()]),
+        previewStartsAt: z.number().optional(),
         order: z.number(),
-        title: z.string(),
-        slug: z.string()
       })
     }),
   }
