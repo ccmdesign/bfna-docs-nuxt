@@ -1,7 +1,8 @@
 <template>
   <div v-if="!isPlaying" class="docs-topbar | subgrid cluster" :isHomepage="isHomepage" :style="{ justifyContent: isMobile ? 'space-between' : 'flex-start', '--logo-scale': logoScale }">
-      <h1 class="docs-topbar__left | site-logo"><nuxt-link>
-        <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" @click="handleGoHome" />
+      <h1 class="docs-topbar__left | site-logo">
+      <nuxt-link to="/" aria-label="BFNA Documentaries home" @click.prevent="handleGoHome">
+        <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" />
       </nuxt-link>
     </h1>
     <div class="docs-topbar__center">
@@ -10,7 +11,7 @@
     </div>
     
     
-    <a class="docs-topbar__right | hide-on-mobile" href="https://www.bfna.org/" target="_blank">Visit Bertelsmann Foundation <span class="icon">open_in_new</span></a>
+    <a class="docs-topbar__right | hide-on-mobile" href="https://www.bfna.org/" target="_blank" rel="noopener">Visit Bertelsmann Foundation <span class="icon" aria-hidden="true">open_in_new</span></a>
   </div>
 </template>
 

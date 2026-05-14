@@ -11,8 +11,8 @@
         </button>
     </div>
 
-    <div v-if="tabs.length" :class="['docs-tabs__content | subgrid', tabs[activeTab].class]">
-      <slot :name="tabs[activeTab].slot" :class="tabs[activeTab].class"></slot>
+    <div v-if="tabs.length" :class="['docs-tabs__content | subgrid', tabs[activeTab]?.class]">
+      <slot :name="tabs[activeTab]?.slot || 'information'" :class="tabs[activeTab]?.class"></slot>
     </div>
   </div>
 </template>
@@ -23,27 +23,41 @@ const videoStore = useVideoStore();
 const { currentVideo, relatedLength } = storeToRefs(videoStore);
 
 const seriesLength = computed(() => {
-  return currentVideo.value.series.reduce((acc, serie) => acc + serie.items.length + 1, 0);
-});
+  const series = currentVideo.value?.series || []
+  return series.reduce((acc, serie) => acc + (serie?.items?.length ?? 0) + 1, 0)
+})
 
 const seriesTitle = computed(() => {
-  if (!currentVideo.value.series.length) return '';
-  const firstSerieId = currentVideo.value.series[0].serieId;
-  const serie = videoStore.series.find(serie => serie.serieId === firstSerieId);
-  return serie ? serie.title : '';
-});
+  const series = currentVideo.value?.series || []
+  if (!series.length) return ''
+  const firstSerieId = series[0]?.serieId
+  const serie = videoStore.series.find((s) => s.serieId === firstSerieId)
+  return serie?.title ?? ''
+})
 
 const trailerLength = computed(() => {
-  return currentVideo.value.video_info.teaser_url ? currentVideo.value.video_info.teaser_url.length : 0;
-});
+  const url = currentVideo.value?.video_info?.teaser_url
+  return url ? url.length : 0
+})
 
 const informationLength = computed(() => {
-  return currentVideo.value.video_info && currentVideo.value.video_info.column_1_title ? currentVideo.value.video_info.column_1_title.length : 0;
-});
+  const desc = currentVideo.value?.video_info?.description
+  return desc ? String(desc).length : 0
+})
 
 const studiesLength = computed(() => {
-  return currentVideo.value.resources.filter(resource => resource.type === 'pdf' || resource.type === 'link').length;
-});
+  const resources = currentVideo.value?.resources || []
+  return resources.reduce((total, r) => {
+    const t = (r?.type || '').toLowerCase()
+    const isPdf = t === 'application/pdf' || t === 'pdf' || (t === 'file' && (r?.extension || '').toLowerCase() === 'pdf')
+    const linkCount = Array.isArray(r?.links) ? r.links.length : 0
+    const hasLinks = linkCount > 0
+    if (!isPdf && !hasLinks) return total
+    if (hasLinks && isPdf) return total + 1 + linkCount
+    if (hasLinks) return total + linkCount
+    return total + 1
+  }, 0)
+})
 
 const information = { label: 'Information', slot: 'information', count: 1, class: '', showCounter: false };
 const series = { label: seriesTitle.value, slot: 'series', count: seriesLength, class: '', showCounter: true };
@@ -72,7 +86,11 @@ const tabs = computed(() => {
   return tablist;
 });
 
-const activeTab = ref(tabs.value.findIndex(tab => tab.label === 'Information') !== -1 ? tabs.value.findIndex(tab => tab.label === 'Information') : 0);
+const activeTab = ref(0)
+watch(tabs, (t) => {
+  const idx = t.findIndex((tab) => tab.label === 'Information')
+  if (idx >= 0) activeTab.value = idx
+}, { immediate: true })
 </script>
 
 <style scoped>

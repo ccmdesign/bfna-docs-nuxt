@@ -3,10 +3,10 @@
     <div class="footer__content">
       <div class="stack">
         <div class="cluster">
-          <a class="footer__logo" href="#">
+          <a class="footer__logo" href="https://www.bfna.org/" target="_blank" rel="noopener" aria-label="Bertelsmann Foundation">
             <img src="/assets/bertelsmann-logo.png" alt="Bertelsmann Foundation" class="bfna-logo"/>
           </a>
-          <a class="footer__logo" href="#">
+          <a class="footer__logo" href="/" aria-label="BFNA Documentaries home">
             <img src="/assets/bfna-documentaries-logo.png" alt="BFNA Documentaries" class="bfna-documentaries-logo" />
           </a>
         </div>

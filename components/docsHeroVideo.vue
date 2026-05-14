@@ -30,13 +30,11 @@ const vimeoEmbedUrl = (url) => {
 }
 
 const trailer = computed(() => {
-  return currentVideo.value.video_info.teaser_url ? 
-  {
-    id: currentVideo.value.id,
-    videoUrl: currentVideo.value.video_info.teaser_url,
-    video_info: currentVideo.value.video_info,
-  } : null;
-});
+  const vi = currentVideo.value?.video_info
+  return vi?.teaser_url
+    ? { id: currentVideo.value.id, videoUrl: vi.teaser_url, video_info: vi }
+    : null
+})
 
 </script>
 
@@ -72,7 +70,7 @@ const trailer = computed(() => {
 
     <div v-else class="hero__video" v-bind="$attrs">
       <!-- <video class="hero__video-media" src="/assets/sample-3.mov" muted loop playsinline></video> -->
-      <div class="hero__video-media" :style="{ backgroundImage: `url('${currentVideo.backgroundImage}')`, height: '100%' }"></div>
+      <div class="hero__video-media" :style="{ backgroundImage: `url('${currentVideo?.backgroundImage ?? ''}')`, height: '100%' }"></div>
     </div>
 </template>
 

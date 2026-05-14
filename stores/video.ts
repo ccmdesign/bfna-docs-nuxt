@@ -95,7 +95,10 @@ export const useVideoStore = defineStore('video', {
       title: 'No video selected',
       description: 'Select a video to watch',
       source: 'youtube',
-      videoUrl: ''
+      videoUrl: '',
+      videoId: '',
+      slug: '',
+      video_info: {}
     }) as Video,
     getCurrentVideoBasedOnSlug: (state) => {
       const route = useRoute();

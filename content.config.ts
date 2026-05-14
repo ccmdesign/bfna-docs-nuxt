@@ -213,7 +213,6 @@ export default defineContentConfig({
     featuredvideos: defineCollection({
       source: 'featuredvideos/*.json',
       type: 'data',
-      // Define custom schema for docs collection
       schema: z.object({
         id: z.string(),
         videoId: z.string(),
@@ -256,6 +255,10 @@ export default defineContentConfig({
         relatedDocumentaries: z.array(z.string()).optional(),
         keywords: z.array(z.string()),
         previewStartsAt: z.number().optional()
+        id: z.union([z.string(), z.number()]),
+        order: z.number(),
+        title: z.string(),
+        slug: z.string()
       })
     }),
   }

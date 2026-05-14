@@ -12,11 +12,10 @@
           <docs-chip v-for="tag in currentVideo.tags" :key="tag" :tag="tag" />
         </div>
       </div>
-      <p v-if="route.name !== 'index'"
-        :class="['font-size:-1', route.name === 'index' ? 'hero__description' : '']"
-      >
-        {{ currentVideo.description }}
-      </p>
+      <div v-if="route.name !== 'index'"
+        :class="['font-size:-1', route.name === 'index' ? 'hero__description' : '']" class="prose"
+      v-html="currentVideo.description">
+    </div>
 
       <div class="hero__actions | cluster">
         <docs-button effect="pill" variant="primary" icon="play_arrow" @click="playVideo">Watch Now</docs-button>
@@ -104,10 +103,10 @@ onUnmounted(() => {
   padding-block-end: var(--space-3xl);
   align-self: center;
 
+  & { --_stack-space: var(--space-2xs); }
+
   @media (max-width: 768px) { padding-block-end: var(--space-m); }
   @media (min-width: 768px) { grid-column: content-start / col2; }
-
-  --_stack-space: var(--space-2xs);
 
   .hero__actions {
     --_stack-space: var(--space-s);
@@ -164,5 +163,9 @@ onUnmounted(() => {
 
 .trailer-btn {
   background-color: var(--base-color-60-tint);
+}
+
+.prose * {
+  font-size: 1em;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="by-line">
     <div class="by-line__content | cluster">
-      <a href="/assets/Privacy-Policy.pdf">Privacy</a>
+      <a href="/assets/privacy-policy.pdf">Privacy</a>
       <a href="#" @click.prevent="openCookieModal">Cookies</a>
       <span split-left>© 2025 BFNA</span>
       <a href="https://www.ccmdesign.ca/" target="_blank">by ccm.design</a>
