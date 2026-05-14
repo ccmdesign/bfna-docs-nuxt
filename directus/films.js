@@ -47,18 +47,29 @@ const __writeContent = async (item, folder, log = false) => {
 const mapVideoInfo = (vi) => {
   if (!vi) return {};
 
-  // console.log(555, vi);
+  const fileId = (f) => (typeof f === 'string' ? f : f?.id) || '';
+  const fileExt = (f) =>
+    (f && typeof f === 'object'
+      ? (f.type?.split('/')[1] ?? f.filename_download?.split('.').pop())
+      : '') || '';
 
   const __getScreenshots = (ssSource) => {
     if (!vi.screenshots) return [];
     return vi.screenshots.map((s) => {
-      const screenshot = ssSource.find((ss) => ss.id === s);
+      const sid = typeof s === 'string' ? s : s?.id;
+      const screenshot = (ssSource || []).find((ss) => ss.id === sid);
+      if (!screenshot) return null;
       return {
         id: screenshot.id,
-        url: common.getImage(screenshot.file.id),
+        url: common.getImage(fileId(screenshot.file)),
       };
     }).filter(Boolean);
   }
+
+  const posterId = fileId(vi.poster);
+  const compressedId = fileId(vi.image_compressed);
+  const thumbId = fileId(vi.teaser_thumbnail);
+  const trailerThumbId = fileId(vi.trailer_thumbnail);
 
   return {
     title: vi.title || '',
@@ -70,10 +81,12 @@ const mapVideoInfo = (vi) => {
         : '',
     description: vi.description || '',
     screenshots: __getScreenshots(vi.screenshotsSource),
-    thumb: vi.teaser_thumbnail ? common.getImage(vi.teaser_thumbnail) : '',
+    thumb: thumbId ? common.getImage(thumbId, false, fileExt(vi.teaser_thumbnail)) : '',
     trailer_url: vi.trailer_url || '',
-    trailer_thumbnail: vi.trailer_thumbnail ? common.getImage(vi.trailer_thumbnail) : '',
-    poster: vi.image_compressed ? common.getImage(vi.image_compressed, true) : common.getImage(vi.poster),
+    trailer_thumbnail: trailerThumbId ? common.getImage(trailerThumbId, false, fileExt(vi.trailer_thumbnail)) : '',
+    poster: compressedId
+      ? common.getImage(compressedId, true)
+      : (posterId ? common.getImage(posterId, false, fileExt(vi.poster)) : ''),
     year: vi.year ?? null,
     duration: vi.duration ?? null,
   };
@@ -161,7 +174,7 @@ const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resourc
     trailer_thumbnail: item.vi_trailer_thumbnail,
     poster: item.vi_poster,
     screenshots: item.vi_screenshots,
-    compressed_image: item.vi_compressed_image,
+    image_compressed: item.vi_compressed_image,
   }
   const extraVideoInfo = await common.extractVideoInfo(item)
 
