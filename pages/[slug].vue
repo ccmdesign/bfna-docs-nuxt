@@ -40,9 +40,8 @@
 
     <template #related>
       <docs-grid>
-        <docs-card v-for="item in relatedItems" 
-        :video="item" 
-        :thumbnail="true" 
+        <docs-card v-for="item in relatedItems"
+        :video="item"
         :key="item.videoId"
         :cardId="item.videoId"
         :hoveredCard="hoveredCardId"
