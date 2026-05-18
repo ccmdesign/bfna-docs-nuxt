@@ -322,31 +322,70 @@ const getVimeoMetaInfo = async (url) => {
 }
 
 export const extractVideoInfo = async (fields) => {
+  // Priority for year: fields.date -> subtitle regex -> video-provider metadata.
+  // Priority for duration: subtitle regex -> video-provider metadata.
+  // Thumbnail is fetched independently and must never be clobbered by the
+  // metadata fallback. This mirrors the CCM-272 fix (commit 421bec5) ported
+  // from contentful/main.js: previously the else-branch reassigned
+  // `videoInfo = await getVimeoMetaInfo(...)`, wholesale wiping any
+  // date-derived year and the thumbnail. BF-52 ports that fix to the active
+  // Directus path.
+  const videoInfo = {};
 
-  // first we try to get the video info from subtitle field, ex.: (2024, 22 Minutes)
-  let videoInfo = {};
-  if (fields.video_url.includes('youtu')) {
-    videoInfo.thumbnail = await getYoutubeThumbnail(fields.video_url)
-  } else if (fields.video_url.includes('vimeo')) {
-    videoInfo.thumbnail  = await getVimeoThumbnail(fields.video_url)
+  // 1. Thumbnail (independent of year/duration logic).
+  if (fields.video_url && fields.video_url.includes('youtu')) {
+    videoInfo.thumbnail = await getYoutubeThumbnail(fields.video_url);
+  } else if (fields.video_url && fields.video_url.includes('vimeo')) {
+    videoInfo.thumbnail = await getVimeoThumbnail(fields.video_url);
   }
 
+  // 2. Date-derived year (primary source). Guard against null/empty/malformed dates.
+  let dateYear = null;
+  if (fields.date) {
+    const parsedYear = new Date(fields.date).getFullYear();
+    if (!Number.isNaN(parsedYear)) {
+      dateYear = parsedYear;
+    }
+  }
+
+  // 3. Subtitle regex (secondary source for year, primary for duration).
+  let subtitleYear = null;
+  let subtitleDuration = null;
   if (fields.subtitle) {
     // Extract all digit groups separated by comma (e.g., "2024, 22")
     const digitMatch = fields.subtitle.match(/\((\d+)\s*,\s*(\d+)\s*.*\)/);
     if (digitMatch) {
-      videoInfo.year = parseInt(digitMatch[1], 10);
-      videoInfo.duration = parseInt(digitMatch[2], 10);
-    } else {
-      if (fields.video_url.includes('youtu')) {
-        videoInfo = await getYoutubeMetaInfo(fields.video_url)
-      } else if (fields.video_url.includes('vimeo')) {
-        videoInfo  = await getVimeoMetaInfo(fields.video_url)
-      }
+      subtitleYear = parseInt(digitMatch[1], 10);
+      subtitleDuration = parseInt(digitMatch[2], 10);
     }
   }
 
-  return videoInfo;
+  // 4. Video-provider metadata fallback — computed into a SEPARATE local so
+  //    it can never reassign `videoInfo` and wipe the thumbnail or the
+  //    date-derived year (the bug that CCM-272 fixed on the Contentful path).
+  //    Only call the provider if we still need year or duration.
+  const needYear = dateYear == null && subtitleYear == null;
+  const needDuration = subtitleDuration == null;
+  let metaInfo = null;
+  if (fields.video_url && (needYear || needDuration)) {
+    if (fields.video_url.includes('youtu')) {
+      metaInfo = await getYoutubeMetaInfo(fields.video_url);
+    } else if (fields.video_url.includes('vimeo')) {
+      metaInfo = await getVimeoMetaInfo(fields.video_url);
+    }
+  }
 
+  // 5. Merge in strict priority order. Never reassign `videoInfo`.
+  const resolvedYear = dateYear ?? subtitleYear ?? (metaInfo ? metaInfo.year : null);
+  if (resolvedYear != null) {
+    videoInfo.year = resolvedYear;
+  }
+
+  const resolvedDuration = subtitleDuration ?? (metaInfo ? metaInfo.duration : null);
+  if (resolvedDuration != null) {
+    videoInfo.duration = resolvedDuration;
+  }
+
+  return videoInfo;
 }
   
