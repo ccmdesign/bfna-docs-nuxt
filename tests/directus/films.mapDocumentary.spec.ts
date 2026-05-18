@@ -30,8 +30,13 @@ vi.mock('../../directus/common.js', () => {
   };
 });
 
+// vi.mock() must be declared before these imports so Vitest's hoisting
+// applies the mock to directus/common.js. Reordering to satisfy import/first
+// would defeat the mock, so the rule is disabled for these two lines only.
+/* eslint-disable import/first */
 import * as common from '../../directus/common.js';
 import { mapDocumentary } from '../../directus/films.js';
+/* eslint-enable import/first */
 
 const baseItem = (overrides: Record<string, unknown> = {}) => ({
   id: 42,
