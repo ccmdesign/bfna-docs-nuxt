@@ -1,7 +1,7 @@
 ---
 title: "fix: Film year regression on the Directus content path (BF-52)"
 type: fix
-status: active
+status: completed
 date: 2026-05-18
 ticket: BF-52
 branch: feature/BF-52-film-year-directus-regression

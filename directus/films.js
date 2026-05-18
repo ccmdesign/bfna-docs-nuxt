@@ -149,7 +149,7 @@ const mapAwards = (items) => {
 };
 
 /** Map Directus documentary to Contentful-style structure (matches after-michael.json) */
-const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resources = [], index = 0) => {
+export const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resources = [], index = 0) => {
   const videoUrl = item.video_url || '';
   const source = videoUrl.includes('youtu') ? 'youtube' : videoUrl.includes('vimeo') ? 'vimeo' : '';
   const bg = item.background_image
@@ -183,11 +183,26 @@ const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resourc
   displayFilters.durations.push(extraVideoInfo.duration);
   displayFilters.workstreams.push(item.workstream || '');
 
+  // Resolve docYear with the same priority as extraVideoInfo.year so the two
+  // can never diverge into the 2025/2026 split BF-52 fixed. Fallback order:
+  // editorial `item.date` -> extraVideoInfo.year (which itself is
+  // editorial date -> subtitle regex -> provider metadata after the
+  // extractVideoInfo restructure). Guard Number.isNaN: a malformed
+  // item.date would otherwise yield NaN and crash Nuxt Content ingest on
+  // the required `docYear: z.number()`. Mirrors CCM-272 commit 75410f7.
+  let docYear = extraVideoInfo.year;
+  if (item.date) {
+    const parsedYear = new Date(item.date).getFullYear();
+    if (!Number.isNaN(parsedYear)) {
+      docYear = parsedYear;
+    }
+  }
+
   return {
     id: String(item.id),
     order: index ?? item.sort ?? 0,
     created: item.date_created || null,
-    docYear: item.date ? new Date(item.date).getFullYear() : extraVideoInfo.year,
+    docYear,
     videoId: item.id,
     updated: item.date_updated || null,
     title: item.title || '',
