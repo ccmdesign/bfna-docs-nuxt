@@ -10,9 +10,10 @@
     <h2 class="h3 | featured-title" split-right>Featured Videos</h2>
     <div class="featured-reel-wrapper">
       <button
-        v-if="showLeftArrow"
         type="button"
         class="featured-reel__nav featured-reel__nav--left"
+        :class="{ 'featured-reel__nav--visible': showLeftArrow }"
+        :disabled="!showLeftArrow"
         aria-label="Scroll featured videos left"
         @click="scrollFeatured('left')"
       >
@@ -31,9 +32,10 @@
         </template>
       </docs-reel>
       <button
-        v-if="showRightArrow"
         type="button"
         class="featured-reel__nav featured-reel__nav--right"
+        :class="{ 'featured-reel__nav--visible': showRightArrow }"
+        :disabled="!showRightArrow"
         aria-label="Scroll featured videos right"
         @click="scrollFeatured('right')"
       >
@@ -93,14 +95,29 @@ const featuredReelStyle = computed(() => {
     : {};
 });
 
+let scrollRafId = null;
+
 const detachFeaturedReelListener = () => {
   if (featuredReelElement.value) {
     featuredReelElement.value.removeEventListener('scroll', handleFeaturedReelScroll);
+    featuredReelElement.value.removeEventListener('wheel', stopScrollAnimation);
+    featuredReelElement.value.removeEventListener('touchstart', stopScrollAnimation);
+  }
+  stopScrollAnimation();
+  if (scrollRafId !== null) {
+    cancelAnimationFrame(scrollRafId);
+    scrollRafId = null;
   }
 };
 
+// Coalesce scroll events to at most one layout read per frame so momentum
+// scrolling doesn't thrash layout while updating the nav arrow visibility.
 const handleFeaturedReelScroll = () => {
-  updateNavigationVisibility();
+  if (scrollRafId !== null) return;
+  scrollRafId = requestAnimationFrame(() => {
+    scrollRafId = null;
+    updateNavigationVisibility();
+  });
 };
 
 const updateNavigationVisibility = () => {
@@ -133,10 +150,65 @@ const attachFeaturedReelElement = () => {
   if (root instanceof HTMLElement) {
     featuredReelElement.value = root;
     featuredReelElement.value.addEventListener('scroll', handleFeaturedReelScroll, { passive: true });
+    // A manual gesture takes over from any in-flight arrow animation.
+    featuredReelElement.value.addEventListener('wheel', stopScrollAnimation, { passive: true });
+    featuredReelElement.value.addEventListener('touchstart', stopScrollAnimation, { passive: true });
     updateNavigationVisibility();
   } else {
     featuredReelElement.value = null;
     updateNavigationVisibility();
+  }
+};
+
+// Arrow navigation runs its own rAF animation instead of native
+// scrollTo({ behavior: 'smooth' }): the native version restarts its easing
+// curve from zero velocity on every click, so rapid clicks made the reel
+// stall ("freeze"). Approaching the target exponentially lets a new click
+// simply move the target — the motion continues seamlessly.
+let scrollAnimId = null;
+let scrollAnimTarget = null;
+let scrollAnimLastTs = null;
+
+function stopScrollAnimation() {
+  if (scrollAnimId !== null) {
+    cancelAnimationFrame(scrollAnimId);
+    scrollAnimId = null;
+  }
+  scrollAnimTarget = null;
+  scrollAnimLastTs = null;
+  featuredReelElement.value?.classList.remove('is-animating');
+}
+
+const stepScrollAnimation = (ts) => {
+  const reel = featuredReelElement.value;
+  if (!reel || scrollAnimTarget === null) {
+    stopScrollAnimation();
+    return;
+  }
+
+  const dt = scrollAnimLastTs === null ? 16 : ts - scrollAnimLastTs;
+  scrollAnimLastTs = ts;
+
+  const remaining = scrollAnimTarget - reel.scrollLeft;
+  if (Math.abs(remaining) <= 1) {
+    reel.scrollLeft = scrollAnimTarget;
+    stopScrollAnimation();
+  } else {
+    // Time-based exponential ease-out: frame-rate independent.
+    reel.scrollLeft += remaining * (1 - Math.exp(-dt / 90));
+    scrollAnimId = requestAnimationFrame(stepScrollAnimation);
+  }
+  updateNavigationVisibility();
+};
+
+const animateScrollTo = (reel, target) => {
+  scrollAnimTarget = target;
+  if (scrollAnimId === null) {
+    // Suspend card hover effects while animating so pointer churn can't
+    // trigger layout/paint work mid-scroll.
+    reel.classList.add('is-animating');
+    scrollAnimLastTs = null;
+    scrollAnimId = requestAnimationFrame(stepScrollAnimation);
   }
 };
 
@@ -146,22 +218,27 @@ const scrollFeatured = (direction) => {
     return;
   }
 
-  // const maxScrollLeft = Math.max(reel.scrollWidth - reel.clientWidth, 0);
-  // const target = direction === 'right' ? maxScrollLeft : 0;
-
-  // reel.scrollTo({ left: target, behavior: 'smooth' });
   const firstCard = reel.querySelector('.card');
   const styles = getComputedStyle(reel);
   const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
-  const cardWidth = firstCard ? firstCard.getBoundingClientRect().width : reel.clientWidth / 4;
+  // offsetWidth ignores any in-flight hover scale transform.
+  const cardWidth = firstCard ? firstCard.offsetWidth : reel.clientWidth / 4;
   const distance = 3 * (cardWidth + gap);
   const maxScrollLeft = Math.max(reel.scrollWidth - reel.clientWidth, 0);
+  // Chain from the pending target (not the current position) so rapid
+  // clicks accumulate into one continuous glide.
+  const base = scrollAnimTarget ?? reel.scrollLeft;
   const step = direction === 'right' ? distance : -distance;
-  const target = reel.scrollLeft + step;
-  const nextLeft = direction === 'right' ? Math.min(target, maxScrollLeft) : Math.max(target, 0);
-  reel.scrollTo({ left: nextLeft, behavior: 'smooth' });
-  requestAnimationFrame(() => updateNavigationVisibility());
-  setTimeout(() => updateNavigationVisibility(), 350);
+  const target = Math.min(Math.max(base + step, 0), maxScrollLeft);
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    stopScrollAnimation();
+    reel.scrollLeft = target;
+    updateNavigationVisibility();
+    return;
+  }
+
+  animateScrollTo(reel, target);
 };
 
 onMounted(() => {
@@ -263,7 +340,15 @@ h2 {
 #featured-reel {
   padding-block: 1rem;
   padding-block-end: var(--space-xs-l);
-  scroll-behavior: smooth;
+  /* NOTE: no `scroll-behavior: smooth` here — arrow navigation animates
+     scrollLeft itself, and CSS smooth scrolling would fight it. */
+}
+
+/* While the arrows are animating the reel, cards sliding under the cursor
+   must not fire hover effects (scale/outline) — that layout/paint work is
+   what made navigation stutter. */
+#featured-reel.is-animating :deep(.card) {
+  pointer-events: none;
 }
 
 #featured-reel .card {
@@ -287,7 +372,16 @@ h2 {
   color: var(--white-color);
   cursor: pointer;
   z-index: 2;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  /* Arrows fade in/out instead of being added/removed with v-if: inserting
+     DOM mid-scroll invalidated layout and interrupted the animation. */
+  opacity: 0;
+  pointer-events: none;
+  transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+
+  &.featured-reel__nav--visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
   &:hover {
     background-color: transparent;
