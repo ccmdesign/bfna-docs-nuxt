@@ -1,0 +1,12 @@
+# Route Directus film images through Netlify's edge CDN [BF-107].
+#
+# MUST live in _redirects (not netlify.toml): Netlify processes _redirects
+# rules BEFORE netlify.toml, and the Nitro Netlify preset emits a catch-all
+# fallback here. Placing this rule in public/_redirects makes Nitro keep it
+# ABOVE that fallback (see nitropack .../presets/netlify/utils.mjs), so /cms/*
+# is proxied instead of falling through to the 404 handler.
+#
+# The origin sends cache-control: public,max-age=2592000 + last-modified, so
+# Netlify caches each transformed image at its edge; only misses hit Directus.
+# Query string (width/format/quality) is forwarded automatically.
+/cms/*  https://bfna.simplyas.com/assets/:splat  200!
