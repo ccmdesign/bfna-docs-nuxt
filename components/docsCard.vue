@@ -145,7 +145,7 @@ const serieTitle = computed(() => {
     @click="moreInfo(video)">
         
       <template v-if="poster">
-        <img class="card__poster" :class="{'card__poster-border' : border }" :src="posterImage" :alt="video.title" />
+        <img class="card__poster" :class="{'card__poster-border' : border }" :src="posterImage" :alt="video.title" loading="lazy" decoding="async" />
       </template>
       <template v-else>
         <div :class="{ 'card__video--hovered': isHovered }" class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">

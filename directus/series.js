@@ -8,7 +8,7 @@ const mapDocumentary = (d) => {
   const videoUrl = d.video_url || '';
   const source = videoUrl.includes('youtu') ? 'youtube' : videoUrl.includes('vimeo') ? 'vimeo' : '';
   const backgroundImage = d.background_image
-    ? common.getImage(d.background_image)
+    ? common.getImage(d.background_image, false, null, common.IMAGE_WIDTHS.hero)
     : '';
 
   return {
@@ -40,7 +40,9 @@ const mapResources = (items) => {
     return {
       id: r.id,
       title: r.title || '',
-      url: fileId ? common.getImage(fileId) : r.url || '',
+      // Type-aware: a PDF study guide comes back untransformed, an image
+      // resource still gets resized (it is painted as a card background).
+      url: fileId ? common.getImage(r.file ?? fileId, false, null, common.IMAGE_WIDTHS.poster) : r.url || '',
       description: r.description || '',
       size: r.size || '',
       type: r.type || 'file',
@@ -72,10 +74,11 @@ const mapVideoInfo = (vi) => {
         : '',
     description: vi.description || '',
     screenshot_extras: Array.isArray(vi.screenshot_extras) ? vi.screenshot_extras : [],
-    thumbnail: common.getImage(vi.thumbnail) || common.getImage(vi.teaser_thumbnail) || '',
+    thumbnail: common.getImage(vi.thumbnail, false, null, common.IMAGE_WIDTHS.card)
+      || common.getImage(vi.teaser_thumbnail, false, null, common.IMAGE_WIDTHS.card) || '',
     year: vi.year ?? null,
     duration: vi.duration ?? null,
-    poster: common.getImage(vi.poster) || '',
+    poster: common.getImage(vi.poster, false, null, common.IMAGE_WIDTHS.poster) || '',
   };
 };
 

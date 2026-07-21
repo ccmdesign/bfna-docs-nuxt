@@ -49,16 +49,10 @@ export const getDirectusData = async (collectionName, junctionFields=undefined) 
   return { data: content };
 }
 
-// getImageUrl - skips transform for webp (Directus re-encoding can degrade quality)
-export const getImage = (imageId, compressed = false, extension = null) => {
-  if (!imageId) return ''
-  const base = `${process.env.BASE_URL}/assets/${imageId}`
-  if (compressed) return base
-  const ext = (extension || '').toLowerCase()
-  const isWebp = ext === 'webp' || (typeof imageId === 'string' && /\.webp$/i.test(imageId))
-  if (isWebp) return base
-  return `${base}?width=800&format=webp&quality=80`
-}
+// Asset URL construction lives in ./imageUrl.js (dependency-free so it is
+// unit-testable). Re-exported here so existing `common.getImage(...)` callers
+// keep working unchanged.
+export { getImage, IMAGE_WIDTHS } from './imageUrl.js'
 
 // slugify
 export const slugify = (term) => {
