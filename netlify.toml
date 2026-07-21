@@ -7,7 +7,7 @@
 # cache misses hit Directus — turning ~2.7s/image (origin, on-the-fly) into
 # ~125ms edge hits. The query string (width/format/quality) is forwarded
 # automatically and each distinct URL caches separately.
-#
+
 # Applies to production, branch deploys, and deploy previews alike, so a
 # `dev` branch preview exercises the exact production path.
 [[redirects]]
