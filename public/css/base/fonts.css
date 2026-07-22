@@ -140,18 +140,6 @@ font-style: normal; */
   overflow: hidden;
 }
 
-/* The Google `css2?family=` endpoint ships only the @font-face — unlike the legacy
-   `icon?family=` endpoint it never defines the utility class. Without this the
-   ~8 `<span class="material-symbols-outlined">` icons render their ligature name as
-   literal text in the body font (and, since BF-122 gave the class a 1em box with
-   overflow:hidden, as a clipped sliver of it). */
-.material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
-  font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
-  font-feature-settings: 'liga';
-  -webkit-font-smoothing: antialiased;
-}
-
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
