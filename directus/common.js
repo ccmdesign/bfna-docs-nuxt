@@ -49,25 +49,11 @@ export const getDirectusData = async (collectionName, junctionFields=undefined) 
   return { data: content };
 }
 
-// Asset host for image URLs. On Netlify (production, branch deploys, deploy
-// previews) images are emitted as same-origin `/cms/<id>` so they serve from
-// Netlify's edge cache via the proxy rewrite in netlify.toml — the origin is
-// hit only on a cache miss (BF-107). Off Netlify (local `npm run dev`) there is
-// no proxy, so fall back to the Directus origin directly. `ASSET_BASE_URL` is an
-// explicit override/escape hatch if the default ever needs to change.
-const ASSET_BASE = process.env.ASSET_BASE_URL
-  || (process.env.NETLIFY ? '/cms' : `${process.env.BASE_URL}/assets`)
-
-// getImageUrl - skips transform for webp (Directus re-encoding can degrade quality)
-export const getImage = (imageId, compressed = false, extension = null) => {
-  if (!imageId) return ''
-  const base = `${ASSET_BASE}/${imageId}`
-  if (compressed) return base
-  const ext = (extension || '').toLowerCase()
-  const isWebp = ext === 'webp' || (typeof imageId === 'string' && /\.webp$/i.test(imageId))
-  if (isWebp) return base
-  return `${base}?width=800&format=webp&quality=80`
-}
+// Asset URL construction lives in ./imageUrl.js (dependency-free so it is
+// unit-testable). Re-exported here so existing `common.getImage(...)` callers
+// keep working unchanged. The Netlify `/cms` edge-CDN base (BF-107) also
+// lives there.
+export { getImage, IMAGE_WIDTHS } from './imageUrl.js'
 
 // slugify
 export const slugify = (term) => {

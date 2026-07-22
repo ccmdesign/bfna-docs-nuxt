@@ -208,15 +208,17 @@ onBeforeUnmount(() => {
         allow="autoplay; fullscreen"
         allowfullscreen
       ></iframe> -->
-      <img 
+      <img
         ref="videoRef"
-        class="card__video" 
-        :src="video.animatedThumbnail" 
+        class="card__video"
+        :src="video.animatedThumbnail"
         :muted="true"
-        loop 
+        loop
         playsinline
-        autoplay 
+        autoplay
         preload="auto"
+        loading="lazy"
+        decoding="async"
       ></img>
     </template>
 

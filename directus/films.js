@@ -61,7 +61,9 @@ const mapVideoInfo = (vi) => {
       if (!screenshot) return null;
       return {
         id: screenshot.id,
-        url: common.getImage(fileId(screenshot.file)),
+        // Pass the resolved file (not just its id) so getImage can see type +
+        // dimensions and decide whether a transform is legal.
+        url: common.getImage(screenshot.file, false, null, common.IMAGE_WIDTHS.card),
       };
     }).filter(Boolean);
   }
@@ -81,12 +83,14 @@ const mapVideoInfo = (vi) => {
         : '',
     description: vi.description || '',
     screenshots: __getScreenshots(vi.screenshotsSource),
-    thumb: thumbId ? common.getImage(thumbId, false, fileExt(vi.teaser_thumbnail)) : '',
+    // Prefer the resolved file object over the bare id — getImage needs
+    // type/width/height to avoid a 400 or a PDF-shaped "image".
+    thumb: thumbId ? common.getImage(vi.teaser_thumbnail ?? thumbId, false, fileExt(vi.teaser_thumbnail), common.IMAGE_WIDTHS.card) : '',
     trailer_url: vi.trailer_url || '',
-    trailer_thumbnail: trailerThumbId ? common.getImage(trailerThumbId, false, fileExt(vi.trailer_thumbnail)) : '',
+    trailer_thumbnail: trailerThumbId ? common.getImage(vi.trailer_thumbnail ?? trailerThumbId, false, fileExt(vi.trailer_thumbnail), common.IMAGE_WIDTHS.card) : '',
     poster: compressedId
-      ? common.getImage(compressedId, true)
-      : (posterId ? common.getImage(posterId, false, fileExt(vi.poster)) : ''),
+      ? common.getImage(vi.image_compressed ?? compressedId, true)
+      : (posterId ? common.getImage(vi.poster ?? posterId, false, fileExt(vi.poster), common.IMAGE_WIDTHS.poster) : ''),
     year: vi.year ?? null,
     duration: vi.duration ?? null,
   };
@@ -116,19 +120,26 @@ const mapResources = (items, p_resources = []) => {
     const links = res?.links?.length > 0 ? res.links : junction?.links ?? [];
     const guideCover = res?.guide_cover ? res.guide_cover : junction?.guide_cover ?? '';
 
+    // The resolved file object, when we have it. Pass the object rather than
+    // the bare id so getImage can tell a PDF study guide (serve clean, no
+    // transform params) from an image resource (docsRelatedItemsCard paints
+    // that one as a background, so it still wants a resize).
+    const resourceFile = (res?.file && typeof res.file === 'object') ? res.file : null;
+
     return {
       id: res?.id ?? junction?.id ?? '',
       title: res?.title ?? junction?.title ?? '',
-      url: fileId ? common.getImage(fileId) : res?.url ?? junction?.url ?? '',
-      guideCover: guideCover ? common.getImage(guideCover.id) : '',
+      url: fileId ? common.getImage(resourceFile ?? fileId, false, null, common.IMAGE_WIDTHS.poster) : res?.url ?? junction?.url ?? '',
+      guideCover: guideCover ? common.getImage(guideCover, false, null, common.IMAGE_WIDTHS.poster) : '',
       description: res?.description ?? junction?.description ?? '',
       size: formatSize(bytes),
-      type: res?.file.type ?? junction?.type,
+      // `res?.file.type` threw whenever a resource resolved without a file.
+      type: res?.file?.type ?? junction?.type,
       extension: res?.extension ?? junction?.extension ?? '',
       links: links.map((l) => ({
         title: l.title,
         link: l.link,
-        cover: common.getImage(l.cover),
+        cover: common.getImage(l.cover, false, null, common.IMAGE_WIDTHS.poster),
       })),
     };
   });
@@ -155,7 +166,9 @@ export const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_
   const bg = item.background_image
   const bgId = typeof bg === 'string' ? bg : bg?.id
   const bgExt = bg?.type?.split('/')[1] ?? bg?.filename_download?.split('.').pop() ?? ''
-  const backgroundImage = bgId ? common.getImage(bgId, false, bgExt) : ''
+  // `bg` is the resolved file (junction pulls background_image.*) — pass it
+  // through so the transform decision can read type/width/height.
+  const backgroundImage = bgId ? common.getImage(bg ?? bgId, false, bgExt, common.IMAGE_WIDTHS.hero) : ''
 
   const docId = item.id;
   const seriesInDoc = seriesDocs
