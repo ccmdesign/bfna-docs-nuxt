@@ -1,0 +1,17 @@
+# Route Directus film images through Netlify's edge CDN [BF-107].
+#
+# Image URLs are emitted as same-origin `/cms/<asset-id>?width=...` (see
+# directus/common.js getImage). This rewrite proxies those to the Directus
+# asset origin. Netlify caches the response at its edge because the origin
+# sends `cache-control: public, max-age=2592000` + `last-modified`, so only
+# cache misses hit Directus — turning ~2.7s/image (origin, on-the-fly) into
+# ~125ms edge hits. The query string (width/format/quality) is forwarded
+# automatically and each distinct URL caches separately.
+
+# Applies to production, branch deploys, and deploy previews alike, so a
+# `dev` branch preview exercises the exact production path.
+[[redirects]]
+  from = "/cms/*"
+  to = "https://bfna.simplyas.com/assets/:splat"
+  status = 200
+  force = true

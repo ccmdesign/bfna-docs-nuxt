@@ -145,7 +145,7 @@ const serieTitle = computed(() => {
     @click="moreInfo(video)">
         
       <template v-if="poster">
-        <img class="card__poster" :class="{'card__poster-border' : border }" :src="posterImage" :alt="video.title" />
+        <img class="card__poster" :class="{'card__poster-border' : border }" :src="posterImage" :alt="video.title" decoding="async" />
       </template>
       <template v-else>
         <div :class="{ 'card__video--hovered': isHovered }" class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">
@@ -246,7 +246,10 @@ const serieTitle = computed(() => {
 }
 
 .card {
-  transition: all 0.3s ease-in-out;
+  /* Only animate the properties that actually change on hover.
+     `transition: all` would also animate layout (width/position) whenever
+     the reel reflows, making the whole row stutter while scrolling. */
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
   gap: var(--space-3xs-2xs);
   
   @media (max-width: 320px) { 
@@ -277,20 +280,24 @@ const serieTitle = computed(() => {
   border-radius: var(--border-radius-s);
   aspect-ratio: 1/1.42;
 
+  /* Outline instead of border: paint-only, so hovering mid-scroll never
+     triggers layout work (a border resizes the image's content box). */
   &:hover {
-    border: solid 2px var(--white-color);
+    outline: solid 2px var(--white-color);
+    outline-offset: -2px;
   }
 }
 
 .card__poster-border {
-  border: solid 2px var(--white-color);
+  outline: solid 2px var(--white-color);
+  outline-offset: -2px;
 }
 
 
 /* TODO: Add hover effect with transition */
 /* Exploring transitions for hover effect */
 .card {
-  transition: all .5s ease-in-out;
+  transition: transform .5s ease-in-out, background-color .3s ease-in-out, box-shadow .3s ease-in-out;
   cursor: pointer;
   transform-origin: center;
 
