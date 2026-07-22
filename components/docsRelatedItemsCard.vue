@@ -35,7 +35,7 @@ const pdfBackgroundStyle = computed(() => {
 
 const getLinkBackgroundImage = (item) => {
   return {
-    backgroundImage: `url('${item.cover || '/assets/link-cover.png'}')`,
+    backgroundImage: `url('${item.cover || '/assets/link-cover.webp'}')`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }
