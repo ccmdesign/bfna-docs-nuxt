@@ -122,7 +122,22 @@ font-style: normal; */
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
+  /* BF-122: icons are rendered as ligature TEXT (`content: attr(icon)`), so with the
+     default `auto` display the fallback font paints the literal string "play_arrow"
+     and the swap reflows everything around it. `block` keeps it invisible instead. */
+  font-display: block;
   src: url(https://fonts.gstatic.com/s/materialicons/v139/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+}
+
+/* BF-122: ponytail — one fixed 1em box for every icon glyph, both families. Glyph
+   metrics can then never move neighbouring content, whichever font is in use. */
+.material-icons,
+.material-symbols-outlined {
+  display: inline-block;
+  inline-size: 1em;
+  block-size: 1em;
+  line-height: 1;
+  overflow: hidden;
 }
 
 .material-icons {

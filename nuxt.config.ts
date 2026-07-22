@@ -55,7 +55,9 @@ export default defineNuxtConfig({
       ],
       link: [
         // google icons
-        { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" },
+        // display=block: icons are ligature text, so a fallback-font paint would show
+        // the raw glyph name and reflow on swap (BF-122).
+        { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=block" },
         { rel: 'icon', type: 'image/ico', href: '/assets/favicon.ico'}
       ],
       script: [],
