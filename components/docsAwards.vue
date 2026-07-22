@@ -19,7 +19,7 @@ const awards = computed(() => currentVideo.value.awards);
 
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .doc-awards {
   width: 100%;
   display: grid;

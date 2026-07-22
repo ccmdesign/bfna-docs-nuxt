@@ -74,7 +74,7 @@ const trailer = computed(() => {
     </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .hero__video {
   max-width: 100%;
   width: 100%;
