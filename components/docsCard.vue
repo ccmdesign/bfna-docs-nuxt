@@ -322,6 +322,11 @@ const serieTitle = computed(() => {
 
 .card__poster {
   width: 100%;
+  /* Required because the <img> carries width/height attributes: those become a
+     presentational `height: 568px`, and with `width: 100%` also definite the
+     aspect-ratio below is ignored (it only applies when one axis is auto).
+     Without this the reel posters render 1/1.84 instead of 1/1.42. */
+  height: auto;
   object-fit: cover;
   border-radius: var(--border-radius-s);
   aspect-ratio: 1/1.42;
