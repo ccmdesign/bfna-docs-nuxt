@@ -27,7 +27,8 @@
         :style="featuredReelStyle"
       >
         <template #reel>
-          <docs-card v-for="i in videoStore.featuredVideosList" :video="i" poster :key="i.id"></docs-card>
+          <!-- First 4 posters are above the fold, so they load eagerly. -->
+          <docs-card v-for="(i, index) in videoStore.featuredVideosList" :video="i" poster :eager="index < 4" :key="i.id"></docs-card>
           <!-- <docs-card v-for="i in 5" :video="i" poster :key="i.id"></docs-card> -->
         </template>
       </docs-reel>
@@ -292,20 +293,8 @@ watch(
   
 }
 
-.hero-headings--index {
-  grid-column: 8 / 14;
-  grid-row: 2 / 3;
-  justify-self: end;
-  align-self: end;
-  text-align: right;
-  padding-bottom: var(--space-l);
-
-  @media (max-width: 768px) {
-    grid-column: content-start / content-end;
-    justify-self: start;
-    text-align: left;
-  }
-}
+/* .hero-headings--index positioning moved to components/docsHeroHeadings.vue (BF-122)
+   so it ships in the render-blocking head CSS instead of the route chunk. */
 
 h2 {
   font-weight: bold;
