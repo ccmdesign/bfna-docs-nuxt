@@ -92,7 +92,7 @@ onUnmounted(() => {
 
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 
 /* Hero Layout - SubGrid */
 
@@ -102,8 +102,7 @@ onUnmounted(() => {
   justify-self: end;
   padding-block-end: var(--space-3xl);
   align-self: center;
-
-  & { --_stack-space: var(--space-2xs); }
+  --_stack-space: var(--space-2xs);
 
   @media (max-width: 768px) { padding-block-end: var(--space-m); }
   @media (min-width: 768px) { grid-column: content-start / col2; }
@@ -112,7 +111,7 @@ onUnmounted(() => {
     --_stack-space: var(--space-s);
     --_cluster-space: var(--space-s);
 
-    // justify-content: flex-end;
+    /* justify-content: flex-end; */
     @media (max-width: 768px) {
       justify-content: flex-start;
     }

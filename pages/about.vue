@@ -71,7 +71,7 @@ videoStore.setNavigation(true);
 </template>
 
 
-<style lang="scss" scoped>
+<style scoped>
 .app-window {
   grid-column: content-start / content-end;
   display: grid;
@@ -92,21 +92,21 @@ videoStore.setNavigation(true);
   align-items: flex-start;
   gap: var(--space-xl);
 
-  &-image {
-    width: 100%;
-    max-width: 340px;
-
-    img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-  }
-
   @media (max-width: 768px) {
     grid-column: 1 / -1;
     align-items: center;
     text-align: center;
+  }
+}
+
+.about-page__profile-image {
+  width: 100%;
+  max-width: 340px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 }
 
@@ -126,56 +126,54 @@ videoStore.setNavigation(true);
   }
 }
 
-.about-us-view {
-  &__title {
-    font-size: 2em;
-    font-weight: 700;
-    letter-spacing: 2.92px;
-    line-height: 50px;
-    text-transform: uppercase;
-    padding: 32px 0;
+.about-us-view__title {
+  font-size: 2em;
+  font-weight: 700;
+  letter-spacing: 2.92px;
+  line-height: 50px;
+  text-transform: uppercase;
+  padding: 32px 0;
 
-    .highlight {
-      color: var(--primary-color);
-      letter-spacing: 3px;
-    }
+  .highlight {
+    color: var(--primary-color);
+    letter-spacing: 3px;
   }
+}
 
-  &__text {
-    font-weight: 500;
-    line-height: 30px;
-    grid-column: 1 / 2;
-    display: flex;
-    flex-flow: column nowrap;
-    gap: var(--space-xl);
-    @media (max-width: 768px) {
-      grid-column: 1 / -1;
-    }
+.about-us-view__text {
+  font-weight: 500;
+  line-height: 30px;
+  grid-column: 1 / 2;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: var(--space-xl);
+  @media (max-width: 768px) {
+    grid-column: 1 / -1;
   }
+}
 
-  &__text_contact {
-    font-weight: 500;
-    line-height: 30px;
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--space-xl);
-    width: 100%;
-    max-width: 340px;
-    @media (max-width: 768px) {
-      align-items: center;
-      text-align: center;
-    }
+.about-us-view__text_contact {
+  font-weight: 500;
+  line-height: 30px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-xl);
+  width: 100%;
+  max-width: 340px;
+  @media (max-width: 768px) {
+    align-items: center;
+    text-align: center;
   }
+}
 
-  &__podcast-icon {
-    display: inline-block;
+.about-us-view__podcast-icon {
+  display: inline-block;
+}
 
-    & + & {
-      margin-left: 16px;
-    }
-  }
+.about-us-view__podcast-icon + .about-us-view__podcast-icon {
+  margin-left: 16px;
 }
 
 .row {

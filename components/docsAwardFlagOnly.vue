@@ -8,7 +8,7 @@
 
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .doc-awards {
   display: grid;
   grid-template-columns: auto 1fr;

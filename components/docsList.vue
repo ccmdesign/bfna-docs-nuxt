@@ -98,7 +98,7 @@ const handleClearHoveredCard = () => {
   </ol>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 
 ol {
   list-style: decimal;
