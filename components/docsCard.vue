@@ -175,6 +175,9 @@ const serieTitle = computed(() => {
       </template>
       <template v-else>
         <div :class="{ 'card__video--hovered': isHovered }" class="card__video card__video--bg" style="position: relative;" @click="handleCurrentVideo(video)">
+          <!-- alt is empty in the grid variant: the title renders right below as a real
+               heading, so an alt would make a screen reader announce it twice. The
+               thumbnail variant has no visible title, so it keeps one. -->
           <img
             class="card__video-img"
             :src="cardImage"
@@ -182,7 +185,7 @@ const serieTitle = computed(() => {
             sizes="(max-width: 320px) 100vw, (max-width: 768px) 50vw, 25vw"
             width="600"
             height="338"
-            :alt="video.title"
+            :alt="thumbnail ? video.title : ''"
             :loading="eager ? 'eager' : 'lazy'"
             decoding="async" />
           <Transition name="fade-gif">

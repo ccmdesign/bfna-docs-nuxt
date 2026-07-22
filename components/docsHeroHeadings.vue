@@ -122,10 +122,11 @@ onUnmounted(() => {
    which Nuxt never links from the SSR head, so at first paint only the base
    .hero-headings rule existed and the hero painted in the wrong grid cell.
    Component CSS *is* render-blocking in the head. Same specificity as the base
-   rule (0-2-0) — it must stay AFTER it so source order picks the winner. */
+   rule (0-2-0) — it must stay AFTER it so source order picks the winner.
+   The row is owned by `#hero` in layouts/default.vue — an unscoped id selector (1-0-0)
+   that beats this class (0-2-0) — so no grid-row is declared here. */
 .hero-headings--index {
   grid-column: 8 / 14;
-  grid-row: 2 / 3;
   justify-self: end;
   align-self: end;
   text-align: right;
