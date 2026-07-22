@@ -20,7 +20,7 @@ const isMobile = computed(() => {
 
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .doc-hero-extra {
   max-height: 340px;
   overflow-y: scroll;

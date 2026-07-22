@@ -55,7 +55,9 @@ export default defineNuxtConfig({
       ],
       link: [
         // google icons
-        { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" },
+        // display=block: icons are ligature text, so a fallback-font paint would show
+        // the raw glyph name and reflow on swap (BF-122).
+        { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=block" },
         { rel: 'icon', type: 'image/ico', href: '/assets/favicon.ico'}
       ],
       script: [],
@@ -91,7 +93,15 @@ export default defineNuxtConfig({
   },
   ssr: true,
   experimental: {
-    clientFallback: true
+    clientFallback: true,
+    // BF-123: payload extraction made every page ship the catalogue twice — a
+    // full-size inline __NUXT_DATA__ *and* a same-size _payload.json that Nuxt
+    // both <link rel=preload as=fetch>'d and fetch()'d (so up to 3 copies per
+    // view, ~578 KB decoded on a detail page). Nothing here needs it: the whole
+    // catalogue is loaded once by app.vue's useAsyncData, app.vue never
+    // unmounts, and pages/[slug].vue has no useAsyncData of its own — so no
+    // query re-runs on the client after a route change.
+    payloadExtraction: false
   },
   components: [
     { path: '~/components', pathPrefix: false }

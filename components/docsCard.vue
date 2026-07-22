@@ -47,6 +47,11 @@ const props = defineProps({
   border: {
     type: Boolean,
     defalt: false
+  },
+  // Above-the-fold cards (first featured-reel posters) opt out of lazy loading.
+  eager: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -67,15 +72,24 @@ function isVimeo(url) {
   return /vimeo\.com/.test(url)
 }
 
-const backgroundStyle = computed(() => {
+// ponytail: the Directus URLs already carry `?width=<n>&format=webp&quality=80`
+// and the transform endpoint accepts any width, so a srcset is just the same URL
+// with the width swapped — no imageUrl.js change needed. URLs with no `width=`
+// param (originals, SVG, PDF, external resource links) get no srcset at all.
+const srcset = (url, widths) => {
+  if (!url || !/[?&]width=\d+/.test(url)) return undefined
+  return widths.map(w => `${url.replace(/([?&]width=)\d+/, `$1${w}`)} ${w}w`).join(', ')
+}
+
+const cardImage = computed(() => {
   const vi = props.video?.video_info
   const imageUrl = vi?.thumbnail ?? vi?.thumb ?? ''
-  return {
-    backgroundImage: `url('${props.thumbnail & imageUrl ? imageUrl : (props.video.backgroundImageCard || props.video.backgroundImage)}')`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  }
+  // ponytail: `props.thumbnail & imageUrl` is a known dead branch (bitwise AND,
+  // always falsy). Preserved verbatim — it is tracked separately, not in BF-121.
+  return props.thumbnail & imageUrl ? imageUrl : (props.video.backgroundImageCard || props.video.backgroundImage)
 })
+
+const cardImageSrcset = computed(() => srcset(cardImage.value, [320, 600]))
 
 const router = useRouter();
 const route = useRoute();
@@ -129,6 +143,8 @@ const posterImage = computed(() => {
   return props.video.video_info && props.video.video_info.poster ? props.video.video_info.poster : posterFromResources ? posterFromResources.url : (props.video.backgroundImageCard || props.video.backgroundImage);
 });
 
+const posterImageSrcset = computed(() => srcset(posterImage.value, [200, 400]))
+
 const serieTitle = computed(() => {
   return videoStore.getSerieTitle(props.video.series && props.video.series.length ? props.video.series[0]?.serieId : null)
 })
@@ -145,10 +161,33 @@ const serieTitle = computed(() => {
     @click="moreInfo(video)">
         
       <template v-if="poster">
-        <img class="card__poster" :class="{'card__poster-border' : border }" :src="posterImage" :alt="video.title" loading="lazy" decoding="async" />
+        <img
+          class="card__poster"
+          :class="{'card__poster-border' : border }"
+          :src="posterImage"
+          :srcset="posterImageSrcset"
+          sizes="(max-width: 320px) 100vw, (max-width: 768px) 40vw, 20vw"
+          width="400"
+          height="568"
+          :alt="video.title"
+          :loading="eager ? 'eager' : 'lazy'"
+          decoding="async" />
       </template>
       <template v-else>
-        <div :class="{ 'card__video--hovered': isHovered }" class="card__video card__video--bg" :style="backgroundStyle" style="position: relative;" @click="handleCurrentVideo(video)">
+        <div :class="{ 'card__video--hovered': isHovered }" class="card__video card__video--bg" style="position: relative;" @click="handleCurrentVideo(video)">
+          <!-- alt is empty in the grid variant: the title renders right below as a real
+               heading, so an alt would make a screen reader announce it twice. The
+               thumbnail variant has no visible title, so it keeps one. -->
+          <img
+            class="card__video-img"
+            :src="cardImage"
+            :srcset="cardImageSrcset"
+            sizes="(max-width: 320px) 100vw, (max-width: 768px) 50vw, 25vw"
+            width="600"
+            height="338"
+            :alt="thumbnail ? video.title : ''"
+            :loading="eager ? 'eager' : 'lazy'"
+            decoding="async" />
           <Transition name="fade-gif">
             <img 
               v-if="!featured && isHovered && !poster && isVimeo(video.videoUrl)"
@@ -221,6 +260,16 @@ const serieTitle = computed(() => {
   }
 }
 
+/* Replaces the old CSS background-image so the card art can lazy-load. The
+   wrapper keeps the aspect-ratio/radius/overflow, this just fills it. */
+.card__video-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
 .card__video--hovered {
   transform: scale(1.02);
   transition: transform 0.3s ease;
@@ -276,6 +325,11 @@ const serieTitle = computed(() => {
 
 .card__poster {
   width: 100%;
+  /* Required because the <img> carries width/height attributes: those become a
+     presentational `height: 568px`, and with `width: 100%` also definite the
+     aspect-ratio below is ignored (it only applies when one axis is auto).
+     Without this the reel posters render 1/1.84 instead of 1/1.42. */
+  height: auto;
   object-fit: cover;
   border-radius: var(--border-radius-s);
   aspect-ratio: 1/1.42;

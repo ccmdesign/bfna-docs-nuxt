@@ -54,7 +54,16 @@ defineProps({
 
 .docs-button[icon]:before,
 .docs-button[icon-after]:after {
-  line-height: 0;
+  /* BF-122: fixed 1em box — these pseudo-icons are flex items of the inline-flex
+     button and don't carry the .material-icons class, so they need their own
+     reservation. Without it the pre-swap fallback text ("play_arrow") is laid out
+     at its literal width and the whole hero reflows when the icon font lands. */
+  display: inline-block;
+  flex: 0 0 auto;
+  inline-size: 1em;
+  block-size: 1em;
+  line-height: 1;
+  overflow: hidden;
   content: attr(icon);
   font-family: var(--font-family-icon);
   font-weight: 200;

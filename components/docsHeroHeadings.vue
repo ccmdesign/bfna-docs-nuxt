@@ -92,7 +92,7 @@ onUnmounted(() => {
 
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 
 /* Hero Layout - SubGrid */
 
@@ -102,8 +102,7 @@ onUnmounted(() => {
   justify-self: end;
   padding-block-end: var(--space-3xl);
   align-self: center;
-
-  & { --_stack-space: var(--space-2xs); }
+  --_stack-space: var(--space-2xs);
 
   @media (max-width: 768px) { padding-block-end: var(--space-m); }
   @media (min-width: 768px) { grid-column: content-start / col2; }
@@ -112,10 +111,31 @@ onUnmounted(() => {
     --_stack-space: var(--space-s);
     --_cluster-space: var(--space-s);
 
-    // justify-content: flex-end;
+    /* justify-content: flex-end; */
     @media (max-width: 768px) {
       justify-content: flex-start;
     }
+  }
+}
+
+/* Moved here from pages/index.vue (BF-122). Page CSS ships in the route chunk,
+   which Nuxt never links from the SSR head, so at first paint only the base
+   .hero-headings rule existed and the hero painted in the wrong grid cell.
+   Component CSS *is* render-blocking in the head. Same specificity as the base
+   rule (0-2-0) — it must stay AFTER it so source order picks the winner.
+   The row is owned by `#hero` in layouts/default.vue — an unscoped id selector (1-0-0)
+   that beats this class (0-2-0) — so no grid-row is declared here. */
+.hero-headings--index {
+  grid-column: 8 / 14;
+  justify-self: end;
+  align-self: end;
+  text-align: right;
+  padding-bottom: var(--space-l);
+
+  @media (max-width: 768px) {
+    grid-column: content-start / content-end;
+    justify-self: start;
+    text-align: left;
   }
 }
 
