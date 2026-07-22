@@ -59,6 +59,13 @@ defineProps({
   /* Align icon vertically with select */
   display: flex;
   align-items: center;
+  /* Same 1em reservation as docsButton (BF-122): this pseudo-icon is ligature text,
+     so without a fixed box the pre-swap fallback lays out at the glyph name's width. */
+  flex: 0 0 auto;
+  inline-size: 1em;
+  block-size: 1em;
+  line-height: 1;
+  overflow: hidden;
 }
 
 .docs-select[size="s"] select,
