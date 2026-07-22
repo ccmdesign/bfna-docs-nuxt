@@ -27,7 +27,8 @@
         :style="featuredReelStyle"
       >
         <template #reel>
-          <docs-card v-for="i in videoStore.featuredVideosList" :video="i" poster :key="i.id"></docs-card>
+          <!-- First 4 posters are above the fold, so they load eagerly. -->
+          <docs-card v-for="(i, index) in videoStore.featuredVideosList" :video="i" poster :eager="index < 4" :key="i.id"></docs-card>
           <!-- <docs-card v-for="i in 5" :video="i" poster :key="i.id"></docs-card> -->
         </template>
       </docs-reel>
