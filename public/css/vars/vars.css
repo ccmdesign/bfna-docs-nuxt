@@ -1,7 +1,18 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap'); */
-@import url('https://fonts.googleapis.com/css2?family=Material+Icons+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
-
-@import url("https://cloud.typography.com/7264818/6254032/css/fonts.css");
+/* Removed three render-blocking @imports that returned no usable CSS:
+   - Google Fonts "Inter" — URL corrupted at some point (`14..32` became
+     `14assets32`), HTTP 400. Nothing in this codebase sets font-family: Inter.
+   - Google Fonts "Material Icons Outlined" — HTTP 400 (that family has no
+     variable axes). The icon font actually in use is declared as a plain
+     @font-face in base/fonts.css and loads fine.
+   - cloud.typography.com (Hoefler) — the account stopped serving: it used to
+     403, and as of 2026-07-22 it accepts the TCP connection and then never
+     responds, hanging until the client times out. Being render-blocking,
+     that one stall alone put FCP at ~120s.
+   All three delivered zero bytes, so removing them cannot change rendering.
+   NOTE: --display-font/--body-font below still name the Hoefler families,
+   which have not loaded for some time — the site is falling back to system
+   sans-serif. Pointing them at the working Typekit faces is a visible design
+   change and is deliberately NOT done here. */
 
 :root {
   --display-font: "Idlewild SSm A", "Idlewild SSm B", sans-serif;
