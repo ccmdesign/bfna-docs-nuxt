@@ -42,6 +42,7 @@ export default defineContentConfig({
         videoUrl: z.string().url(),
         workstream: z.string(),
         backgroundImage: z.string().url(),
+        backgroundImageCard: z.string().optional(),
         source: z.string(),
         screenings: z.array(z.unknown()),
         video_info: z.object({
@@ -89,6 +90,7 @@ export default defineContentConfig({
         videoUrl: z.string().url(),
         workstream: z.string(),
         backgroundImage: z.string().url(),
+        backgroundImageCard: z.string().optional(),
         animatedThumbnail: z.string().url().optional(),
         source: z.string(),
         screenings: z.array(z.unknown()),
@@ -136,6 +138,7 @@ export default defineContentConfig({
         videoUrl: z.string().url(),
         workstream: z.string(),
         backgroundImage: z.string().url(),
+        backgroundImageCard: z.string().optional(),
         source: z.string(),
         screenings: z.array(z.unknown()),
         video_info: z.object({
@@ -178,6 +181,7 @@ export default defineContentConfig({
         videoUrl: z.string().url(),
         workstream: z.string(),
         backgroundImage: z.string().url(),
+        backgroundImageCard: z.string().optional(),
         animatedThumbnail: z.string().url().optional(),
         source: z.string(),
         screenings: z.array(z.unknown()),
@@ -224,6 +228,7 @@ export default defineContentConfig({
         videoUrl: z.string().url(),
         workstream: z.string(),
         backgroundImage: z.string().url(),
+        backgroundImageCard: z.string().optional(),
         source: z.string(),
         screenings: z.array(z.unknown()),
         video_info: z.object({
