@@ -71,7 +71,7 @@ const backgroundStyle = computed(() => {
   const vi = props.video?.video_info
   const imageUrl = vi?.thumbnail ?? vi?.thumb ?? ''
   return {
-    backgroundImage: `url('${props.thumbnail & imageUrl ? imageUrl : props.video.backgroundImage}')`,
+    backgroundImage: `url('${props.thumbnail & imageUrl ? imageUrl : (props.video.backgroundImageCard || props.video.backgroundImage)}')`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }
@@ -126,7 +126,7 @@ const toTop = () => {
 
 const posterImage = computed(() => {
   const posterFromResources = props.video.resources.find(resource => resource.type === 'image');
-  return props.video.video_info && props.video.video_info.poster ? props.video.video_info.poster : posterFromResources ? posterFromResources.url : props.video.backgroundImage;
+  return props.video.video_info && props.video.video_info.poster ? props.video.video_info.poster : posterFromResources ? posterFromResources.url : (props.video.backgroundImageCard || props.video.backgroundImage);
 });
 
 const serieTitle = computed(() => {

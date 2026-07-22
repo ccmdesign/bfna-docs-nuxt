@@ -169,6 +169,10 @@ export const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_
   // `bg` is the resolved file (junction pulls background_image.*) — pass it
   // through so the transform decision can read type/width/height.
   const backgroundImage = bgId ? common.getImage(bg ?? bgId, false, bgExt, common.IMAGE_WIDTHS.hero) : ''
+  // Same artwork at card width: the field feeds both the full-viewport hero
+  // (needs 1200) and the ~600px card backgrounds. Serving the hero cut to 38
+  // homepage cards was ~2.6 MB of the page weight [BF-107].
+  const backgroundImageCard = bgId ? common.getImage(bg ?? bgId, false, bgExt, common.IMAGE_WIDTHS.card) : ''
 
   const docId = item.id;
   const seriesInDoc = seriesDocs
@@ -231,6 +235,7 @@ export const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_
     relatedDocumentaries: item.related_documentaries.map((x) => x.related_docs_documentaries_id),
     keywords: Array.isArray(item.keywords) ? item.keywords : [],
     backgroundImage,
+    backgroundImageCard,
     source,
     screenings: Array.isArray(item.screenings) ? item.screenings : [],
     video_info: { ...mapVideoInfo({ ...rawVideoInfo, screenshotsSource: screenshots }), ...extraVideoInfo },
