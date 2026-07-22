@@ -88,8 +88,12 @@ const mapVideoInfo = (vi) => {
     thumb: thumbId ? common.getImage(vi.teaser_thumbnail ?? thumbId, false, fileExt(vi.teaser_thumbnail), common.IMAGE_WIDTHS.card) : '',
     trailer_url: vi.trailer_url || '',
     trailer_thumbnail: trailerThumbId ? common.getImage(vi.trailer_thumbnail ?? trailerThumbId, false, fileExt(vi.trailer_thumbnail), common.IMAGE_WIDTHS.card) : '',
+    // image_compressed stays the preferred SOURCE file, but it is resized like
+    // everything else. The field name describes byte size, not dimensions: the
+    // "compressed" uploads are 6450x9138 originals at ~710KB being painted into
+    // ~300px cards, and asking for the original here was 2.17MB of the homepage.
     poster: compressedId
-      ? common.getImage(vi.image_compressed ?? compressedId, true)
+      ? common.getImage(vi.image_compressed ?? compressedId, false, fileExt(vi.image_compressed), common.IMAGE_WIDTHS.poster)
       : (posterId ? common.getImage(vi.poster ?? posterId, false, fileExt(vi.poster), common.IMAGE_WIDTHS.poster) : ''),
     year: vi.year ?? null,
     duration: vi.duration ?? null,
