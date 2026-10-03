@@ -4,7 +4,7 @@ import { createDirectus, rest, readItems, staticToken, updateItem } from '@direc
 dotenv.config();
 
 const CONTENT_STATUS = process.env.DEV ? JSON.parse(process.env.DEV) : ["published"]
-const client = createDirectus(process.env.BASE_URL).with(rest());
+const client = process.env.BASE_URL ? createDirectus(process.env.BASE_URL).with(rest()) : null;
 
 // Lazy-initialised write client. Built on first use; warns once when token is absent.
 let __writeClient = undefined; // undefined = uninitialised, null = warned-and-disabled
@@ -36,6 +36,10 @@ export const updateDocumentaryAnimatedThumbnail = async (documentaryId, url) => 
 
 // get content from directus
 export const getDirectusData = async (collectionName, junctionFields=undefined) => {
+  if (!client) {
+    console.warn('[directus] BASE_URL not set; skipping Directus data fetch.');
+    return { data: [] };
+  }
   const content = await client.request(readItems(collectionName, {
     fields: junctionFields ? [`*.*`, ...junctionFields] : ['*.*'],
     limit: -1,
