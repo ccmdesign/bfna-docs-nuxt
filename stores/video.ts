@@ -4,7 +4,9 @@ export interface Video {
   videoId: string
   slug: string
   series: string[]
-  order: number
+  order: number | null
+  docYear?: number
+  date?: string | null
   title: string
   description: string
   subtitle?: string

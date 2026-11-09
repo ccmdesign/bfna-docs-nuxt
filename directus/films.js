@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { rimraf } from 'rimraf';
 import * as common from './common.js';
+import { sortFilms } from '../utils/filmOrder.js';
 
 let displayFilters = {
   workstreams: [],
@@ -164,7 +165,7 @@ const mapAwards = (items) => {
 };
 
 /** Map Directus documentary to Contentful-style structure (matches after-michael.json) */
-export const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resources = [], index = 0) => {
+export const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_resources = []) => {
   const videoUrl = item.video_url || '';
   const source = videoUrl.includes('youtu') ? 'youtube' : videoUrl.includes('vimeo') ? 'vimeo' : '';
   const bg = item.background_image
@@ -213,7 +214,9 @@ export const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_
   // the required `docYear: z.number()`. Mirrors CCM-272 commit 75410f7.
   let docYear = extraVideoInfo.year;
   if (item.date) {
-    const parsedYear = new Date(item.date).getFullYear();
+    // UTC: a date-only '2017-01-01' is UTC midnight, which is 2016 in any
+    // timezone west of UTC (local generates), but not on Netlify's UTC builds.
+    const parsedYear = new Date(item.date).getUTCFullYear();
     if (!Number.isNaN(parsedYear)) {
       docYear = parsedYear;
     }
@@ -221,7 +224,8 @@ export const mapDocumentary = async (item, seriesDocs = [], screenshots = [], p_
 
   return {
     id: String(item.id),
-    order: index ?? item.sort ?? 0,
+    // Directus `sort` (the CMS drag-and-drop order); null until an editor sets it.
+    order: typeof item.sort === 'number' ? item.sort : null,
     created: item.date_created || null,
     docYear,
     videoId: item.id,
@@ -273,17 +277,13 @@ const objectContructor = async (dir, fs) => {
       documentaries: (s.films || []).map((f) => f.docs_documentaries_id?.id).filter(Boolean),
     }));
 
-    const sorted = [...(docsRes.data || [])].sort((a, b) => {
-      const orderA = a.documentary_tabs ?? a.sort ?? Number.MAX_SAFE_INTEGER;
-      const orderB = b.documentary_tabs ?? b.sort ?? Number.MAX_SAFE_INTEGER;
-      if (orderA !== orderB) return orderA - orderB;
-      const dateA = a.date_created ? new Date(a.date_created).getTime() : 0;
-      const dateB = b.date_created ? new Date(b.date_created).getTime() : 0;
-      return dateA - dateB;
-    });
+    const mapped = [];
+    for (const item of docsRes.data || []) {
+      mapped.push(await mapDocumentary(item, seriesDocs, screenshotsRes.data, resourcesRes.data));
+    }
 
-    for (const [index, item] of sorted.entries()) {
-      const output = await mapDocumentary(item, seriesDocs, screenshotsRes.data, resourcesRes.data, index);
+    // Same order as the grid (utils/filmOrder.js): year, then CMS `sort`.
+    for (const output of sortFilms(mapped)) {
       videosSlugs.slugs.push(output.slug);
       const filepath = dir + '/' + output.slug + '.json';
       await fs.promises.writeFile(filepath, JSON.stringify(output));

@@ -6,6 +6,7 @@
 
 <script setup>
 import { useVideoStore } from '~/stores/video'
+import { sortFilms } from '~/utils/filmOrder'
 
 const videoStore = useVideoStore();
 
@@ -29,9 +30,10 @@ const ALLVIDEOS_FIELDS = [
 const FEATURED_FIELDS = ['id', 'slug', 'stem', 'order']
 
 const { data: allvideos } = await useAsyncData('allvideos', () =>
-  queryCollection('allvideos').select(...ALLVIDEOS_FIELDS).order('date', 'DESC').all()
+  queryCollection('allvideos').select(...ALLVIDEOS_FIELDS).all()
 )
-const videoList = Array.isArray(allvideos.value) ? allvideos.value : []
+// Year, then the CMS `sort` (utils/filmOrder.js). Search reads this list as is.
+const videoList = sortFilms(Array.isArray(allvideos.value) ? allvideos.value : [])
 videoStore.setVideos(videoList)
 
 // Featured: get first item from featuredvideos (order=1), then resolve full video from allvideos
