@@ -80,7 +80,8 @@ export default defineContentConfig({
       schema: z.object({
         id: z.string(),
         videoId: z.string(),
-        order: z.number(),
+        // Directus `sort` (manual CMS order); null until an editor sets it.
+        order: z.number().nullable(),
         docYear: z.number(),
         date: z.string().nullable().optional(),
         title: z.string(),

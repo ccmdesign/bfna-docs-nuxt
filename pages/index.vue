@@ -54,6 +54,7 @@
 
 <script setup>
 import { useVideoStore } from '~/stores/video';
+import { compareFilms } from '~/utils/filmOrder';
 
 definePageMeta({
   layout: false
@@ -83,11 +84,7 @@ const videos = computed(() => {
       }
     }
     return filterOptions.value.workstream === 'all' || video.workstream === filterOptions.value.workstream
-  }).sort((a, b) => {
-    const dateA = a?.date ?? ''
-    const dateB = b?.date ?? ''
-    return filterOptions.value.sort === 'desc' ? dateB.localeCompare(dateA) : dateA.localeCompare(dateB)
-  })
+  }).sort((a, b) => compareFilms(a, b, filterOptions.value.sort))
 })
 
 const featuredReelStyle = computed(() => {

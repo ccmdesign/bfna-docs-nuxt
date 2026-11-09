@@ -144,3 +144,37 @@ describe('mapDocumentary (directus) — docYear resolution', () => {
     expect(output.date).toBe('2026-04-13');
   });
 });
+
+describe('mapDocumentary (directus) — order', () => {
+  it('order is the Directus `sort`, not the documentary_tabs id', async () => {
+    (common.extractVideoInfo as ReturnType<typeof vi.fn>).mockResolvedValue({ year: 2026, duration: 30 });
+
+    const output = await mapDocumentary(baseItem({ sort: 4, documentary_tabs: 71 }));
+
+    expect(output.order).toBe(4);
+  });
+
+  it('order is null when the film has no `sort` yet', async () => {
+    (common.extractVideoInfo as ReturnType<typeof vi.fn>).mockResolvedValue({ year: 2026, duration: 30 });
+
+    const output = await mapDocumentary(baseItem({ sort: null, documentary_tabs: 71 }));
+
+    expect(output.order).toBeNull();
+  });
+});
+
+describe('mapDocumentary (directus) — docYear timezone', () => {
+  it('a 1 January date keeps its year west of UTC', async () => {
+    const tz = process.env.TZ;
+    process.env.TZ = 'America/Los_Angeles';
+    try {
+      (common.extractVideoInfo as ReturnType<typeof vi.fn>).mockResolvedValue({ year: 2017, duration: 30 });
+
+      const output = await mapDocumentary(baseItem({ date: '2017-01-01' }));
+
+      expect(output.docYear).toBe(2017);
+    } finally {
+      process.env.TZ = tz;
+    }
+  });
+});
